@@ -74,6 +74,8 @@ async function validateScanUrl(raw) {
   }
 
   // DNS check: every resolved address must be public.
+  // shortcut: the browser re-resolves DNS at navigation time, so a fast-rebinding
+  // domain could still slip through; acceptable for a local single-user tool.
   try {
     const records = await dns.lookup(host, { all: true });
     if (!records.length) return { error: 'Could not resolve that hostname.' };
@@ -137,7 +139,7 @@ async function scanOnePage(page, url) {
   await page.waitForLoadState('networkidle', { timeout: 6_000 }).catch(() => {});
 
   const html = await page.content();
-  if (html.length > MAX_HTML_BYTES) {
+  if (Buffer.byteLength(html, 'utf8') > MAX_HTML_BYTES) {
     return { url, error: 'Page is too large to scan safely.', status: resp?.status() ?? null };
   }
 
@@ -184,7 +186,6 @@ async function runScan(scanId, startUrl, crawl) {
     const context = await b.newContext({
       viewport: { width: 1280, height: 900 },
       userAgent: 'AccessScan/0.1 (+local accessibility checker; https://github.com)',
-      ignoreHTTPSErrors: false,
     });
     const page = await context.newPage();
 

@@ -25,6 +25,9 @@ let pollTimer = null;
 let pollFailures = 0;
 let ui = { activePage: 0, severity: 'all', query: '' };
 
+// JS smooth-scroll ignores prefers-reduced-motion; honor it manually.
+const smoothScroll = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
 function showError(msg) {
   formError.textContent = msg;
   formError.hidden = !msg;
@@ -93,7 +96,7 @@ function abortScan(msg) {
   setBusy(false);
   results.hidden = false;
   resultsBody.innerHTML = `<div class="page-error"><strong>Scan interrupted.</strong> ${esc(msg)}</div>`;
-  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
 }
 
 async function pollScan() {
@@ -133,7 +136,7 @@ async function pollScan() {
     setBusy(false);
     results.hidden = false;
     resultsBody.innerHTML = `<div class="page-error"><strong>Scan failed.</strong> ${esc(data.error || 'Unknown error.')}</div>`;
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('results').scrollIntoView({ behavior: smoothScroll, block: 'start' });
   }
 }
 
@@ -174,11 +177,11 @@ function renderReport(result) {
     </div>`;
 
   if (result.pages.length > 1) {
-    html += `<div class="page-tabs" role="tablist">` +
+    html += `<div class="page-tabs">` +
       result.pages.map((p, i) => {
         const label = safeHostPath(p.url);
-        const err = p.error ? ' ⚠' : '';
-        return `<button class="page-tab ${i === ui.activePage ? 'active' : ''}" data-page="${i}" role="tab">${esc(label)}${err}</button>`;
+        const err = p.error ? ' (error)' : '';
+        return `<button class="page-tab ${i === ui.activePage ? 'active' : ''}" data-page="${i}" title="${esc(p.url)}">${esc(label)}${err}</button>`;
       }).join('') + `</div>`;
   }
 
@@ -194,7 +197,7 @@ function renderReport(result) {
   });
 
   renderPageDetail(result.pages[ui.activePage]);
-  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
 }
 
 function safeHostPath(url) {
@@ -329,5 +332,5 @@ newScanBtn.addEventListener('click', () => {
   results.hidden = true;
   urlInput.value = '';
   urlInput.focus();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: smoothScroll });
 });

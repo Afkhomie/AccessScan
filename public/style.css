@@ -13,6 +13,7 @@
   --crit-bg: #fbe9e7;
   --serious: #b25e09;
   --serious-bg: #fdf0e0;
+  --serious-ink: #8a4d08; /* darker shade: --serious on --serious-bg is 4.2:1, under AA for small text */
   --moderate: #8a6d00;
   --moderate-bg: #fdf6dd;
   --minor: #5b6472;
@@ -79,7 +80,8 @@ body {
   background: var(--paper); color: var(--ink);
 }
 #url-input:focus {
-  outline: 3px solid var(--accent-soft);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
   border-color: var(--accent);
 }
 #scan-btn {
@@ -178,7 +180,7 @@ body {
 .sev-tile.critical { background: var(--crit-bg); border-color: #f0c4c0; }
 .sev-tile.critical .n, .sev-tile.critical .l { color: var(--crit); }
 .sev-tile.serious { background: var(--serious-bg); border-color: #eed9bd; }
-.sev-tile.serious .n, .sev-tile.serious .l { color: var(--serious); }
+.sev-tile.serious .n, .sev-tile.serious .l { color: var(--serious-ink); }
 .sev-tile.moderate { background: var(--moderate-bg); border-color: #ece0b3; }
 .sev-tile.moderate .n, .sev-tile.moderate .l { color: var(--moderate); }
 .sev-tile.minor { background: var(--minor-bg); border-color: #dfe4ec; }
@@ -217,7 +219,7 @@ body {
   border: 1.5px solid var(--line); background: var(--paper);
   min-width: 180px; flex: 1;
 }
-.filters input[type="search"]:focus { outline: 3px solid var(--accent-soft); border-color: var(--accent); }
+.filters input[type="search"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
 
 /* issue list */
 .issue {
