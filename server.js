@@ -273,6 +273,15 @@ app.get('/api/scan/:id', (req, res) => {
   res.json(out);
 });
 
+// ---------- 404s ----------
+// Unknown API routes get JSON; everything else gets the styled 404 page.
+app.use('/api', (_req, res) => {
+  res.status(404).json({ error: 'Not found.' });
+});
+app.use((_req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
 // Graceful-ish shutdown
 process.on('SIGINT', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });
 process.on('SIGTERM', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });

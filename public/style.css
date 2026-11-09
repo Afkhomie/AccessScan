@@ -91,12 +91,30 @@ body {
 }
 #scan-btn:hover { background: var(--accent-dark); }
 #scan-btn:disabled { opacity: 0.6; cursor: wait; }
+
+/* Keyboard focus — explicit ring on every interactive element. */
+.brand:focus-visible,
+.header-nav a:focus-visible,
+#scan-btn:focus-visible,
+.btn-ghost:focus-visible,
+.page-tab:focus-visible,
+.chip:focus-visible,
+.issue-field a:focus-visible,
+.btn-link:focus-visible,
+.crawl-opt input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 .crawl-opt {
   display: inline-flex; align-items: center; gap: 8px;
   margin-top: 12px; font-size: 0.9rem; color: var(--ink-soft); cursor: pointer;
 }
 .form-error {
-  margin: 12px 0 0; color: var(--crit); font-size: 0.95rem;
+  margin: 12px auto 0; max-width: 640px; text-align: left;
+  color: var(--crit); background: var(--crit-bg);
+  border: 1px solid #f0c4c0; border-radius: var(--radius);
+  padding: 10px 14px; font-size: 0.95rem;
 }
 
 /* ---------- Progress ---------- */
@@ -140,6 +158,7 @@ body {
   color: var(--accent); cursor: pointer;
 }
 .btn-ghost:hover { border-color: var(--accent); }
+.btn-link { display: inline-block; text-decoration: none; }
 
 .summary-card {
   background: var(--paper); border: 1px solid var(--line);
@@ -173,13 +192,12 @@ body {
 }
 .page-tab {
   font: inherit; font-size: 0.88rem;
-  padding: 7px 14px; border-radius: 999px;
+  padding: 8px 14px; border-radius: 999px;
   border: 1.5px solid var(--line); background: var(--paper);
   color: var(--ink-soft); cursor: pointer;
   max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .page-tab.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); font-weight: 600; }
-.page-tab .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
 
 /* filters */
 .filters {
@@ -188,7 +206,7 @@ body {
 }
 .chip {
   font: inherit; font-size: 0.85rem; font-weight: 600;
-  padding: 6px 14px; border-radius: 999px;
+  padding: 7px 14px; border-radius: 999px;
   border: 1.5px solid var(--line); background: var(--paper);
   color: var(--ink-soft); cursor: pointer;
 }
@@ -281,6 +299,15 @@ body {
   font-size: 0.85rem; color: var(--ink-soft);
 }
 .site-footer p { margin: 0; }
+
+::selection { background: var(--accent-soft); color: var(--accent-dark); }
+
+h1, h2 { text-wrap: balance; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+  html { scroll-behavior: auto; }
+}
 
 @media (max-width: 560px) {
   .hero { padding-top: 36px; }

@@ -22,6 +22,7 @@ const SEVERITIES = ['critical', 'serious', 'moderate', 'minor'];
 
 let currentScanId = null;
 let pollTimer = null;
+let pollFailures = 0;
 let ui = { activePage: 0, severity: 'all', query: '' };
 
 function showError(msg) {
@@ -70,13 +71,29 @@ async function startScan(url, crawl) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     setBusy(false);
-    showError(data.error || `Request failed (${res.status}).`);
+    if (res.status === 429) {
+      showError(`A scan is already running — ${data.error || 'please wait for it to finish, then try again.'}`);
+    } else {
+      showError(data.error || `Request failed (${res.status}). Please try again.`);
+    }
     return;
   }
 
   currentScanId = data.id;
+  pollFailures = 0;
   pollTimer = setInterval(pollScan, 900);
   pollScan();
+}
+
+// Give up polling and show an inline error the user can act on.
+function abortScan(msg) {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  currentScanId = null;
+  pollFailures = 0;
+  setBusy(false);
+  results.hidden = false;
+  resultsBody.innerHTML = `<div class="page-error"><strong>Scan interrupted.</strong> ${esc(msg)}</div>`;
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function pollScan() {
@@ -84,10 +101,22 @@ async function pollScan() {
   let data;
   try {
     const res = await fetch(`/api/scan/${currentScanId}`);
+    if (!res.ok) {
+      abortScan(res.status === 404
+        ? 'The scan result expired before it finished (the server keeps only recent scans). Start a new scan to try again.'
+        : `The server returned an error (${res.status}) while checking scan status. Try again in a moment.`);
+      return;
+    }
     data = await res.json();
   } catch {
-    return; // transient network hiccup, keep polling
+    // Transient network hiccup — tolerate a few, then give up.
+    pollFailures += 1;
+    if (pollFailures >= 5) {
+      abortScan('Lost connection to the local server. Check that it is still running, then try again.');
+    }
+    return;
   }
+  pollFailures = 0;
 
   progressPhase.textContent = fmtPhase(data.phase);
 
