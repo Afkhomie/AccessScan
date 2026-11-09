@@ -273,6 +273,19 @@ app.get('/api/scan/:id', (req, res) => {
   res.json(out);
 });
 
+// ---------- errors ----------
+// Malformed JSON / body-parser failures: clean JSON, no stack trace leak.
+app.use((err, _req, res, _next) => {
+  if (err && err.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'Malformed JSON body.' });
+  }
+  if (err && err.type === 'entity.too.large') {
+    return res.status(413).json({ error: 'Request body too large.' });
+  }
+  console.error('unhandled error:', err);
+  res.status(500).json({ error: 'Internal server error.' });
+});
+
 // ---------- 404s ----------
 // Unknown API routes get JSON; everything else gets the styled 404 page.
 app.use('/api', (_req, res) => {
