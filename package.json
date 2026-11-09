@@ -1,0 +1,19 @@
+{
+  "name": "accessscan",
+  "version": "0.1.0",
+  "description": "Free, local-first EU Accessibility Act / WCAG website checker. Paste a URL, get an honest automated accessibility report.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "npx playwright install chromium"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "express": "^4.21.2",
+    "playwright": "^1.49.1"
+  }
+}

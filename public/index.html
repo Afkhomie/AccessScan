@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AccessScan — free WCAG / EAA accessibility checker</title>
+<meta name="description" content="Free, local-first automated accessibility scan for the EU Accessibility Act and WCAG. Paste a URL, get an honest report.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231f4e8c'/%3E%3Cpath d='M9 16l5 5 9-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/" aria-label="AccessScan home">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="currentColor"/><path d="M9 16l5 5 9-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>AccessScan</span>
+    </a>
+    <nav class="header-nav" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#limits">Limits</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>Is your website accessible?</h1>
+    <p class="lede">Paste a URL. We scan it for common WCAG&nbsp;2.x failures relevant to the EU Accessibility Act — locally, free, no account, no tracking.</p>
+
+    <form id="scan-form" class="scan-form" novalidate>
+      <label class="sr-only" for="url-input">Website URL</label>
+      <div class="url-row">
+        <input id="url-input" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+               placeholder="https://example.com" required>
+        <button type="submit" id="scan-btn">Scan</button>
+      </div>
+      <label class="crawl-opt">
+        <input type="checkbox" id="crawl-input">
+        Also scan up to 5 linked pages on the same site
+      </label>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+    </form>
+
+    <div class="progress" id="progress" hidden aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <div>
+        <p class="progress-phase" id="progress-phase">Starting…</p>
+        <p class="progress-sub">This can take up to a minute on slow sites.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap disclaimer" id="limits">
+    <strong>Honest disclaimer:</strong> automated scans like this find roughly <strong>30–57%</strong> of WCAG issues (per Deque's research). A clean result does <em>not</em> mean your site is compliant, and issues found don't automatically mean you're breaking the law — they mean real problems worth fixing. EAA enforcement is live in the EU since June 2025. When in doubt, get a manual audit.
+  </section>
+
+  <section class="results wrap" id="results" hidden>
+    <div class="results-head">
+      <h2>Report</h2>
+      <button class="btn-ghost" id="new-scan" type="button">Scan another URL</button>
+    </div>
+
+    <div id="results-body"></div>
+  </section>
+
+  <section class="wrap how" id="how">
+    <h2>How it works</h2>
+    <ol class="how-grid">
+      <li><strong>Paste a URL</strong><span>Any public http(s) page. Private/internal addresses are blocked.</span></li>
+      <li><strong>We load it in a headless browser</strong><span>Same rendering engine users get, then axe-core checks the DOM against WCAG&nbsp;2.x rules.</span></li>
+      <li><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally crawl up to 5 same-origin links.</span></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>AccessScan runs entirely on this machine — no accounts, no payments, no database, no cloud. MIT licensed.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
