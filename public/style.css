@@ -327,3 +327,10 @@ h1, h2 { text-wrap: balance; }
   /* iOS Safari zooms the page when a focused input is <16px — keep it at 1rem */
   .filters input[type="search"] { font-size: 1rem; }
 }
+
+/* Short viewports (e.g. 320x480): compact the hero so the scanner isn't buried. */
+@media (max-height: 560px) {
+  .hero { padding: 20px 20px 16px; }
+  .hero h1 { font-size: 1.4rem; margin-bottom: 8px; }
+  .hero p { margin-bottom: 12px; }
+}
