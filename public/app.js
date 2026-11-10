@@ -420,13 +420,14 @@ form.addEventListener('submit', (e) => {
     urlInput.focus();
     return;
   }
-  // Light client-side sanity; server does the real validation.
-  if (!/^https?:\/\/.+/i.test(raw)) {
-    showError('URL must start with http:// or https://');
+  // Accept bare domains (example.com) — default to https://.
+  const normalized = /^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`;
+  if (!/^https?:\/\/.+/i.test(normalized)) {
+    showError('Enter a valid URL, e.g. example.com');
     urlInput.focus();
     return;
   }
-  startScan(raw, crawlInput.checked, Number(maxPagesInput.value));
+  startScan(normalized, crawlInput.checked, Number(maxPagesInput.value));
 });
 
 // Enable/disable the page-count select with the crawl checkbox.

@@ -52,9 +52,12 @@ function isPrivateIp(ip) {
 }
 
 async function validateScanUrl(raw) {
+  // Accept bare domains/paths (example.com, example.com/x) — default to https://.
+  const trimmed = String(raw || '').trim();
+  const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   let u;
   try {
-    u = new URL(raw);
+    u = new URL(withScheme);
   } catch {
     return { error: 'That does not look like a valid URL.' };
   }
