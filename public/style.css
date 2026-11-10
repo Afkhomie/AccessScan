@@ -73,6 +73,10 @@ body {
   color: var(--ink-soft); font-size: 1.1rem; max-width: 620px;
   margin: 0 auto 32px;
 }
+.hero-note {
+  color: var(--ink-soft); font-size: 0.88rem; max-width: 640px;
+  margin: -20px auto 28px;
+}
 .scan-form { max-width: 640px; margin: 0 auto; }
 .url-row { display: flex; gap: 10px; }
 #url-input {
@@ -111,9 +115,14 @@ body {
   border-radius: 4px;
 }
 .crawl-opt {
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
   margin-top: 12px; font-size: 0.9rem; color: var(--ink-soft); cursor: pointer;
 }
+.crawl-opt select {
+  font: inherit; color: var(--ink); background: #fff;
+  border: 1px solid var(--line, #dfe4ec); border-radius: 6px; padding: 2px 6px;
+}
+.crawl-opt select:disabled { opacity: 0.55; cursor: default; }
 .form-error {
   margin: 12px auto 0; max-width: 640px; text-align: left;
   color: var(--crit); background: var(--crit-bg);
@@ -163,6 +172,34 @@ body {
 }
 .btn-ghost:hover { border-color: var(--accent); }
 .btn-link { display: inline-block; text-decoration: none; }
+.results-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Recent scans ---------- */
+.recent { padding-bottom: 8px; }
+.recent h2 { font-size: 1.15rem; margin: 0 0 4px; }
+.recent-note { font-size: 0.85rem; color: var(--ink-soft); margin: 0 0 12px; }
+.recent-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 8px;
+}
+.recent-item {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 10px 14px; font-size: 0.9rem;
+}
+.recent-item .r-url {
+  flex: 1; min-width: 10rem; font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.recent-item .r-meta { color: var(--ink-soft); font-size: 0.82rem; }
+.btn-mini {
+  font: inherit; font-size: 0.82rem; font-weight: 600;
+  padding: 6px 14px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: var(--paper);
+  color: var(--accent); cursor: pointer; white-space: nowrap;
+}
+.btn-mini:hover { border-color: var(--accent); background: var(--accent-soft); }
+.btn-mini:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .summary-card {
   background: var(--paper); border: 1px solid var(--line);
@@ -188,7 +225,32 @@ body {
 .sev-tile.minor { background: var(--minor-bg); border-color: #dfe4ec; }
 .sev-tile.minor .n, .sev-tile.minor .l { color: var(--minor); }
 .sev-tile.clean .n { color: var(--ok); }
+.sev-tile .sev-note { font-size: 0.72rem; margin-top: 3px; opacity: 0.85; }
 .summary-note { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+.summary-note.next-step { margin-top: 10px; }
+
+/* compare banner — vs previous scan of the same URL */
+.compare-banner {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 12px 16px; margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+.compare-line { margin: 0; }
+.compare-details { margin-top: 6px; }
+.compare-details summary {
+  cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.88rem;
+}
+.compare-details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.compare-details ul { margin: 6px 0 4px; padding-left: 20px; }
+.compare-details li { margin: 2px 0; }
+.compare-sub {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--ink-soft); margin: 8px 0 2px;
+}
+
+/* real fix bullets inside an issue */
+.fix-list { margin: 0 0 6px; padding-left: 18px; font-size: 0.92rem; }
+.fix-list li { margin: 3px 0; }
 
 /* page tabs — horizontal scroll strip on narrow screens instead of squeezing */
 .page-tabs {
@@ -283,6 +345,22 @@ body {
   background: var(--paper); border: 1px dashed var(--line); border-radius: var(--radius);
 }
 .empty-state strong { color: var(--ok); }
+
+/* axe "incomplete" — needs a human, honest-tooling callout */
+.review-box {
+  background: var(--moderate-bg); border: 1px solid #ece0b3;
+  border-radius: var(--radius); padding: 12px 16px; margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+.review-box strong { color: var(--moderate); }
+.review-sub { margin: 4px 0 8px; font-size: 0.85rem; color: var(--ink-soft); }
+.review-box ul { margin: 0; padding-left: 20px; }
+.review-box li { margin: 3px 0; }
+.review-count {
+  background: var(--bg); border-radius: 999px; padding: 1px 8px;
+  font-size: 0.78rem; color: var(--ink-soft);
+}
+.review-box a { color: var(--accent); }
 
 /* page error */
 .page-error {

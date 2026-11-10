@@ -27,6 +27,7 @@
   <section class="hero wrap">
     <h1>Is your website accessible?</h1>
     <p class="lede">Paste a URL. We scan it for common WCAG&nbsp;2.x failures relevant to the EU Accessibility Act — locally, free, no account, no tracking.</p>
+    <p class="hero-note">No Node.js? Send this page to your web developer.</p>
 
     <form id="scan-form" class="scan-form" novalidate>
       <label class="sr-only" for="url-input">Website URL</label>
@@ -37,7 +38,13 @@
       </div>
       <label class="crawl-opt">
         <input type="checkbox" id="crawl-input">
-        Also scan up to 5 linked pages on the same site
+        Also scan linked pages on the same site —
+        <select id="maxpages-input" disabled aria-label="Maximum pages to scan">
+          <option value="1">just this page</option>
+          <option value="3">up to 3 pages</option>
+          <option value="5" selected>up to 5 pages</option>
+          <option value="10">up to 10 pages</option>
+        </select>
       </label>
       <p class="form-error" id="form-error" role="alert" hidden></p>
     </form>
@@ -46,9 +53,15 @@
       <div class="spinner" aria-hidden="true"></div>
       <div>
         <p class="progress-phase" id="progress-phase">Starting…</p>
-        <p class="progress-sub">This can take up to a minute on slow sites.</p>
+        <p class="progress-sub" id="progress-sub">This can take up to a minute on slow sites.</p>
       </div>
     </div>
+  </section>
+
+  <section class="wrap recent" id="recent" hidden>
+    <h2>Recent scans</h2>
+    <p class="recent-note">Kept in memory only — gone when the server restarts.</p>
+    <ul class="recent-list" id="recent-list"></ul>
   </section>
 
   <section class="wrap disclaimer" id="limits">
@@ -58,7 +71,12 @@
   <section class="results wrap" id="results" hidden>
     <div class="results-head">
       <h2>Report</h2>
-      <button class="btn-ghost" id="new-scan" type="button">Scan another URL</button>
+      <div class="results-actions">
+        <a class="btn-ghost btn-link" id="export-html" href="#" download hidden>Download HTML</a>
+        <a class="btn-ghost btn-link" id="export-json" href="#" download hidden>Download JSON</a>
+        <a class="btn-ghost btn-link" id="export-pdf" href="#" download hidden>Download PDF</a>
+        <button class="btn-ghost" id="new-scan" type="button">Scan another URL</button>
+      </div>
     </div>
 
     <div id="results-body"></div>
@@ -69,17 +87,18 @@
     <ol class="how-grid">
       <li><strong>Paste a URL</strong><span>Any public http(s) page. Private/internal addresses are blocked.</span></li>
       <li><strong>We load it in a headless browser</strong><span>Same rendering engine users get, then axe-core checks the DOM against WCAG&nbsp;2.x rules.</span></li>
-      <li><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally crawl up to 5 same-origin links.</span></li>
+      <li><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally scan up to 10 pages including same-site links.</span></li>
     </ol>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine — no accounts, no payments, no database, no cloud. MIT licensed.</p>
+    <p>AccessScan runs entirely on this machine — no accounts, no payments, no database, no cloud. MIT licensed. · <a href="rules.html">WCAG rule reference</a></p>
   </div>
 </footer>
 
+<script src="rules-data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -4,12 +4,19 @@ const form = document.getElementById('scan-form');
 const urlInput = document.getElementById('url-input');
 const scanBtn = document.getElementById('scan-btn');
 const crawlInput = document.getElementById('crawl-input');
+const maxPagesInput = document.getElementById('maxpages-input');
 const formError = document.getElementById('form-error');
 const progress = document.getElementById('progress');
 const progressPhase = document.getElementById('progress-phase');
+const progressSub = document.getElementById('progress-sub');
 const results = document.getElementById('results');
 const resultsBody = document.getElementById('results-body');
 const newScanBtn = document.getElementById('new-scan');
+const exportHtml = document.getElementById('export-html');
+const exportJson = document.getElementById('export-json');
+const exportPdf = document.getElementById('export-pdf');
+const recentSection = document.getElementById('recent');
+const recentList = document.getElementById('recent-list');
 
 const PHASE_LABELS = {
   queued: 'Queued…',
@@ -20,9 +27,26 @@ const PHASE_LABELS = {
 };
 const SEVERITIES = ['critical', 'serious', 'moderate', 'minor'];
 
+// rules-data.js loads before this file and exposes a top-level `const RULES`
+// (classic-script global lexical binding) — id → fix guidance lookup.
+const RULE_LOOKUP = (() => {
+  const m = new Map();
+  try {
+    if (typeof RULES !== 'undefined') for (const r of RULES) m.set(r.id, r);
+  } catch { /* rules data optional — fall back to axe's own text */ }
+  return m;
+})();
+const sevRank = (impact) => {
+  const i = SEVERITIES.indexOf(impact || 'minor');
+  return i === -1 ? SEVERITIES.length : i;
+};
+
 let currentScanId = null;
+let lastReportId = null;
 let pollTimer = null;
 let pollFailures = 0;
+let scanStartedAt = 0;
+let slowHintShown = false;
 let ui = { activePage: 0, severity: 'all', query: '' };
 
 // JS smooth-scroll ignores prefers-reduced-motion; honor it manually.
@@ -53,17 +77,20 @@ function esc(s) {
   }[c]));
 }
 
-async function startScan(url, crawl) {
+async function startScan(url, crawl, maxPages) {
   showError('');
   setBusy(true);
   progressPhase.textContent = 'Starting scan…';
+  progressSub.textContent = 'This can take up to a minute on slow sites.';
+  scanStartedAt = Date.now();
+  slowHintShown = false;
 
   let res;
   try {
     res = await fetch('/api/scan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, crawl }),
+      body: JSON.stringify({ url, crawl, maxPages: crawl ? maxPages : undefined }),
     });
   } catch {
     setBusy(false);
@@ -121,19 +148,27 @@ async function pollScan() {
   }
   pollFailures = 0;
 
+  // After 60s, gently warn that the scan is slower than usual (server caps ~3min).
+  if (!slowHintShown && Date.now() - scanStartedAt > 60_000) {
+    slowHintShown = true;
+    progressSub.textContent = 'Still working — this one is taking longer than usual.';
+  }
   progressPhase.textContent = fmtPhase(data.phase);
 
   if (data.status === 'done') {
+    const doneId = currentScanId;
     clearInterval(pollTimer);
     pollTimer = null;
     currentScanId = null;
     setBusy(false);
-    renderReport(data.result);
+    renderReport(data.result, doneId);
+    loadHistory();
   } else if (data.status === 'error') {
     clearInterval(pollTimer);
     pollTimer = null;
     currentScanId = null;
     setBusy(false);
+    loadHistory();
     results.hidden = false;
     resultsBody.innerHTML = `<div class="page-error"><strong>Scan failed.</strong> ${esc(data.error || 'Unknown error.')}</div>`;
     document.getElementById('results').scrollIntoView({ behavior: smoothScroll, block: 'start' });
@@ -142,13 +177,23 @@ async function pollScan() {
 
 /* ---------- Rendering ---------- */
 
-function sevTile(label, n, cls) {
-  return `<div class="sev-tile ${cls}"><div class="n">${n}</div><div class="l">${label}</div></div>`;
+function sevTile(label, n, cls, note) {
+  return `<div class="sev-tile ${cls}"><div class="n">${n}</div><div class="l">${label}</div>${note ? `<div class="sev-note">${note}</div>` : ''}</div>`;
 }
 
-function renderReport(result) {
+function renderReport(result, scanId) {
   ui = { activePage: 0, severity: 'all', query: '' };
+  lastReportId = scanId || null;
   results.hidden = false;
+  if (lastReportId) {
+    const enc = encodeURIComponent(lastReportId);
+    exportHtml.href = `/api/scan/${enc}/export?format=html`;
+    exportJson.href = `/api/scan/${enc}/export?format=json`;
+    exportPdf.href = `/api/scan/${enc}/export?format=pdf`;
+    exportHtml.hidden = exportJson.hidden = exportPdf.hidden = false;
+  } else {
+    exportHtml.hidden = exportJson.hidden = exportPdf.hidden = true;
+  }
 
   const t = result.totals;
   const allClean = t.rules === 0;
@@ -160,21 +205,26 @@ function renderReport(result) {
         Scanned ${result.pages.length} page${result.pages.length === 1 ? '' : 's'} · ${esc(scannedAt)}
         ${result.crawled ? ' · included same-site links' : ''}
       </p>
-      <div class="sev-grid">
+      <div class="sev-grid" title="Each count is per rule per page — the same rule failing on two pages counts twice.">
         ${allClean
           ? `<div class="sev-tile clean" style="grid-column:1/-1;text-align:center"><div class="n" style="font-size:1.3rem">No violations found</div><div class="l">by the rules axe ran</div></div>`
           : `
-            ${sevTile('Critical', t.critical, 'critical')}
-            ${sevTile('Serious', t.serious, 'serious')}
-            ${sevTile('Moderate', t.moderate, 'moderate')}
-            ${sevTile('Minor', t.minor, 'minor')}`}
+            ${sevTile('Critical', t.critical, 'critical', 'blocks some users entirely')}
+            ${sevTile('Serious', t.serious, 'serious', 'major barriers')}
+            ${sevTile('Moderate', t.moderate, 'moderate', 'hinders some tasks')}
+            ${sevTile('Minor', t.minor, 'minor', 'polish issues')}`}
       </div>
       <p class="summary-note">
         ${allClean
           ? 'axe-core found no violations on the checked rules. That is not a compliance guarantee — see the disclaimer above.'
           : `${t.rules} rule${t.rules === 1 ? '' : 's'} failed across ${t.nodes} element${t.nodes === 1 ? '' : 's'}. Severity is axe's impact rating; fix critical and serious first.`}
+        ${(t.passes || 0) + (t.incomplete || 0) > 0
+          ? ` axe passed ${t.passes || 0} check${(t.passes || 0) === 1 ? '' : 's'} and flagged ${(t.incomplete || 0)} rule${(t.incomplete || 0) === 1 ? '' : 's'} needing manual review.`
+          : ''}
       </p>
-    </div>`;
+      <p class="summary-note next-step">Share the exported report with whoever maintains this site.</p>
+    </div>
+    <div id="compare-banner" class="compare-banner" hidden></div>`;
 
   if (result.pages.length > 1) {
     html += `<div class="page-tabs">` +
@@ -197,7 +247,38 @@ function renderReport(result) {
   });
 
   renderPageDetail(result.pages[ui.activePage]);
+  loadCompareBanner();
   results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
+}
+
+// Compact "vs previous scan" banner — silent no-op when there's nothing to compare.
+async function loadCompareBanner() {
+  const el = document.getElementById('compare-banner');
+  if (!el || !lastReportId) return;
+  let data;
+  try {
+    const res = await fetch(`/api/scans/${encodeURIComponent(lastReportId)}/compare`);
+    if (!res.ok) return;
+    data = await res.json();
+  } catch { return; }
+  if (!data || !data.comparable) return;
+
+  const d = new Date(data.previousScannedAt || '');
+  const when = isNaN(d) ? 'a previous scan' : d.toLocaleDateString();
+  const added = data.addedRules || [];
+  const fixed = data.fixedRules || [];
+  const sev = data.severityChanges || [];
+  const ruleItem = (r) => `<li><code>${esc(r.id)}</code> — ${esc(safeHostPath(r.pageUrl || ''))}</li>`;
+  const sevItem = (c) => `<li><code>${esc(c.id)}</code>: ${esc(c.before)} → ${esc(c.after)} — ${esc(safeHostPath(c.pageUrl || ''))}</li>`;
+
+  el.innerHTML = `
+    <p class="compare-line">vs scan ${esc(when)}: <strong>+${added.length} new</strong>, <strong>−${fixed.length} fixed</strong>, ${sev.length} severity change${sev.length === 1 ? '' : 's'}</p>
+    ${added.length + fixed.length + sev.length ? `<details class="compare-details"><summary>Details</summary>
+      ${added.length ? `<p class="compare-sub">New issues</p><ul>${added.map(ruleItem).join('')}</ul>` : ''}
+      ${fixed.length ? `<p class="compare-sub">Fixed since then</p><ul>${fixed.map(ruleItem).join('')}</ul>` : ''}
+      ${sev.length ? `<p class="compare-sub">Severity changed</p><ul>${sev.map(sevItem).join('')}</ul>` : ''}
+    </details>` : ''}`;
+  el.hidden = false;
 }
 
 function safeHostPath(url) {
@@ -219,8 +300,16 @@ function renderPageDetail(page) {
 
   const violations = page.violations || [];
   const counts = page.counts || { critical: 0, serious: 0, moderate: 0, minor: 0 };
+  const incomplete = page.incomplete || [];
 
-  let html = `
+  const reviewHtml = incomplete.length ? `
+    <div class="review-box">
+      <strong>Needs manual review (${page.incompleteCount || incomplete.length} rule${(page.incompleteCount || incomplete.length) === 1 ? '' : 's'})</strong>
+      <p class="review-sub">axe could not determine pass/fail automatically — check these by hand.</p>
+      <ul>${incomplete.map((i) => `<li>${esc(i.help || i.id)} <span class="review-count">${i.nodeCount || 0}×</span>${i.helpUrl ? ` · <a href="${esc(i.helpUrl)}" target="_blank" rel="noopener noreferrer">reference ↗</a>` : ''}</li>`).join('')}</ul>
+    </div>` : '';
+
+  let html = reviewHtml + `
     <div class="filters" role="group" aria-label="Filter issues">
       <button class="chip ${ui.severity === 'all' ? 'active' : ''}" data-sev="all">All (${violations.length})</button>
       ${SEVERITIES.map((s) => `<button class="chip ${ui.severity === s ? 'active' : ''}" data-sev="${s}">${s} (${counts[s] || 0})</button>`).join('')}
@@ -254,7 +343,7 @@ function renderIssueList(page) {
     if (ui.severity !== 'all' && v.impact !== ui.severity) return false;
     if (q && !(`${v.id} ${v.help} ${v.description}`.toLowerCase().includes(q))) return false;
     return true;
-  });
+  }).sort((a, b) => sevRank(a.impact) - sevRank(b.impact));
 
   if (!items.length) {
     list.innerHTML = `<div class="empty-state"><strong>No matching issues.</strong><br>Adjust the filters, or this page passed every checked rule.</div>`;
@@ -276,6 +365,22 @@ function renderIssueList(page) {
     const more = (v.nodeCount || 0) > 10 ? `<p class="summary-note">…and ${(v.nodeCount || 0) - 10} more element${(v.nodeCount || 0) - 10 === 1 ? '' : 's'} with this issue.</p>` : '';
     const tags = (v.tags || []).map((t) => `<span class="wcag-tag">${esc(t)}</span>`).join('');
 
+    // Real fix guidance from rules-data.js when we know the rule; otherwise
+    // fall back to axe's own one-line summary, labeled honestly.
+    const rule = RULE_LOOKUP.get(v.id);
+    const ruleLinks = `<a href="rules.html#${esc(v.id)}">What this means</a>${v.helpUrl ? ` · <a href="${esc(v.helpUrl)}" target="_blank" rel="noopener noreferrer">official docs ↗</a>` : ''}`;
+    const fixField = rule
+      ? `<div class="issue-field">
+          <label>How to fix</label>
+          <ul class="fix-list">${rule.fix.slice(0, 2).map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+          <a href="rules.html#${esc(v.id)}">Full fix guide</a>${v.helpUrl ? ` · <a href="${esc(v.helpUrl)}" target="_blank" rel="noopener noreferrer">official docs ↗</a>` : ''}
+        </div>`
+      : `<div class="issue-field">
+          <label>axe summary</label>
+          <code>${esc(v.help || v.description || '')}</code>
+          ${ruleLinks}
+        </div>`;
+
     return `
     <div class="issue" data-idx="${i}">
       <button class="issue-head" aria-expanded="false">
@@ -287,11 +392,7 @@ function renderIssueList(page) {
       <div class="issue-body">
         <p class="issue-desc">${esc(v.description || '')}</p>
         <div class="issue-grid">
-          <div class="issue-field">
-            <label>Fix hint</label>
-            <code>${esc(v.help || '')}</code>
-            ${v.helpUrl ? `<a href="${esc(v.helpUrl)}" target="_blank" rel="noopener noreferrer">Rule reference ↗</a>` : ''}
-          </div>
+          ${fixField}
           ${tags ? `<div class="wcag-tags" aria-label="WCAG tags">${tags}</div>` : ''}
           ${nodes}
           ${more}
@@ -325,12 +426,77 @@ form.addEventListener('submit', (e) => {
     urlInput.focus();
     return;
   }
-  startScan(raw, crawlInput.checked);
+  startScan(raw, crawlInput.checked, Number(maxPagesInput.value));
+});
+
+// Enable/disable the page-count select with the crawl checkbox.
+crawlInput.addEventListener('change', () => {
+  maxPagesInput.disabled = !crawlInput.checked;
 });
 
 newScanBtn.addEventListener('click', () => {
   results.hidden = true;
+  exportHtml.hidden = exportJson.hidden = exportPdf.hidden = true;
+  lastReportId = null;
   urlInput.value = '';
   urlInput.focus();
   window.scrollTo({ top: 0, behavior: smoothScroll });
 });
+
+/* ---------- Recent scans (in-memory history) ---------- */
+
+async function loadHistory() {
+  let data;
+  try {
+    const res = await fetch('/api/scans');
+    if (!res.ok) return;
+    data = await res.json();
+  } catch { return; }
+
+  const scans = (data.scans || []).filter((s) => s.status === 'done' || s.status === 'error');
+  if (!scans.length) { recentSection.hidden = true; return; }
+
+  recentSection.hidden = false;
+  recentList.innerHTML = scans.slice(0, 10).map((s) => {
+    const when = s.scannedAt ? new Date(s.scannedAt).toLocaleString() : new Date(s.createdAt).toLocaleString();
+    const label = s.status === 'done'
+      ? `${s.totals?.rules || 0} issue rule${(s.totals?.rules || 0) === 1 ? '' : 's'}`
+      : 'failed';
+    return `<li class="recent-item">
+      <span class="r-url" title="${esc(s.url || '')}">${esc(safeHostPath(s.url || ''))}</span>
+      <span class="r-meta">${esc(when)} · ${esc(label)}</span>
+      <button class="btn-mini" type="button" data-scan="${esc(s.id)}">View</button>
+    </li>`;
+  }).join('');
+
+  recentList.querySelectorAll('.btn-mini').forEach((btn) => {
+    btn.addEventListener('click', () => viewScan(btn.dataset.scan));
+  });
+}
+
+async function viewScan(id) {
+  let data;
+  try {
+    const res = await fetch(`/api/scan/${encodeURIComponent(id)}`);
+    if (!res.ok) {
+      showError('That scan is no longer available (results are kept in memory only).');
+      return;
+    }
+    data = await res.json();
+  } catch {
+    showError('Could not reach the local server.');
+    return;
+  }
+
+  results.hidden = false;
+  if (data.status === 'done' && data.result) {
+    renderReport(data.result, id);
+  } else {
+    resultsBody.innerHTML = `<div class="page-error"><strong>${data.status === 'error' ? 'Scan failed.' : 'Scan not finished.'}</strong> ${esc(data.error || '')}</div>`;
+    exportHtml.hidden = exportJson.hidden = exportPdf.hidden = true;
+    lastReportId = null;
+  }
+  results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
+}
+
+loadHistory();

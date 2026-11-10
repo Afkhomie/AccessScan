@@ -14,15 +14,18 @@ Site owners, devs, agencies, auditors doing quick pre-checks before manual revie
 - Scan via headless Chromium + axe-core (WCAG 2.x A/AA rule tags).
 - Optional: also scan up to 5 same-origin links found on the page.
 - Results: violations grouped by WCAG rule, severity (critical/serious/moderate/minor), element selector + HTML snippet + fix hint, per-page breakdown.
+- axe `incomplete` rules surfaced as "needs manual review" (not counted as violations); pass counts shown.
+- Report export: self-contained print-friendly HTML and raw JSON download per finished scan.
+- Scan history: last ~20 scans kept in memory, re-viewable via UI list (no persistence).
 - SSRF protection: http/https only, block private/internal hosts & IPs, DNS resolution check, timeouts, page-size cap.
 - One scan at a time (queue of 1) → HTTP 429 when busy. Weak-hardware friendly.
 - **Honest framing (required):** UI states automated scans find ~30–57% of WCAG issues; not a compliance guarantee.
 
 ## Non-goals (MVP)
 - No login/accounts/billing/database/persistence across restarts.
-- No PDF/CSV export, no scheduled re-scans, no multi-user, no hosted service.
+- No PDF/CSV export (HTML + JSON only), no scheduled re-scans, no multi-user, no hosted service.
 - No manual-review workflow; automated scan only.
-- No axe-incomplete/needs-review triage UI beyond raw counts (v2).
+- No depth-2+ crawling or sitemap discovery (single page + up to 5 same-origin links).
 
 ## Success criteria
 - `npm install && npm start` works on a fresh machine (document `npx playwright install chromium` if needed).
