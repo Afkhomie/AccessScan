@@ -6,86 +6,120 @@
 <title>WCAG rule reference — AccessScan</title>
 <meta name="description" content="Plain-English explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231f4e8c'/%3E%3Cpath d='M9 16l5 5 9-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 <style>
-/* rules.html — page-specific layout on top of style.css tokens */
+/* rules.html — page-specific layout on top of style.css tokens (Swiss brutalism) */
 
 .skip-link {
-  position: absolute; left: 16px; top: -48px; z-index: 10;
-  background: var(--accent); color: #fff; font-weight: 600;
-  padding: 10px 16px; border-radius: var(--radius); text-decoration: none;
-  transition: top 0.15s ease;
+  position: absolute; left: 16px; top: -60px; z-index: 10;
+  background: var(--accent); color: var(--accent-ink);
+  font-family: var(--mono); font-weight: 800; font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 12px 18px; border: var(--bw) solid var(--ink);
+  text-decoration: none;
 }
-.skip-link:focus-visible { top: 8px; outline: 2px solid var(--ink); outline-offset: 2px; }
+.skip-link:focus-visible { top: 8px; outline: 4px solid var(--ink); outline-offset: 2px; }
 
-.rules-hero { padding: 40px 20px 8px; }
-.rules-hero h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); letter-spacing: -0.02em; margin: 0 0 10px; }
+.rules-hero {
+  padding: 56px 20px 24px;
+  border-bottom: var(--bw) solid var(--ink);
+}
+.rules-hero .hero-kicker { margin-bottom: 12px; }
+.rules-hero h1 {
+  font-size: clamp(2.5rem, 9vw, 4rem); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -0.035em; line-height: 0.98;
+  margin: 0 0 16px;
+}
 .rules-hero .lede { margin-bottom: 20px; }
 
-.rule-filter-row { margin-bottom: 8px; }
+.rule-filter-row { margin-bottom: 0; padding-bottom: 24px; }
 #rule-filter {
-  width: 100%; font: inherit; font-size: 1rem;
-  padding: 12px 16px; border-radius: var(--radius);
-  border: 1.5px solid var(--line); background: var(--paper); color: var(--ink);
+  width: 100%; font: inherit; font-family: var(--mono); font-size: 1rem;
+  padding: 14px 16px; border-radius: 0;
+  border: var(--bw) solid var(--ink); background: var(--paper); color: var(--ink);
 }
-#rule-filter:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
-#filter-count { display: block; margin-top: 6px; font-size: 0.85rem; color: var(--ink-soft); }
+#rule-filter:focus { outline: 4px solid var(--accent); outline-offset: -4px; }
+#filter-count {
+  display: block; margin-top: 8px;
+  font-family: var(--mono); font-size: 0.8rem; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
 
-.rules-body { padding: 16px 20px 56px; }
+.rules-body { padding: 24px 0 64px; }
 
-.disclaimer a, .rule-meta a, .rule-help-link a { color: var(--accent); }
+.disclaimer a, .rule-meta a, .rule-help-link a { color: var(--ink); font-weight: 700; }
+.disclaimer a:hover, .rule-meta a:hover, .rule-help-link a:hover {
+  background: var(--accent); color: var(--accent-ink);
+}
 
-.principle { margin-top: 36px; scroll-margin-top: 16px; }
-.principle > h2 { font-size: 1.35rem; margin: 0 0 4px; letter-spacing: -0.01em; }
-.principle-blurb { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 16px; }
+.principle { margin-top: 40px; scroll-margin-top: 16px; }
+.principle > h2 {
+  font-size: 1.8rem; font-weight: 900; text-transform: uppercase;
+  letter-spacing: -0.02em; margin: 0 0 6px;
+  padding-bottom: 10px; border-bottom: var(--bw) solid var(--ink);
+}
+.principle-blurb {
+  color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 18px;
+}
 
-.rule-list { display: grid; gap: 12px; }
+.rule-list { display: grid; gap: 0; border: var(--bw) solid var(--ink); }
 
 .rule {
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 16px 18px 14px;
+  background: var(--paper); border-bottom: var(--bw) solid var(--ink);
+  padding: 18px 20px 16px;
   scroll-margin-top: 16px;
 }
-.rule:target { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.rule:last-child { border-bottom: 0; }
+.rule:target { background: var(--paper-dim); border-left: 8px solid var(--accent); }
 
-.rule-head { display: flex; align-items: baseline; gap: 10px; }
-.rule-id { margin: 0; font-size: 1.05rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.rule-head { display: flex; align-items: baseline; gap: 12px; }
+.rule-id {
+  margin: 0; font-size: 1.1rem; font-weight: 800;
+  font-family: var(--mono); letter-spacing: -0.01em;
+}
 .rule-permalink {
-  color: var(--ink-soft); text-decoration: none; font-weight: 700;
+  color: var(--ink); text-decoration: none; font-weight: 900;
+  font-family: var(--mono); font-size: 1.1rem;
   opacity: 0; transition: opacity 0.15s ease;
 }
 .rule:hover .rule-permalink, .rule:focus-within .rule-permalink { opacity: 1; }
-.rule-permalink:focus-visible { opacity: 1; outline: 2px solid var(--accent); border-radius: 4px; }
+.rule-permalink:hover { background: var(--accent); color: var(--accent-ink); }
 
-.rule-help { margin: 4px 0 8px; font-size: 0.95rem; color: var(--ink-soft); }
-.rule-means { margin: 0 0 10px; font-size: 0.97rem; }
+.rule-help { margin: 6px 0 8px; font-size: 0.98rem; color: var(--ink); font-weight: 600; }
+.rule-means { margin: 0 0 12px; font-size: 0.95rem; color: var(--ink-soft); }
 
 .rule-fix h4 {
-  margin: 0 0 6px; font-size: 0.78rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft);
+  margin: 0 0 8px; font-family: var(--mono); font-size: 0.75rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink);
 }
-.rule-fix ul { margin: 0; padding-left: 20px; }
-.rule-fix li { margin: 3px 0; font-size: 0.93rem; }
+.rule-fix ul { margin: 0; padding-left: 22px; }
+.rule-fix li { margin: 5px 0; font-size: 0.93rem; }
 
 .rule-meta {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line);
+  margin-top: 14px; padding-top: 12px; border-top: var(--bw) solid var(--ink);
   font-size: 0.85rem;
 }
-.rule-meta a { color: var(--accent); margin-left: auto; }
+.rule-meta a { color: var(--ink); margin-left: auto; font-family: var(--mono); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 .rule-meta a + a { margin-left: 0; }
 
 .empty-filter {
-  display: none; text-align: center; padding: 32px 20px;
-  color: var(--ink-soft); background: var(--paper);
-  border: 1px dashed var(--line); border-radius: var(--radius);
+  display: none; text-align: center; padding: 40px 20px;
+  color: var(--ink); background: var(--paper);
+  border: var(--bw) dashed var(--ink);
 }
 body.filter-empty .empty-filter { display: block; }
 body.filter-empty .principle { display: none; }
 
+@media (prefers-reduced-motion: reduce) {
+  .rule-permalink { transition: none; }
+}
+
 @media (max-width: 560px) {
-  .rules-hero { padding-top: 28px; }
+  .rules-hero { padding-top: 36px; }
+  .rule { padding: 16px 16px 14px; }
   .rule-meta { gap: 8px; }
+  .rule-meta a { margin-left: 0; }
 }
 </style>
 </head>
@@ -96,7 +130,7 @@ body.filter-empty .principle { display: none; }
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="AccessScan home">
-      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="currentColor"/><path d="M9 16l5 5 9-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" fill="currentColor"/><path d="M8 16l6 6 10-12" stroke="#fff" stroke-width="4" fill="none"/></svg>
       <span>AccessScan</span>
     </a>
     <nav class="header-nav" aria-label="Main">
@@ -107,6 +141,7 @@ body.filter-empty .principle { display: none; }
 
 <main id="main">
   <section class="wrap rules-hero">
+    <p class="hero-kicker">Rule reference · axe-core 4.14</p>
     <h1>WCAG rule reference</h1>
     <p class="lede">Plain-English explanations of the accessibility rules AccessScan checks, grouped by WCAG&nbsp;2.x principle. Each entry links to the full axe-core reference.</p>
     <div class="disclaimer" role="note">
