@@ -19,8 +19,14 @@ Express server (server.js)
           │  optional: collect same-origin <a href> links (maxPages-1, ≤9)
           │  → scan crawl pages 2 at a time (own tab each), ~3min total deadline
           ▼
-   Results kept in-memory Map (last ~20 scans), returned as JSON
+   Results kept in-memory via scan-store.js (last ~20 scans), returned as JSON
 ```
+
+## Modules
+- `server.js` — Express routes, SSRF validation, scan orchestration. Thin adapters only.
+- `scan-store.js` — in-memory scan Map, keep-last-20 pruning, URL normalization, finished-scan invariant (404/409), rule-level compare diff. Pure logic, no Playwright.
+- `axe-map.js` — pure `mapAxeResults(axeResults, {url,status,title})`: trims raw axe output to the stored per-page shape.
+- `report.js` — `buildHtmlReport` + `escHtml`/`SEV_ORDER`: self-contained HTML export rendering.
 
 ## Key decisions
 - **Express over node:http**: barely more code, static + JSON routing for free.
