@@ -113,8 +113,9 @@ function createScanStore({ maxScans = MAX_SCANS } = {}) {
         .sort((a, b) => b.createdAt - a.createdAt);
     },
 
-    // Compare against the most recent OTHER finished scan of the same
-    // normalized URL. "Most recent" = greatest createdAt.
+    // Compare against the nearest EARLIER finished scan of the same
+    // normalized URL (createdAt strictly before this scan's), so
+    // addedRules/fixedRules always read as "what changed since then".
     // Returns { comparable:false } or the diff payload; { status, error } on failure.
     compare(id) {
       const fin = this.getFinished(id);
@@ -126,6 +127,7 @@ function createScanStore({ maxScans = MAX_SCANS } = {}) {
       for (const other of scans.values()) {
         if (other.id === rec.id || other.status !== 'done' || !other.result) continue;
         if (normalizeScanUrl(other.url) !== key) continue;
+        if (other.createdAt >= rec.createdAt) continue;
         if (!prev || other.createdAt > prev.createdAt) prev = other;
       }
       if (!prev) return { comparable: false };

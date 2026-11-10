@@ -247,15 +247,22 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.post('/api/scan', async (req, res) => {
+  // Reserve the single scan slot BEFORE any await — concurrent requests must
+  // not all pass the busy check while DNS validation is in flight.
   if (scanning) {
     return res.status(429).json({ error: 'A scan is already running. Please wait for it to finish.' });
   }
+  scanning = true;
   const raw = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
   if (!raw || raw.length > 2048) {
+    scanning = false;
     return res.status(400).json({ error: 'Provide a URL to scan.' });
   }
   const { url, error } = await validateScanUrl(raw);
-  if (error) return res.status(400).json({ error });
+  if (error) {
+    scanning = false;
+    return res.status(400).json({ error });
+  }
 
   // Optional maxPages: total pages including the submitted URL, clamped 1-10.
   // Non-numeric → 400; numeric out-of-range → clamped (not an error).
@@ -264,13 +271,19 @@ app.post('/api/scan', async (req, res) => {
   if (rawMax !== undefined && rawMax !== null && rawMax !== '') {
     const n = typeof rawMax === 'number' ? rawMax : Number(rawMax);
     if (!Number.isFinite(n)) {
+      scanning = false;
       return res.status(400).json({ error: 'maxPages must be a number.' });
     }
     maxPages = Math.min(MAX_PAGES_LIMIT, Math.max(1, Math.trunc(n)));
   }
 
-  scanning = true;
-  const rec = scanStore.create({ url: url.toString(), maxPages });
+  // Store a credential-free copy for display/history — rec.url ends up in
+  // /api/scans, reports and exports, so user:pass@ must not persist there.
+  // Navigation still uses the original URL (basic-auth sites keep working).
+  const storedUrl = new URL(url.toString());
+  storedUrl.username = '';
+  storedUrl.password = '';
+  const rec = scanStore.create({ url: storedUrl.toString(), maxPages });
   const crawl = req.body?.crawl === true;
 
   // Fire and forget; client polls /api/scan/:id

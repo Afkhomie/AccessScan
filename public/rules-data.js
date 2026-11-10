@@ -1068,7 +1068,10 @@ function initFilter() {
   input.addEventListener('input', apply);
   // jump-to-anchor support: if the target was hidden by a filter, reveal it
   window.addEventListener('hashchange', () => {
-    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    let targetId;
+    try { targetId = decodeURIComponent(location.hash.slice(1)); }
+    catch { return; } // malformed percent-encoding — nothing to reveal
+    const target = document.getElementById(targetId);
     if (target && target.classList && target.classList.contains('rule') && target.hidden) {
       input.value = '';
       apply();
