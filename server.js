@@ -13,6 +13,7 @@ const { mapAxeResults } = require('./axe-map');
 const { buildHtmlReport } = require('./report');
 
 const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.HOST || '127.0.0.1';
 const SCAN_TIMEOUT_MS = 45_000;
 const SCAN_DEADLINE_MS = 180_000; // ~3 min total wall-clock per scan
 const MAX_PAGES = 6; // default total pages (submitted URL + same-origin links); API allows 1-10
@@ -449,6 +450,6 @@ app.use((_req, res) => {
 process.on('SIGINT', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });
 process.on('SIGTERM', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`AccessScan listening on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`AccessScan listening on http://${HOST}:${PORT}`);
 });
