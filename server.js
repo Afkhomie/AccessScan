@@ -146,6 +146,16 @@ async function scanOnePage(page, url) {
   // Give late scripts a moment, but don't hang on networkidle.
   await page.waitForLoadState('networkidle', { timeout: 6_000 }).catch(() => {});
 
+  // A redirect may have landed on an internal host — re-validate the
+  // final URL the same way the submitted URL was validated.
+  const finalUrl = page.url();
+  if (finalUrl && finalUrl !== url) {
+    const check = await validateScanUrl(finalUrl);
+    if (check.error) {
+      return { url, error: `Redirected to a disallowed address. ${check.error}`, status: resp?.status() ?? null };
+    }
+  }
+
   const html = await page.content();
   if (Buffer.byteLength(html, 'utf8') > MAX_HTML_BYTES) {
     return { url, error: 'Page is too large to scan safely.', status: resp?.status() ?? null };
@@ -382,6 +392,6 @@ app.use((_req, res) => {
 process.on('SIGINT', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });
 process.on('SIGTERM', async () => { if (browser) await browser.close().catch(() => {}); process.exit(0); });
 
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
   console.log(`AccessScan listening on http://localhost:${PORT}`);
 });
