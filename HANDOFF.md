@@ -84,3 +84,12 @@ GET /api/scan/:id → export?format=html|json|pdf.
   `app.set('trust proxy', 1)` (or appropriate hops) on the Render service —
   needs a Render redeploy, do it deliberately.
 - Render cold starts (~50s) still apply after idle.
+
+## 2026-11-11 EOD state
+- LIVE: https://access-scan-tool.vercel.app (Vercel static, public/ = root dir)
+- API: https://accessscan-9gcz.onrender.com (Render free tier, auto-deploy on push)
+- /api/* proxied via public/vercel.json rewrites — same-origin, no CORS
+- vercel.json lives in public/ NOT repo root (root conflicts with Express detect)
+- .github/workflows/{test,keepalive}.yml exist LOCALLY ONLY — push needs `gh auth refresh -s workflow`
+- Keep-alive: GH Action cron */10min drafted; if unpushed, Render sleeps after ~15min idle (cold start ~50s, self-heals on visit)
+- TODO next: trust proxy on Render for real per-IP rate limits; Search Console once custom domain exists
