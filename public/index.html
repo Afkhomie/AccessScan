@@ -3,23 +3,48 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AccessScan — free WCAG / EAA accessibility checker</title>
-<meta name="description" content="Free WCAG/EAA accessibility scanner — check any website for accessibility issues. Runs locally, no signup.">
+<title>AccessScan · free WCAG / EAA accessibility checker</title>
+<meta name="description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
 <meta name="theme-color" content="#003399">
 <link rel="canonical" href="https://github.com/Afkhomie/AccessScan">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AccessScan">
-<meta property="og:title" content="AccessScan — free WCAG/EAA accessibility scanner">
-<meta property="og:description" content="Free WCAG/EAA accessibility scanner — check any website for accessibility issues. Runs locally, no signup.">
+<meta property="og:title" content="AccessScan · free WCAG/EAA accessibility scanner">
+<meta property="og:description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
 <meta property="og:url" content="https://github.com/Afkhomie/AccessScan">
 <meta property="og:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AccessScan — free WCAG/EAA accessibility scanner">
-<meta name="twitter:description" content="Free WCAG/EAA accessibility scanner — check any website for accessibility issues. Runs locally, no signup.">
+<meta name="twitter:title" content="AccessScan · free WCAG/EAA accessibility scanner">
+<meta name="twitter:description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <link rel="stylesheet" href="style.css">
+<style>
+/* FAQ — hairline-separated disclosure list, same rhythm as .how-grid.
+   Uses existing tokens only; native <details> keeps it JS-free. */
+.faq { padding-top: 56px; padding-bottom: 72px; }
+.faq h2 {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em;
+  margin: 0 0 24px;
+}
+.faq-list { margin: 0; }
+.faq-list details { border-top: 1px solid var(--line); }
+.faq-list details:last-child { border-bottom: 1px solid var(--line); }
+.faq-list summary {
+  cursor: pointer; font-weight: 600; font-size: 1rem;
+  padding: 18px 4px; color: var(--ink);
+}
+.faq-list summary:hover { color: var(--blue); }
+.faq-list summary:focus-visible {
+  outline: 3px solid var(--blue); outline-offset: 2px;
+}
+.faq-list details p {
+  margin: 0 0 20px; padding: 0 4px;
+  max-width: 72ch; color: var(--ink-soft); font-size: 0.9375rem;
+}
+.faq-list details p a { font-weight: 600; }
+</style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 </head>
 <body>
@@ -44,7 +69,7 @@
   <section class="hero wrap">
     <p class="hero-kicker">WCAG 2.x · EAA · axe-core · local-first</p>
     <h1>Is your website accessible?</h1>
-    <p class="lede">Paste a URL. We scan it for common WCAG&nbsp;2.x failures relevant to the EU Accessibility Act — locally, free, no account, no tracking.</p>
+    <p class="lede">Paste a URL. We scan it for common WCAG&nbsp;2.x failures relevant to the EU Accessibility Act. The scan runs locally, is free, and needs no account or tracking.</p>
     <p class="hero-note">No Node.js? Send this page to your web developer.</p>
 
     <form id="scan-form" class="scan-form" novalidate>
@@ -56,7 +81,7 @@
       </div>
       <label class="crawl-opt">
         <input type="checkbox" id="crawl-input">
-        Also scan linked pages on the same site —
+        Also scan linked pages on the same site:
         <select id="maxpages-input" disabled aria-label="Maximum pages to scan">
           <option value="1">just this page</option>
           <option value="3">up to 3 pages</option>
@@ -79,13 +104,13 @@
 
   <section class="wrap recent" id="recent" hidden>
     <h2>Recent scans</h2>
-    <p class="recent-note">Kept in memory only — gone when the server restarts.</p>
+    <p class="recent-note">Kept in memory only. Gone when the server restarts.</p>
     <ul class="recent-list" id="recent-list"></ul>
   </section>
 
   <section class="wrap" id="limits">
     <div class="disclaimer">
-      <strong>Honest disclaimer:</strong> automated scans like this find roughly <strong>30–57%</strong> of WCAG issues (per Deque's research). A clean result does <em>not</em> mean your site is compliant, and issues found don't automatically mean you're breaking the law — they mean real problems worth fixing. EAA enforcement is live in the EU since June 2025. When in doubt, get a manual audit.
+      <strong>Honest disclaimer:</strong> automated scans like this find roughly <strong>30–57%</strong> of WCAG issues (per Deque's research). A clean result does <em>not</em> mean your site is compliant, and issues found don't automatically mean you're breaking the law. They mean real problems worth fixing. EAA enforcement is live in the EU since June 2025. When in doubt, get a manual audit.
     </div>
   </section>
 
@@ -107,16 +132,50 @@
   <section class="wrap how" id="how">
     <h2>How it works</h2>
     <ol class="how-grid">
-      <li><strong>Paste a URL</strong><span>Any public http(s) page. Private/internal addresses are blocked.</span></li>
-      <li><strong>We load it in a headless browser</strong><span>Same rendering engine users get, then axe-core checks the DOM against WCAG&nbsp;2.x rules.</span></li>
-      <li><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally scan up to 10 pages including same-site links.</span></li>
+      <li><div class="how-body"><strong>Paste a URL</strong><span>Any public http(s) page. Private/internal addresses are blocked.</span></div></li>
+      <li><div class="how-body"><strong>We load it in a headless browser</strong><span>Same rendering engine users get, then axe-core checks the DOM against WCAG&nbsp;2.x rules.</span></div></li>
+      <li><div class="how-body"><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally scan up to 10 pages including same-site links.</span></div></li>
     </ol>
+  </section>
+
+  <section class="wrap faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Is a clean scan proof of WCAG or EAA compliance?</summary>
+        <p>No. Automated tools like this catch roughly <strong>30–57%</strong> of WCAG issues (per Deque's research) — many criteria need human judgment that no scanner can apply. A clean report means "no common automated failures found," not "compliant." For real assurance, pair it with a manual audit.</p>
+      </details>
+      <details>
+        <summary>Does it cost anything? Do I need an account?</summary>
+        <p>No and no. AccessScan is free, MIT licensed, and needs no signup, payment, or tracking. It runs on whatever machine hosts it — if that's your own install, the only thing that leaves is the request to load the site you ask it to scan.</p>
+      </details>
+      <details>
+        <summary>Where does my data go?</summary>
+        <p>Scan URLs and results live in server memory only — the last 20 scans are kept in memory and everything vanishes when the server restarts. Nothing is written to disk or sent anywhere; the only outbound traffic is the headless browser loading the page you gave it. Credentials in a submitted URL are stripped before anything is stored.</p>
+      </details>
+      <details>
+        <summary>What does it actually check?</summary>
+        <p><a href="rules.html">axe-core</a> WCAG&nbsp;2.x rules at A/AA level (2.0, 2.1 and 2.2 success criteria). Each scan reports violations grouped by severity — critical, serious, moderate, minor — with the exact element, a code snippet and a fix hint, plus items axe flagged as <em>needs manual review</em> because a human has to decide.</p>
+      </details>
+      <details>
+        <summary>Can it scan my whole site?</summary>
+        <p>Yes — the optional crawl mode follows links on the same origin and scans up to 10 pages total (you choose 1, 3, 5 or 10). Pages are scanned two at a time with a ~3-minute wall-clock cap, so very large sites may only be partially covered. Pick the most important pages for the best signal.</p>
+      </details>
+      <details>
+        <summary>How is this different from Lighthouse?</summary>
+        <p>Lighthouse folds accessibility into a quick lab score alongside performance and SEO. AccessScan is focused accessibility depth: every axe rule explained in plain English at <a href="rules.html">the rule reference</a>, per-element snippets you can hand to a developer, and reports you can export as HTML, JSON or PDF. They complement each other — run both.</p>
+      </details>
+      <details>
+        <summary>Is it legal or safe to scan any site?</summary>
+        <p>Only scan sites you own or have explicit permission to test. AccessScan blocks private/internal network addresses as a safety measure, but safeguards are not permission. Automated scanning can still load pages and trigger rate limits on someone else's server — see the <a href="terms.html">acceptable use</a> section of the terms.</p>
+      </details>
+    </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine — no accounts, no payments, no database, no cloud. MIT licensed. · <a href="rules.html">WCAG rule reference</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+    <p>AccessScan runs entirely on this machine: no accounts, no payments, no database, no cloud. MIT licensed. · <a href="rules.html">WCAG rule reference</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
   </div>
 </footer>
 

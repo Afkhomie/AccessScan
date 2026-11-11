@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy — AccessScan</title>
+<title>Privacy · AccessScan</title>
 <meta name="description" content="AccessScan privacy policy in plain language: what data exists, what leaves your machine, and what we never do. No cookies, no tracking, no accounts.">
 <meta name="theme-color" content="#003399">
 <link rel="canonical" href="https://github.com/Afkhomie/AccessScan/blob/master/public/privacy.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AccessScan">
-<meta property="og:title" content="Privacy — AccessScan">
+<meta property="og:title" content="Privacy · AccessScan">
 <meta property="og:description" content="AccessScan privacy policy in plain language: what data exists, what leaves your machine, and what we never do.">
 <meta property="og:url" content="https://github.com/Afkhomie/AccessScan/blob/master/public/privacy.html">
 <meta property="og:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Privacy — AccessScan">
+<meta name="twitter:title" content="Privacy · AccessScan">
 <meta name="twitter:description" content="AccessScan privacy policy in plain language: what data exists, what leaves your machine, and what we never do.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <link rel="stylesheet" href="style.css">
@@ -75,16 +75,16 @@
   <section class="wrap legal-hero">
     <p class="hero-kicker">Privacy · plain language</p>
     <h1>Privacy policy</h1>
-    <p class="lede">AccessScan is a local tool with nothing to track. This page explains exactly what data exists and where it goes — which is mostly nowhere.</p>
+    <p class="lede">AccessScan is a local tool with nothing to track. This page explains exactly what data exists and where it goes, which is mostly nowhere.</p>
   </section>
 
   <div class="wrap legal-body">
     <h2>What data exists</h2>
-    <p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. Both live in the server process's memory (RAM) on your own machine — the same place the tool itself runs. There is no database, no log file of scans, and nothing written to disk.</p>
+    <p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. Both live in the server process's memory (RAM) on your own machine, the same place the tool itself runs. There is no database, no log file of scans, and nothing written to disk.</p>
     <p>Your browser doesn't store anything either: no cookies, no localStorage, no session state. Close the tab or restart the server and everything is gone.</p>
 
     <h2>What leaves your machine</h2>
-    <p>Your browser talks only to the AccessScan server on <code>127.0.0.1</code> — your own computer. From there, the one thing that "leaves" is the point of the tool itself: <strong>the server fetches the website URL you gave it</strong> and runs an accessibility check on the rendered page, exactly as your browser would. That target site sees a normal page request (with a User-Agent identifying AccessScan).</p>
+    <p>Your browser talks only to the AccessScan server on <code>127.0.0.1</code>, your own computer. From there, the one thing that "leaves" is the point of the tool itself: <strong>the server fetches the website URL you gave it</strong> and runs an accessibility check on the rendered page, exactly as your browser would. That target site sees a normal page request (with a User-Agent identifying AccessScan).</p>
     <p>There are no third-party requests: no analytics, no telemetry, no CDN-hosted scripts or fonts, no external fonts or trackers. Every script and stylesheet is served from the same local server. The only outbound links on this site are documentation links (like the axe-core rule reference) that load only if you click them.</p>
 
     <h2>What we don't do</h2>
@@ -93,12 +93,12 @@
       <li>No accounts, sign-ups, or logins</li>
       <li>No analytics or usage reporting</li>
       <li>No third-party SDKs or external services</li>
-      <li>No payments — the tool is free</li>
+      <li>No payments. The tool is free</li>
       <li>No database and no cloud storage</li>
     </ul>
 
     <h2>Data retention</h2>
-    <p>Scan records are kept in memory only, capped at the 20 most recent scans, and are deleted when the server process stops. If you want a copy of a report, export it (HTML, JSON, or PDF) before restarting — exports are generated on your machine and downloaded to your browser like any normal file.</p>
+    <p>Scan records are kept in memory only, capped at the 20 most recent scans, and are deleted when the server process stops. If you want a copy of a report, export it (HTML, JSON, or PDF) before restarting. Exports are generated on your machine and downloaded to your browser like any normal file.</p>
 
     <h2>Contact</h2>
     <p>Questions or concerns: open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a>. AccessScan is operated by Afkhomie via GitHub.</p>
@@ -107,7 +107,7 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine — no accounts, no payments, no database, no cloud. MIT licensed. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="rules.html">Rule reference</a></p>
+    <p>AccessScan runs entirely on this machine: no accounts, no payments, no database, no cloud. MIT licensed. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="rules.html">Rule reference</a></p>
   </div>
 </footer>
 

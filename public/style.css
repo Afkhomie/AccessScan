@@ -43,7 +43,11 @@
   --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
   --shadow-lift: 0 4px 12px rgba(16, 24, 40, 0.12);
 
-  --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Type: Cantarell first — a humanist grotesque with character that ships
+     with Fedora/elementary and is uncommon enough to avoid the Inter/Open
+     Sans template look. No webfont fetch; everywhere else falls through to
+     the native system stack so each OS keeps its own voice. */
+  --sans: Cantarell, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Open Sans", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
 
@@ -527,25 +531,31 @@ body::before {
 
 /* ---------- How / footer ---------- */
 .how { padding-top: 56px; padding-bottom: 72px; }
+/* How-it-works: numbered steps as a hairline-separated list, not a row of
+   identical cards — reads like a gov process description, scales to any width. */
 .how-grid {
   list-style: none; margin: 0; padding: 0; counter-reset: how;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
 }
 .how-grid li {
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 24px; counter-increment: how;
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  counter-increment: how;
+}
+.how-grid li:last-child {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
 }
 .how-grid li::before {
-  content: "0" counter(how); display: block;
-  font-weight: 700; font-size: 1.5rem;
-  color: var(--blue); margin-bottom: 12px;
+  content: "0" counter(how); flex: 0 0 auto;
+  font-weight: 700; font-size: 1.75rem; line-height: 1.15;
+  color: var(--blue); font-variant-numeric: tabular-nums;
 }
-.how-grid strong {
-  display: block; margin-bottom: 6px; font-size: 1rem; font-weight: 700;
+.how-body { max-width: 62ch; }
+.how-body strong {
+  display: block; margin-bottom: 6px; font-size: 1.0625rem; font-weight: 700;
 }
-.how-grid span { font-size: 0.875rem; color: var(--ink-soft); }
+.how-body span { font-size: 0.9375rem; color: var(--ink-soft); }
 .site-footer {
   background: var(--navy); color: #cdd7ea;
   padding: 32px 24px; font-size: 0.875rem;

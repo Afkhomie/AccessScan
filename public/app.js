@@ -112,7 +112,7 @@ async function startScan(url, crawl, maxPages) {
   if (!res.ok) {
     setBusy(false);
     if (res.status === 429) {
-      showError(`A scan is already running — ${data.error || 'please wait for it to finish, then try again.'}`);
+      showError(`A scan is already running. ${data.error || 'Please wait for it to finish, then try again.'}`);
     } else {
       showError(data.error || `Request failed (${res.status}). Please try again.`);
     }
@@ -162,7 +162,7 @@ async function pollScan() {
   // After 60s, gently warn that the scan is slower than usual (server caps ~3min).
   if (!slowHintShown && Date.now() - scanStartedAt > 60_000) {
     slowHintShown = true;
-    progressSub.textContent = 'Still working — this one is taking longer than usual.';
+    progressSub.textContent = 'Still working. This one is taking longer than usual.';
   }
   progressPhase.textContent = fmtPhase(data.phase);
 
@@ -173,7 +173,7 @@ async function pollScan() {
     currentScanId = null;
     setBusy(false);
     renderReport(data.result, doneId);
-    announceScan(`Scan complete — ${data.result?.totals?.rules || 0} issue rule${(data.result?.totals?.rules || 0) === 1 ? '' : 's'} found`);
+    announceScan(`Scan complete. ${data.result?.totals?.rules || 0} issue rule${(data.result?.totals?.rules || 0) === 1 ? '' : 's'} found`);
     loadHistory();
   } else if (data.status === 'error') {
     clearInterval(pollTimer);
@@ -228,10 +228,10 @@ function renderReport(result, scanId) {
             ${sevTile('Moderate', t.moderate, 'moderate', 'hinders some tasks')}
             ${sevTile('Minor', t.minor, 'minor', 'polish issues')}`}
       </div>
-      <span id="sev-grid-note" class="sr-only">Each count is per rule per page — the same rule failing on two pages counts twice.</span>
+      <span id="sev-grid-note" class="sr-only">Each count is per rule per page. The same rule failing on two pages counts twice.</span>
       <p class="summary-note">
         ${allClean
-          ? 'axe-core found no violations on the checked rules. That is not a compliance guarantee — see the disclaimer above.'
+          ? 'axe-core found no violations on the checked rules. That is not a compliance guarantee. See the disclaimer above.'
           : `${t.rules} rule${t.rules === 1 ? '' : 's'} failed across ${t.nodes} element${t.nodes === 1 ? '' : 's'}. Severity is axe's impact rating; fix critical and serious first.`}
         ${(t.passes || 0) + (t.incomplete || 0) > 0
           ? ` axe passed ${t.passes || 0} check${(t.passes || 0) === 1 ? '' : 's'} and flagged ${(t.incomplete || 0)} rule${(t.incomplete || 0) === 1 ? '' : 's'} needing manual review.`
@@ -287,8 +287,8 @@ async function loadCompareBanner() {
   const added = data.addedRules || [];
   const fixed = data.fixedRules || [];
   const sev = data.severityChanges || [];
-  const ruleItem = (r) => `<li><code>${esc(r.id)}</code> — ${esc(safeHostPath(r.pageUrl || ''))}</li>`;
-  const sevItem = (c) => `<li><code>${esc(c.id)}</code>: ${esc(c.before)} → ${esc(c.after)} — ${esc(safeHostPath(c.pageUrl || ''))}</li>`;
+  const ruleItem = (r) => `<li><code>${esc(r.id)}</code> · ${esc(safeHostPath(r.pageUrl || ''))}</li>`;
+  const sevItem = (c) => `<li><code>${esc(c.id)}</code>: ${esc(c.before)} → ${esc(c.after)} · ${esc(safeHostPath(c.pageUrl || ''))}</li>`;
 
   el.innerHTML = `
     <p class="compare-line">vs scan ${esc(when)}: <strong>+${added.length} new</strong>, <strong>−${fixed.length} fixed</strong>, ${sev.length} severity change${sev.length === 1 ? '' : 's'}</p>
@@ -324,7 +324,7 @@ function renderPageDetail(page) {
   const reviewHtml = incomplete.length ? `
     <div class="review-box">
       <strong>Needs manual review (${page.incompleteCount || incomplete.length} rule${(page.incompleteCount || incomplete.length) === 1 ? '' : 's'})</strong>
-      <p class="review-sub">axe could not determine pass/fail automatically — check these by hand.</p>
+      <p class="review-sub">axe could not determine pass/fail automatically. Check these by hand.</p>
       <ul>${incomplete.map((i) => `<li>${esc(i.help || i.id)} <span class="review-count">${i.nodeCount || 0}×</span>${i.helpUrl ? ` · <a href="${esc(i.helpUrl)}" target="_blank" rel="noopener noreferrer">reference ↗</a>` : ''}</li>`).join('')}</ul>
     </div>` : '';
 
