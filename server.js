@@ -2,6 +2,14 @@
 // Single-process: Express serves the UI + JSON API, Playwright+axe does scans.
 // Honest scope: one scan at a time (weak hardware), results are in-memory only.
 
+// On Render, browsers must live inside the deployed app dir — the default
+// ~/.cache/ms-playwright from the build step does not persist to runtime.
+// PLAYWRIGHT_BROWSERS_PATH=0 installs into node_modules/.local-browsers.
+// Must be set before playwright is required (path resolved at load time).
+if (process.env.RENDER === 'true' && !process.env.PLAYWRIGHT_BROWSERS_PATH) {
+  process.env.PLAYWRIGHT_BROWSERS_PATH = '0';
+}
+
 const express = require('express');
 const path = require('path');
 const dns = require('dns').promises;

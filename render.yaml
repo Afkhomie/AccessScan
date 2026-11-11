@@ -3,7 +3,9 @@ services:
     name: accessscan
     runtime: node
     plan: free
-    buildCommand: npm install && npx playwright install --with-deps chromium
+    # PLAYWRIGHT_BROWSERS_PATH=0 → browsers install into node_modules so they
+    # persist from build to runtime (Render does not keep ~/.cache).
+    buildCommand: PLAYWRIGHT_BROWSERS_PATH=0 npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
