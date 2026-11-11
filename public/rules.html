@@ -11,7 +11,7 @@
 /* rules.html — page-specific layout on top of style.css tokens */
 
 .rules-hero {
-  padding: 56px 0 32px;
+  padding-top: 56px; padding-bottom: 32px;
   border-bottom: 1px solid var(--line);
 }
 .rules-hero .hero-kicker { margin-bottom: 12px; }
@@ -31,10 +31,10 @@
 #rule-filter:focus-visible { outline: 3px solid var(--blue); outline-offset: -1px; }
 #filter-count {
   display: block; margin-top: 8px;
-  font-size: 0.88rem; color: var(--ink-soft);
+  font-size: 0.875rem; color: var(--ink-soft);
 }
 
-.rules-body { padding: 32px 0 72px; }
+.rules-body { padding-top: 32px; padding-bottom: 72px; }
 
 .disclaimer a, .rule-meta a, .rule-help-link a { color: var(--blue); font-weight: 600; }
 .disclaimer a:hover, .rule-meta a:hover, .rule-help-link a:hover {
@@ -48,48 +48,48 @@
   padding-bottom: 12px; border-bottom: 2px solid var(--blue);
 }
 .principle-blurb {
-  color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 20px;
+  color: var(--ink-soft); font-size: 0.875rem; margin: 0 0 20px;
 }
 
-.rule-list { display: grid; gap: 14px; }
+.rule-list { display: grid; gap: 16px; }
 
 .rule {
   background: var(--paper); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 20px 22px 18px;
+  padding: 20px 24px;
   scroll-margin-top: 90px;
 }
 .rule:target { background: var(--blue-tint); border-color: #c3d0f0; }
 
 .rule-head { display: flex; align-items: baseline; gap: 12px; }
 .rule-id {
-  margin: 0; font-size: 1.05rem; font-weight: 700;
+  margin: 0; font-size: 1.125rem; font-weight: 700;
   font-family: var(--mono); letter-spacing: -0.01em;
 }
 .rule-permalink {
   color: var(--blue); text-decoration: none; font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.125rem;
   opacity: 0; transition: opacity 0.15s ease;
 }
 .rule:hover .rule-permalink, .rule:focus-within .rule-permalink { opacity: 1; }
 .rule-permalink:hover { text-decoration: underline; }
 
 .rule-help { margin: 8px 0 8px; font-size: 1rem; color: var(--ink); font-weight: 600; }
-.rule-means { margin: 0 0 14px; font-size: 0.93rem; color: var(--ink-soft); }
+.rule-means { margin: 0 0 16px; font-size: 0.875rem; color: var(--ink-soft); }
 
 .rule-fix h4 {
-  margin: 0 0 8px; font-size: 0.8rem; font-weight: 700;
+  margin: 0 0 8px; font-size: 0.75rem; font-weight: 700;
   color: var(--ink-soft);
 }
 .rule-fix ul { margin: 0; padding-left: 22px; }
-.rule-fix li { margin: 5px 0; font-size: 0.93rem; }
+.rule-fix li { margin: 5px 0; font-size: 0.875rem; }
 
 .rule-meta {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
 }
-.rule-meta a { color: var(--blue); margin-left: auto; font-size: 0.85rem; font-weight: 600; }
+.rule-meta a { color: var(--blue); margin-left: auto; font-size: 0.875rem; font-weight: 600; }
 .rule-meta a + a { margin-left: 0; }
 
 .empty-filter {
