@@ -26,6 +26,7 @@
 
 ## Links
 
+- Live: https://access-scan-tool.vercel.app
 - Repo: https://github.com/Afkhomie/AccessScan
 - Rules reference: /rules.html
 - License: MIT

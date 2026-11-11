@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
 
-# No Sitemap line yet — the app is local-first and has no public domain.
-# When deployed at a real domain, add e.g.:
-#   Sitemap: https://your-domain.example/sitemap.xml
+Sitemap: https://access-scan-tool.vercel.app/sitemap.xml

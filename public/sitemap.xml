@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Public face of the project is the GitHub repo (local-first app).
-     When deployed at a real domain, point these at that domain instead. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/Afkhomie/AccessScan</loc>
+    <loc>https://access-scan-tool.vercel.app</loc>
   </url>
   <url>
-    <loc>https://github.com/Afkhomie/AccessScan/blob/master/public/rules.html</loc>
+    <loc>https://access-scan-tool.vercel.app/rules</loc>
   </url>
 </urlset>
