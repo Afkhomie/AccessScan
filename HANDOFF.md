@@ -63,3 +63,24 @@ GET /api/scan/:id → export?format=html|json|pdf.
 - User wants verified claims only — test with real scans/curl, never assume.
 - Keep it lean (ponytail): no new deps without reason, vanilla JS, no DB.
 - Commits: conventional style, push to master is fine (public repo).
+
+## Hosted deployment (added later — Vercel + Render split)
+
+- **Frontend:** https://accessscan-theta.vercel.app — Vercel project `accessscan`
+  (team afkhomies-projects), static deploy of `public/` only.
+- **API:** https://accessscan-9gcz.onrender.com — unchanged Render service.
+- **Proxy:** `public/vercel.json` rewrites `/api/:path*` → Render, so the site
+  is same-origin (no CORS). Verified live: `/api/health` → `{"ok":true}` and a
+  real POST /api/scan example.com → 202 → done through the Vercel URL.
+- **Deploy:** `cd public && vercel --prod --yes`. Do NOT deploy repo root —
+  Vercel CLI 65 auto-detects `server.js` as an Express "service" and rejects
+  top-level `outputDirectory`; project Root Directory is set to `public` in
+  Vercel project settings, and the GitHub repo is connected (pushes to the
+  connected branch auto-deploy `public/`).
+- **Auth:** `vercel login` uses device flow; CLI is authed as `afkhomie`.
+- **Caveat:** `server.js` does not set `trust proxy`, so behind the Vercel→Render
+  rewrite all clients share Render's ingress IP for rate limiting (10 scans/10min
+  per IP + 60 global). If rate limits bite in production, add
+  `app.set('trust proxy', 1)` (or appropriate hops) on the Render service —
+  needs a Render redeploy, do it deliberately.
+- Render cold starts (~50s) still apply after idle.
