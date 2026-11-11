@@ -101,6 +101,48 @@ async function validateScanUrl(raw) {
   return { url: u };
 }
 
+// ---------- Rate limiting (scan creation only) ----------
+// In-memory sliding window — no DB; it's abuse protection, not quota
+// accounting, so losing it on restart is fine. Polling/export endpoints are
+// deliberately NOT limited (one scan = many polls). Tunables via env:
+//   RATE_LIMIT_MAX        accepted scans per IP per window   (default 10)
+//   RATE_LIMIT_WINDOW_MS  window length                      (default 10 min)
+//   RATE_LIMIT_GLOBAL_MAX accepted scans globally per window (default 60)
+// req.ip is used as-is. Behind a reverse proxy either enable
+// `app.set('trust proxy', …)` or have the proxy overwrite X-Forwarded-For —
+// see README "Deploying". Without it all proxied clients share one bucket
+// (the global cap still protects the box).
+const RATE_LIMIT_MAX = Math.max(1, Number(process.env.RATE_LIMIT_MAX || 10));
+const RATE_LIMIT_WINDOW_MS = Math.max(1000, Number(process.env.RATE_LIMIT_WINDOW_MS || 600_000));
+const RATE_LIMIT_GLOBAL_MAX = Math.max(1, Number(process.env.RATE_LIMIT_GLOBAL_MAX || 60));
+const scanHits = new Map(); // ip -> number[] of accepted-request timestamps
+const globalHits = [];
+
+function checkScanRateLimit(ip) {
+  const now = Date.now();
+  const cutoff = now - RATE_LIMIT_WINDOW_MS;
+  const prune = (arr) => { while (arr.length && arr[0] < cutoff) arr.shift(); };
+  prune(globalHits);
+  let hits = scanHits.get(ip);
+  if (!hits) { hits = []; scanHits.set(ip, hits); }
+  prune(hits);
+  // Lazy map cleanup so one-shot IPs don't grow it forever.
+  if (scanHits.size > 5000) {
+    for (const [k, v] of scanHits) if (!v.length) scanHits.delete(k);
+  }
+  const retryAfterFor = (arr) =>
+    Math.max(1, Math.ceil((arr[0] + RATE_LIMIT_WINDOW_MS - now) / 1000));
+  if (globalHits.length >= RATE_LIMIT_GLOBAL_MAX) {
+    return { allowed: false, retryAfter: retryAfterFor(globalHits) };
+  }
+  if (hits.length >= RATE_LIMIT_MAX) {
+    return { allowed: false, retryAfter: retryAfterFor(hits) };
+  }
+  hits.push(now);
+  globalHits.push(now);
+  return { allowed: true };
+}
+
 // ---------- Scan engine ----------
 
 let browser = null;
@@ -183,10 +225,12 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
       userAgent: 'AccessScan/0.1 (+local accessibility checker; https://github.com)',
     });
     const page = await context.newPage();
+    const pages = [];
 
+    try {
     rec.phase = 'loading';
     const first = await scanOnePage(page, startUrl.toString());
-    const pages = [first];
+    pages.push(first);
     // Progress counts COMPLETED pages (first page already done → 1).
     let completed = 1;
     let totalPlanned = crawl && !first.error ? maxPages : 1;
@@ -226,7 +270,11 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
       }
     }
 
-    await context.close();
+    } finally {
+      // Always close — a thrown scanOnePage would otherwise leak the
+      // context (and its pages) in the long-lived shared browser.
+      await context.close().catch(() => {});
+    }
 
     rec.status = 'done';
     rec.phase = 'done';
@@ -266,6 +314,15 @@ app.post('/api/scan', async (req, res) => {
     return res.status(429).json({ error: 'A scan is already running. Please wait for it to finish.' });
   }
   scanning = true;
+  // Rate-limit only requests that would actually create a scan: the busy
+  // check above already 429s without consuming budget, and accepted requests
+  // consume a token even if the URL later fails validation (anti-abuse).
+  const rl = checkScanRateLimit(req.ip || 'unknown');
+  if (!rl.allowed) {
+    scanning = false;
+    res.set('Retry-After', String(rl.retryAfter));
+    return res.status(429).json({ error: 'Too many scan requests from this address. Please wait a few minutes and try again.' });
+  }
   const raw = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
   if (!raw || raw.length > 2048) {
     scanning = false;

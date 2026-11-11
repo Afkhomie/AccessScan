@@ -19,12 +19,20 @@ Vanilla HTML/CSS/JS frontend + tiny Express API. Scans run headless Chromium thr
 
 ## API
 
-- `POST /api/scan` `{ "url": "https://…", "crawl": false, "maxPages": 5 }` → `202 { id }` (429 if busy, 400 on bad/private URL or non-numeric `maxPages`; `maxPages` is total pages incl. the submitted URL, clamped 1–10, default 6)
+- `POST /api/scan` `{ "url": "https://…", "crawl": false, "maxPages": 5 }` → `202 { id }` (429 if busy or rate-limited, 400 on bad/private URL or non-numeric `maxPages`; `maxPages` is total pages incl. the submitted URL, clamped 1–10, default 6)
 - `GET /api/scan/:id` → `{ status, phase, result | error }`
 - `GET /api/scan/:id/export?format=html|json|pdf` → downloadable report (409 until scan finishes)
 - `GET /api/scans` → recent scans kept in memory (newest first)
 - `GET /api/scans/:id/compare` → diff vs. most recent other finished scan of the same normalized URL (origin+pathname, query/hash ignored): `{ comparable, previousId, addedRules, fixedRules, severityChanges, totalsBefore, totalsAfter }` or `{ comparable: false }`
 - `GET /api/health` → `{ ok, busy }`
+
+## Deploying
+
+AccessScan is local-first — `node server.js` binds to `127.0.0.1:3000` and is meant to run on your own machine. If you do expose it (e.g. on a LAN or behind a domain), put it behind nginx/Caddy with HTTPS and keep it off the open internet: scans spawn headless Chromium and the rate limiter is the only thing between the API and resource exhaustion.
+
+- **Rate limiting:** `POST /api/scan` is limited to **10 accepted scan requests per IP per 10 minutes**, plus a global cap of 60 per window. Polling (`GET /api/scan/:id`, `/api/scans`, exports) is *not* limited — one scan legitimately generates many polls. Tune via env: `RATE_LIMIT_MAX`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_GLOBAL_MAX`.
+- **Behind a proxy:** the limiter keys on `req.ip`. Express doesn't trust `X-Forwarded-For` unless you set `app.set('trust proxy', …)` — either add that in `server.js` (e.g. `app.set('trust proxy', 'loopback')` when nginx is on the same host) or have the proxy overwrite the header. Without it, all proxied clients share one bucket; the global cap still protects the server.
+- SEO/social tags point at the GitHub repo as the canonical public face; `public/robots.txt` and `public/sitemap.xml` are included — update both with your real domain if you deploy publicly.
 
 ## Limitations
 

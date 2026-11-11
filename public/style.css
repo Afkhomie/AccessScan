@@ -19,7 +19,7 @@
   --bg-soft: #f4f6f9;       /* page sections / footer-adjacent panels */
   --panel: #f8fafc;         /* issue body interiors */
   --line: #d5dbe3;          /* hairline borders */
-  --line-strong: #b9c2cf;   /* input borders */
+  --line-strong: #8a94a3;   /* input borders — 3.1:1 on white (WCAG 1.4.11) */
   --code-bg: #eef1f5;
 
   /* Severity — tinted surfaces + dark text, all ≥6:1 measured */
@@ -308,6 +308,8 @@ body::before {
 
 /* ---------- Results ---------- */
 .results { padding-top: 56px; padding-bottom: 72px; }
+/* Programmatic focus target after a scan finishes — no ring needed. */
+#results:focus { outline: none; }
 .results-head {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
@@ -470,7 +472,7 @@ body::before {
 .issue.open .issue-body { display: block; }
 .issue-desc { margin: 0 0 16px; font-size: 1rem; color: var(--ink); }
 .issue-grid { display: grid; gap: 16px; }
-.issue-field label {
+.issue-field-label {
   display: block; font-size: 0.75rem; font-weight: 600;
   color: var(--ink-soft); margin-bottom: 8px;
 }

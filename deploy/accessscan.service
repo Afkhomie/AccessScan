@@ -1,0 +1,42 @@
+# AccessScan — systemd service (system-level unit)
+# Install: sudo cp deploy/accessscan.service /etc/systemd/system/accessscan.service
+#          sudo systemctl daemon-reload && sudo systemctl enable --now accessscan
+#
+# Server binds 127.0.0.1:3000 (hardcoded in server.js) — put a reverse proxy
+# (deploy/Caddyfile or deploy/nginx.conf) in front if it should be public.
+
+[Unit]
+Description=AccessScan — local-first WCAG/EAA website checker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=Master_Afk
+WorkingDirectory=/home/Master_Afk/Projects/AccessScan
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=3
+
+# Production env (mirrors deploy/.env.example; env vars are optional since
+# server.js defaults to port 3000 / 127.0.0.1 and rate-limit defaults.)
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# Optional rate-limit overrides (in-app, per-IP):
+# Environment=RATE_LIMIT_MAX=10
+# Environment=RATE_LIMIT_WINDOW_MS=600000
+# Environment=RATE_LIMIT_GLOBAL_MAX=60
+
+# --- Hardening ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+# AccessScan writes nothing persistent to disk (scans are in-memory,
+# see scan-store.js), so no ReadWritePaths is needed. Playwright's
+# chromium binary lives under ~/.cache/ms-playwright and browser
+# temp/profile dirs land in PrivateTmp — fine with these settings.
+# NOTE: no ProtectHome — Playwright/chromium may touch ~/.cache and
+# fontconfig; home stays readable+writable.
+
+[Install]
+WantedBy=multi-user.target

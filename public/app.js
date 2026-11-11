@@ -17,6 +17,16 @@ const exportJson = document.getElementById('export-json');
 const exportPdf = document.getElementById('export-pdf');
 const recentSection = document.getElementById('recent');
 const recentList = document.getElementById('recent-list');
+const scanStatus = document.getElementById('scan-status');
+
+// Announce state changes to screen readers, then move focus to the report.
+function announceScan(msg) {
+  if (scanStatus) {
+    scanStatus.textContent = '';
+    scanStatus.textContent = msg;
+  }
+  if (!results.hidden) results.focus();
+}
 
 const PHASE_LABELS = {
   queued: 'Queued…',
@@ -122,7 +132,8 @@ function abortScan(msg) {
   pollFailures = 0;
   setBusy(false);
   results.hidden = false;
-  resultsBody.innerHTML = `<div class="page-error"><strong>Scan interrupted.</strong> ${esc(msg)}</div>`;
+  resultsBody.innerHTML = `<div class="page-error" role="alert"><strong>Scan interrupted.</strong> ${esc(msg)}</div>`;
+  announceScan(`Scan interrupted: ${msg}`);
   results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
 }
 
@@ -162,6 +173,7 @@ async function pollScan() {
     currentScanId = null;
     setBusy(false);
     renderReport(data.result, doneId);
+    announceScan(`Scan complete — ${data.result?.totals?.rules || 0} issue rule${(data.result?.totals?.rules || 0) === 1 ? '' : 's'} found`);
     loadHistory();
   } else if (data.status === 'error') {
     clearInterval(pollTimer);
@@ -170,8 +182,10 @@ async function pollScan() {
     setBusy(false);
     loadHistory();
     results.hidden = false;
-    resultsBody.innerHTML = `<div class="page-error"><strong>Scan failed.</strong> ${esc(data.error || 'Unknown error.')}</div>`;
-    document.getElementById('results').scrollIntoView({ behavior: smoothScroll, block: 'start' });
+    const errMsg = data.error || 'Unknown error.';
+    resultsBody.innerHTML = `<div class="page-error" role="alert"><strong>Scan failed.</strong> ${esc(errMsg)}</div>`;
+    announceScan(`Scan failed: ${errMsg}`);
+    results.scrollIntoView({ behavior: smoothScroll, block: 'start' });
   }
 }
 
@@ -205,7 +219,7 @@ function renderReport(result, scanId) {
         Scanned ${result.pages.length} page${result.pages.length === 1 ? '' : 's'} · ${esc(scannedAt)}
         ${result.crawled ? ' · included same-site links' : ''}
       </p>
-      <div class="sev-grid" title="Each count is per rule per page — the same rule failing on two pages counts twice.">
+      <div class="sev-grid" aria-describedby="sev-grid-note">
         ${allClean
           ? `<div class="sev-tile clean" style="grid-column:1/-1;text-align:center"><div class="n" style="font-size:1.3rem">No violations found</div><div class="l">by the rules axe ran</div></div>`
           : `
@@ -214,6 +228,7 @@ function renderReport(result, scanId) {
             ${sevTile('Moderate', t.moderate, 'moderate', 'hinders some tasks')}
             ${sevTile('Minor', t.minor, 'minor', 'polish issues')}`}
       </div>
+      <span id="sev-grid-note" class="sr-only">Each count is per rule per page — the same rule failing on two pages counts twice.</span>
       <p class="summary-note">
         ${allClean
           ? 'axe-core found no violations on the checked rules. That is not a compliance guarantee — see the disclaimer above.'
@@ -231,7 +246,7 @@ function renderReport(result, scanId) {
       result.pages.map((p, i) => {
         const label = safeHostPath(p.url);
         const err = p.error ? ' (error)' : '';
-        return `<button class="page-tab ${i === ui.activePage ? 'active' : ''}" data-page="${i}" title="${esc(p.url)}">${esc(label)}${err}</button>`;
+        return `<button class="page-tab ${i === ui.activePage ? 'active' : ''}" data-page="${i}" aria-pressed="${i === ui.activePage}" title="${esc(p.url)}">${esc(label)}${err}</button>`;
       }).join('') + `</div>`;
   }
 
@@ -241,7 +256,11 @@ function renderReport(result, scanId) {
   resultsBody.querySelectorAll('.page-tab').forEach((btn) => {
     btn.addEventListener('click', () => {
       ui.activePage = Number(btn.dataset.page);
-      resultsBody.querySelectorAll('.page-tab').forEach((b) => b.classList.toggle('active', b === btn));
+      resultsBody.querySelectorAll('.page-tab').forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
       renderPageDetail(result.pages[ui.activePage]);
     });
   });
@@ -294,7 +313,7 @@ function renderPageDetail(page) {
   if (!el) return;
 
   if (page.error) {
-    el.innerHTML = `<div class="page-error"><strong>Could not scan ${esc(safeHostPath(page.url))}.</strong> ${esc(page.error)}</div>`;
+    el.innerHTML = `<div class="page-error" role="alert"><strong>Could not scan ${esc(safeHostPath(page.url))}.</strong> ${esc(page.error)}</div>`;
     return;
   }
 
@@ -311,8 +330,8 @@ function renderPageDetail(page) {
 
   let html = reviewHtml + `
     <div class="filters" role="group" aria-label="Filter issues">
-      <button class="chip ${ui.severity === 'all' ? 'active' : ''}" data-sev="all">All (${violations.length})</button>
-      ${SEVERITIES.map((s) => `<button class="chip ${ui.severity === s ? 'active' : ''}" data-sev="${s}">${s} (${counts[s] || 0})</button>`).join('')}
+      <button class="chip ${ui.severity === 'all' ? 'active' : ''}" data-sev="all" aria-pressed="${ui.severity === 'all'}">All (${violations.length})</button>
+      ${SEVERITIES.map((s) => `<button class="chip ${ui.severity === s ? 'active' : ''}" data-sev="${s}" aria-pressed="${ui.severity === s}">${s} (${counts[s] || 0})</button>`).join('')}
       <input type="search" id="issue-search" placeholder="Filter by rule or text…" value="${esc(ui.query)}" aria-label="Filter issues">
     </div>
     <div id="issue-list"></div>`;
@@ -322,7 +341,11 @@ function renderPageDetail(page) {
   el.querySelectorAll('.chip').forEach((chip) => {
     chip.addEventListener('click', () => {
       ui.severity = chip.dataset.sev;
-      el.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === chip));
+      el.querySelectorAll('.chip').forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle('active', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
       renderIssueList(page);
     });
   });
@@ -353,14 +376,14 @@ function renderIssueList(page) {
   list.innerHTML = items.map((v, i) => {
     const nodes = (v.nodes || []).slice(0, 10).map((n) => `
       <div class="issue-field">
-        <label>Element</label>
+        <span class="issue-field-label">Element</span>
         <code>${esc(n.target || '(no selector)')}</code>
       </div>
       <div class="issue-field">
-        <label>HTML snippet</label>
+        <span class="issue-field-label">HTML snippet</span>
         <code class="snippet">${esc(n.html || '')}</code>
       </div>
-      ${n.summary ? `<div class="issue-field"><label>Why it failed</label><code class="snippet">${esc(n.summary)}</code></div>` : ''}
+      ${n.summary ? `<div class="issue-field"><span class="issue-field-label">Why it failed</span><code class="snippet">${esc(n.summary)}</code></div>` : ''}
     `).join('');
     const more = (v.nodeCount || 0) > 10 ? `<p class="summary-note">…and ${(v.nodeCount || 0) - 10} more element${(v.nodeCount || 0) - 10 === 1 ? '' : 's'} with this issue.</p>` : '';
     const tags = (v.tags || []).map((t) => `<span class="wcag-tag">${esc(t)}</span>`).join('');
@@ -371,25 +394,25 @@ function renderIssueList(page) {
     const ruleLinks = `<a href="rules.html#${esc(v.id)}">What this means</a>${v.helpUrl ? ` · <a href="${esc(v.helpUrl)}" target="_blank" rel="noopener noreferrer">official docs ↗</a>` : ''}`;
     const fixField = rule
       ? `<div class="issue-field">
-          <label>How to fix</label>
+          <span class="issue-field-label">How to fix</span>
           <ul class="fix-list">${rule.fix.slice(0, 2).map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
           <a href="rules.html#${esc(v.id)}">Full fix guide</a>${v.helpUrl ? ` · <a href="${esc(v.helpUrl)}" target="_blank" rel="noopener noreferrer">official docs ↗</a>` : ''}
         </div>`
       : `<div class="issue-field">
-          <label>axe summary</label>
+          <span class="issue-field-label">axe summary</span>
           <code>${esc(v.help || v.description || '')}</code>
           ${ruleLinks}
         </div>`;
 
     return `
     <div class="issue" data-idx="${i}">
-      <button class="issue-head" aria-expanded="false">
+      <button class="issue-head" aria-expanded="false" aria-controls="issue-body-${i}">
         <span class="sev-badge ${esc(v.impact || 'minor')}">${esc(v.impact || 'minor')}</span>
         <span class="issue-title">${esc(v.help || v.id)}</span>
         <span class="issue-count">${v.nodeCount || (v.nodes || []).length}×</span>
         <svg class="issue-chevron" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div class="issue-body">
+      <div class="issue-body" id="issue-body-${i}">
         <p class="issue-desc">${esc(v.description || '')}</p>
         <div class="issue-grid">
           ${fixField}
@@ -466,7 +489,7 @@ async function loadHistory() {
     return `<li class="recent-item">
       <span class="r-url" title="${esc(s.url || '')}">${esc(safeHostPath(s.url || ''))}</span>
       <span class="r-meta">${esc(when)} · ${esc(label)}</span>
-      <button class="btn-mini" type="button" data-scan="${esc(s.id)}">View</button>
+      <button class="btn-mini" type="button" data-scan="${esc(s.id)}" aria-label="View scan of ${esc(safeHostPath(s.url || ''))} from ${esc(when)}">View</button>
     </li>`;
   }).join('');
 
@@ -492,8 +515,11 @@ async function viewScan(id) {
   results.hidden = false;
   if (data.status === 'done' && data.result) {
     renderReport(data.result, id);
+    announceScan('Scan report loaded');
   } else {
-    resultsBody.innerHTML = `<div class="page-error"><strong>${data.status === 'error' ? 'Scan failed.' : 'Scan not finished.'}</strong> ${esc(data.error || '')}</div>`;
+    const failMsg = data.status === 'error' ? (data.error || 'Unknown error.') : 'Scan not finished.';
+    resultsBody.innerHTML = `<div class="page-error" role="alert"><strong>${data.status === 'error' ? 'Scan failed.' : 'Scan not finished.'}</strong> ${esc(data.error || '')}</div>`;
+    announceScan(`Scan failed: ${failMsg}`);
     exportHtml.hidden = exportJson.hidden = exportPdf.hidden = true;
     lastReportId = null;
   }

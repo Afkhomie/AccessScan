@@ -1,0 +1,15 @@
+# AccessScan — Caddy reverse proxy (HTTPS termination)
+# Requires Caddy installed and DNS pointing at this host.
+# Rate limiting is handled IN-APP by server.js (RATE_LIMIT_* env vars) —
+# Caddy does not add one here; add rate_limit plugins if you need more.
+
+accessscan.example.com {
+	reverse_proxy localhost:3000
+
+	# Optional: basic headers hygiene
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}

@@ -1,6 +1,6 @@
 {
   "name": "accessscan",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Free, local-first EU Accessibility Act / WCAG website checker. Paste a URL, get an honest automated accessibility report.",
   "main": "server.js",
   "scripts": {

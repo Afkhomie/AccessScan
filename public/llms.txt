@@ -1,0 +1,39 @@
+# AccessScan
+
+> Free, local-first WCAG/EAA accessibility scanner. Checks any public website
+> for accessibility issues using axe-core via headless Chromium. No accounts,
+> no payments, no database, no cloud — results stay on your machine.
+
+## What it does
+
+- Paste a URL (bare domains like `example.com` work) → scans the page with
+  axe-core WCAG 2.x A/AA rules
+- Optional crawl mode: scans up to 10 same-origin pages (concurrency 2)
+- Reports violations by severity (critical/serious/moderate/minor), WCAG
+  criteria, fix guidance, and "needs manual review" items axe couldn't decide
+- Exports self-contained HTML report, JSON, or PDF
+- Compares scans of the same URL: shows added/fixed rules vs. previous scan
+- Bundled plain-English reference for 91 axe rules at /rules.html
+- SSRF-hardened: blocks private/internal hosts, re-validates redirect targets,
+  strips URL credentials before storing
+
+## Honest limits
+
+- Automated scanners catch roughly 30–57% of WCAG issues — a clean scan is
+  not a compliance guarantee. Manual audit still required for EAA.
+- Results are in-memory only; export reports before restarting.
+- Local tool: binds 127.0.0.1, single scan at a time, rate-limited.
+
+## Links
+
+- Repo: https://github.com/Afkhomie/AccessScan
+- Rules reference: /rules.html
+- License: MIT
+
+## For agents
+
+- API: POST /api/scan {url, crawl?, maxPages?} → 202 {id}; poll
+  GET /api/scan/:id; GET /api/scans (history); GET /api/scans/:id/compare;
+  GET /api/scan/:id/export?format=html|json|pdf
+- Run: `npm install && node server.js` → http://localhost:3000
+- Tests: `node test/smoke.js && node test/smoke2.js`
