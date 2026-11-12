@@ -43,6 +43,9 @@ app.set('trust proxy', 2);
 const PROXY_SECRET = process.env.PROXY_SECRET;
 if (PROXY_SECRET) {
   app.use((req, res, next) => {
+    // /api/health stays open: Render's own health check can't send the
+    // header, and the payload ({ok,busy,playwright}) leaks nothing.
+    if (req.method === 'GET' && req.path === '/api/health') return next();
     if (req.get('x-proxy-key') !== PROXY_SECRET) {
       return res.status(403).json({ error: 'Forbidden' });
     }
