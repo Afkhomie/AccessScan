@@ -102,7 +102,7 @@ async function validateScanUrl(raw) {
   // domain could still slip through; acceptable for a local single-user tool.
   try {
     const records = await dns.lookup(host, { all: true });
-    if (!records.length) return { error: 'Could not resolve that hostname.' };
+    if (!records.length) return { error: "We couldn't find that website. Check the spelling and try again." };
     for (const r of records) {
       const ip = r.address;
       const bare = ip.startsWith('::ffff:') ? ip.slice(7) : ip;
@@ -111,7 +111,7 @@ async function validateScanUrl(raw) {
       }
     }
   } catch {
-    return { error: 'Could not resolve that hostname.' };
+    return { error: "We couldn't find that website. Check the spelling and try again." };
   }
   return { url: u };
 }
@@ -195,6 +195,28 @@ function collectSameOriginLinks(page, baseUrl, max) {
   }, baseUrl).then((links) => links.slice(0, max)).catch(() => []);
 }
 
+// Plain-English scan errors — raw Playwright/Node messages stay in server
+// logs; users get messages they can act on.
+function toUserError(e) {
+  const m = String(e?.message || e || '');
+  if (/ERR_NAME_NOT_RESOLVED|ENOTFOUND|getaddrinfo|resolve host/i.test(m)) {
+    return "We couldn't find that website. Check the spelling and try again.";
+  }
+  if (/timeout|timed out/i.test(m)) {
+    return 'The site took too long to respond. Try again, or try a different page.';
+  }
+  if (/ERR_CERT|SSL|certificate|ERR_SSL/i.test(m)) {
+    return "The site has a security certificate problem we couldn't get past.";
+  }
+  if (/ERR_CONNECTION_REFUSED|ECONNREFUSED/i.test(m)) {
+    return 'The site refused the connection. It may be down or blocking scanners.';
+  }
+  if (/ERR_ABORTED|net::ERR/i.test(m)) {
+    return "The page didn't finish loading. The site may be slow or blocking automated visits.";
+  }
+  return 'Something went wrong while scanning this page.';
+}
+
 async function scanOnePage(page, url) {
   const resp = await page.goto(url, {
     waitUntil: 'domcontentloaded',
@@ -274,7 +296,7 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
         try {
           return await scanOnePage(p, link);
         } catch (e) {
-          return { url: link, error: e.message?.slice(0, 200) || 'Scan failed' };
+          return { url: link, error: toUserError(e) };
         } finally {
           await p.close().catch(() => {});
           bumpProgress();
@@ -320,7 +342,7 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
   } catch (e) {
     rec.status = 'error';
     rec.phase = 'error';
-    rec.error = e.message?.slice(0, 300) || 'Scan failed unexpectedly.';
+    rec.error = toUserError(e);
   }
   scanning = false;
 }
