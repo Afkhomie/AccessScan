@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy · AccessScan</title>
-<meta name="description" content="AccessScan privacy policy: what data exists, what leaves your machine, and what the tool does not do. No cookies, no tracking, no accounts.">
+<meta name="description" content="AccessScan privacy policy: what data is stored, where it goes, and what the service does not do. No cookies, no tracking, no accounts.">
 <meta name="theme-color" content="#003399">
 <link rel="canonical" href="https://access-scan-tool.vercel.app/privacy">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AccessScan">
 <meta property="og:title" content="Privacy · AccessScan">
-<meta property="og:description" content="AccessScan privacy policy: what data exists, what leaves your machine, and what the tool does not do.">
+<meta property="og:description" content="AccessScan privacy policy: what data is stored, where it goes, and what the service does not do.">
 <meta property="og:url" content="https://access-scan-tool.vercel.app/privacy">
 <meta property="og:image" content="https://access-scan-tool.vercel.app/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Privacy · AccessScan">
-<meta name="twitter:description" content="AccessScan privacy policy: what data exists, what leaves your machine, and what the tool does not do.">
+<meta name="twitter:description" content="AccessScan privacy policy: what data is stored, where it goes, and what the service does not do.">
 <meta name="twitter:image" content="https://access-scan-tool.vercel.app/og-image.png">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
@@ -75,15 +75,15 @@
   <section class="wrap legal-hero">
     <p class="hero-kicker" data-copy="privacy.kicker">Privacy</p>
     <h1 data-copy="privacy.h1">Privacy policy</h1>
-    <p class="lede" data-copy="privacy.lede">AccessScan is a local tool with nothing to track. This page states exactly what data exists and where it is sent, which in practice is nowhere.</p>
+    <p class="lede" data-copy="privacy.lede">AccessScan is a free, hosted service with nothing to track: no accounts, no cookies, no analytics. This page states exactly what data exists and where it goes.</p>
   </section>
 
   <div class="wrap legal-body">
     <h2 data-copy="privacy.sections.0.h">What data exists</h2>
-    <div data-copy-html="privacy.sections.0.bodyHtml"><p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. Both are held in the memory (RAM) of the server process on your own machine, where the tool itself runs. There is no database, no scan log file, and nothing is written to disk.</p><p>Your browser stores nothing either: no cookies, no local storage, no session state. Closing the tab or restarting the server removes everything.</p></div>
+    <div data-copy-html="privacy.sections.0.bodyHtml"><p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. On our side, both are held in the memory (RAM) of the hosted server process. There is no database, no scan log file, and nothing is written to disk. Scan records are capped at the 20 most recent and are deleted when the server process restarts.</p><p>On your side, the browser keeps a list of your recent scans (scan IDs and URLs) in localStorage so the "Recent scans" list survives page reloads. This data stays on your device only and is never transmitted to us or anyone else. No cookies are set and no other browser storage is used.</p></div>
 
-    <h2 data-copy="privacy.sections.1.h">What leaves your machine</h2>
-    <div data-copy-html="privacy.sections.1.bodyHtml"><p>Your browser communicates only with the AccessScan server on <code>127.0.0.1</code>, your own computer. From there, the single outbound action is the purpose of the tool itself: <strong>the server retrieves the website URL you supplied</strong> and performs an accessibility check on the rendered page, in the same manner as your browser. The target site receives a normal page request bearing a User-Agent string that identifies AccessScan.</p><p>There are no third-party requests: no analytics, no telemetry, no CDN-hosted scripts or fonts, no external fonts or trackers. Every script and stylesheet is served by the same local server. The only external links on this site are documentation references (such as the axe-core rule index) that load only if you choose to open them.</p></div>
+    <h2 data-copy="privacy.sections.1.h">What is sent where</h2>
+    <div data-copy-html="privacy.sections.1.bodyHtml"><p>AccessScan is hosted: the frontend is served from Vercel and the scanning backend runs on Render. Your browser communicates only with AccessScan; the single outbound action performed on your behalf is the purpose of the tool itself: <strong>the server retrieves the website URL you supplied</strong> and performs an accessibility check on the rendered page, in the same manner as your browser. The target site receives a normal page request bearing a User-Agent string that identifies AccessScan.</p><p>There are no third-party requests: no analytics, no telemetry, no tracking pixels, no external fonts or trackers. Every script and stylesheet is served by the same hosted deployment. The only external links on this site are documentation references (such as the axe-core rule index) that load only if you choose to open them.</p></div>
 
     <h2 data-copy="privacy.sections.2.h">What AccessScan does not do</h2>
     <ul>
@@ -92,11 +92,11 @@
       <li data-copy="privacy.sections.2.list.2">Collect analytics or usage statistics</li>
       <li data-copy="privacy.sections.2.list.3">Load third-party SDKs or external services</li>
       <li data-copy="privacy.sections.2.list.4">Process payments; the tool is free</li>
-      <li data-copy="privacy.sections.2.list.5">Use a database or cloud storage</li>
+      <li data-copy="privacy.sections.2.list.5">Persist scan data beyond in-memory storage</li>
     </ul>
 
     <h2 data-copy="privacy.sections.3.h">Data retention</h2>
-    <div data-copy-html="privacy.sections.3.bodyHtml"><p>Scan records are retained in memory only, capped at the 20 most recent scans, and are deleted when the server process stops. To keep a copy of a report, export it (HTML, JSON, or PDF) before restarting. Exports are generated locally and downloaded to your browser like any ordinary file.</p></div>
+    <div data-copy-html="privacy.sections.3.bodyHtml"><p>Scan records are retained in server memory only, capped at the 20 most recent scans, and are deleted when the server process stops or restarts. Your browser’s localStorage keeps up to 20 recent scan IDs and URLs until you clear site data or the list ages out. To keep a copy of a report, export it (HTML, JSON, or PDF) before the server restarts. Exports are generated on demand and downloaded to your browser like any ordinary file.</p></div>
 
     <h2 data-copy="privacy.sections.4.h">Contact</h2>
     <div data-copy-html="privacy.sections.4.bodyHtml"><p>For questions or concerns, open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a>. AccessScan is operated by Afkhomie via GitHub.</p></div>
@@ -105,7 +105,7 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><span data-copy="chrome.footer.line">Free, runs locally, no account needed. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="rules.html" data-copy="chrome.footer.linkRuleReference">Rule reference</a> · <a href="security.html">Security</a> · <a href="reliability.html">Reliability</a></p>
+    <p><span data-copy="chrome.footer.line">Free, no account, no tracking. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="rules.html" data-copy="chrome.footer.linkRuleReference">Rule reference</a> · <a href="security.html">Security</a> · <a href="reliability.html">Reliability</a></p>
   </div>
 </footer>
 

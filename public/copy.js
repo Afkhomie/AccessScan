@@ -20,7 +20,7 @@ window.COPY = {
     navRuleReference: 'Rules',
     toTop: 'Back to top',
     footer: {
-      line: 'Free, runs locally, no account needed. MIT licensed.',
+      line: 'Free, no account, no tracking. MIT licensed.',
       linkRuleReference: 'Rule reference',
       linkPrivacy: 'Privacy Policy',
       linkTerms: 'Terms of Use',
@@ -31,9 +31,9 @@ window.COPY = {
   /* ---------- index.html ---------- */
   index: {
     meta: {
-      kicker: 'WCAG 2.x · EAA · axe-core · local-first',
+      kicker: 'WCAG 2.x · EAA · axe-core',
       h1: 'Is your website accessible?',
-      lede: 'Free scan for common WCAG 2.x accessibility failures on any public page. Runs locally, no account needed.',
+      lede: 'Free scan for common WCAG 2.x accessibility failures on any public page. No account needed.',
     },
     navFaq: 'FAQ',
     form: {
@@ -54,12 +54,13 @@ window.COPY = {
     },
     recent: {
       heading: 'Recent scans',
-      note: 'Kept in memory only, cleared on restart.',
+      note: 'Stored in this browser only, never sent anywhere.',
       view: 'View',
       viewAria: 'View scan of {url} from {when}',
       fallbackLabel: 'scan',
       scanningLabel: 'scanning…',
       failedLabel: 'failed',
+      expiredLabel: 'expired',
     },
     disclaimer: {
       html: '<strong>Automated scans catch roughly 30–57% of WCAG issues</strong> (per Deque’s research). A clean result is not a compliance guarantee. EAA enforcement applies in the EU as of June 2025; for assurance, get a manual audit.',
@@ -88,11 +89,11 @@ window.COPY = {
         },
         {
           q: 'Is it free? Do I need an account?',
-          a: 'Yes, free, no account. It runs on the machine hosting it; the only outbound request is loading the site you scan.',
+          a: 'Yes, free, no account, no tracking. The scan runs on hosted servers; the only outbound request is loading the site you scan.',
         },
         {
           q: 'Where is my data stored?',
-          a: 'In server memory only, capped at the 20 most recent scans, and wiped on restart. Nothing is written to disk or sent anywhere else.',
+          a: 'Scan URLs and results live in server memory only, capped at the 20 most recent scans, and are wiped when the server restarts. Your browser keeps your recent scan IDs and URLs in localStorage on your device only; they are never sent anywhere.',
         },
         {
           q: 'What does it check?',
@@ -135,7 +136,7 @@ window.COPY = {
       alreadyRunningFallback: 'Please wait for it to finish, then try again.',
       serverError: 'The server hit an error. It may still be starting; try again in a minute.',
       generic: 'Something went wrong. Please try again.',
-      unreachable: 'Could not reach the local server. Is it still running?',
+      unreachable: 'Could not reach the server. Try again in a moment.',
       expired: 'That result expired (only recent scans are kept). Start a new scan.',
       hiccup: 'Something went wrong checking progress. Try again in a moment.',
       statusError: 'Could not check scan status. Try again in a moment.',
@@ -145,7 +146,7 @@ window.COPY = {
       failed: 'Scan failed.',
       notFinished: 'Scan not finished.',
       historyGone: 'That scan is gone. Results are kept in memory only.',
-      serverGone: 'Could not reach the local server.',
+      serverGone: 'Could not reach the server.',
       enterUrl: 'Enter a URL first.',
       invalidUrl: 'Enter a valid URL, e.g. example.com',
       reportLoaded: 'Scan report loaded',
@@ -254,15 +255,15 @@ window.COPY = {
   privacy: {
     kicker: 'Privacy',
     h1: 'Privacy policy',
-    lede: 'AccessScan is a local tool with nothing to track. This page states exactly what data exists and where it is sent, which in practice is nowhere.',
+    lede: 'AccessScan is a free, hosted service with nothing to track: no accounts, no cookies, no analytics. This page states exactly what data exists and where it goes.',
     sections: [
       {
         h: 'What data exists',
-        bodyHtml: '<p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. Both are held in the memory (RAM) of the server process on your own machine, where the tool itself runs. There is no database, no scan log file, and nothing is written to disk.</p><p>Your browser stores nothing either: no cookies, no local storage, no session state. Closing the tab or restarting the server removes everything.</p>',
+        bodyHtml: '<p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. On our side, both are held in the memory (RAM) of the hosted server process. There is no database, no scan log file, and nothing is written to disk. Scan records are capped at the 20 most recent and are deleted when the server process restarts.</p><p>On your side, the browser keeps a list of your recent scans (scan IDs and URLs) in localStorage so the "Recent scans" list survives page reloads. This data stays on your device only and is never transmitted to us or anyone else. No cookies are set and no other browser storage is used.</p>',
       },
       {
-        h: 'What leaves your machine',
-        bodyHtml: '<p>Your browser communicates only with the AccessScan server on <code>127.0.0.1</code>, your own computer. From there, the single outbound action is the purpose of the tool itself: <strong>the server retrieves the website URL you supplied</strong> and performs an accessibility check on the rendered page, in the same manner as your browser. The target site receives a normal page request bearing a User-Agent string that identifies AccessScan.</p><p>There are no third-party requests: no analytics, no telemetry, no CDN-hosted scripts or fonts, no external fonts or trackers. Every script and stylesheet is served by the same local server. The only external links on this site are documentation references (such as the axe-core rule index) that load only if you choose to open them.</p>',
+        h: 'What is sent where',
+        bodyHtml: '<p>AccessScan is hosted: the frontend is served from Vercel and the scanning backend runs on Render. Your browser communicates only with AccessScan; the single outbound action performed on your behalf is the purpose of the tool itself: <strong>the server retrieves the website URL you supplied</strong> and performs an accessibility check on the rendered page, in the same manner as your browser. The target site receives a normal page request bearing a User-Agent string that identifies AccessScan.</p><p>There are no third-party requests: no analytics, no telemetry, no tracking pixels, no external fonts or trackers. Every script and stylesheet is served by the same hosted deployment. The only external links on this site are documentation references (such as the axe-core rule index) that load only if you choose to open them.</p>',
       },
       {
         h: 'What AccessScan does not do',
@@ -271,13 +272,13 @@ window.COPY = {
           'Require accounts, registration, or login',
           'Collect analytics or usage statistics',
           'Load third-party SDKs or external services',
-          'Process payments; the tool is free',
-          'Use a database or cloud storage',
+          'Process payments; the service is free',
+          'Persist scan data beyond in-memory storage',
         ],
       },
       {
         h: 'Data retention',
-        bodyHtml: '<p>Scan records are retained in memory only, capped at the 20 most recent scans, and are deleted when the server process stops. To keep a copy of a report, export it (HTML, JSON, or PDF) before restarting. Exports are generated locally and downloaded to your browser like any ordinary file.</p>',
+        bodyHtml: '<p>Scan records are retained in server memory only, capped at the 20 most recent scans, and are deleted when the server process stops or restarts. Your browser\u2019s localStorage keeps up to 20 recent scan IDs and URLs until you clear site data or the list ages out. To keep a copy of a report, export it (HTML, JSON, or PDF) before the server restarts. Exports are generated on demand and downloaded to your browser like any ordinary file.</p>',
       },
       {
         h: 'Contact',
@@ -290,11 +291,11 @@ window.COPY = {
   terms: {
     kicker: 'Terms of use',
     h1: 'Terms of use',
-    lede: 'AccessScan is free software that runs on your own machine. By using it you accept the terms below, which state, in substance, that it is provided without warranty and must be used responsibly.',
+    lede: 'AccessScan is free, hosted software. By using it you accept the terms below, which state, in substance, that it is provided without warranty and must be used responsibly.',
     sections: [
       {
         h: 'The software',
-        bodyHtml: '<p>AccessScan is a free, local-first accessibility scanner for WCAG 2.x and EAA checks. It is provided <strong>as is</strong>, without warranty of any kind, express or implied, including fitness for a particular purpose, accuracy, or availability. The project is MIT licensed; the full text is in the <a href="https://github.com/Afkhomie/AccessScan/blob/master/LICENSE" rel="noopener">LICENSE</a> file.</p>',
+        bodyHtml: '<p>AccessScan is a free, hosted accessibility scanner for WCAG 2.x and EAA checks. It is provided <strong>as is</strong>, without warranty of any kind, express or implied, including fitness for a particular purpose, accuracy, or availability. The project is MIT licensed; the full text is in the <a href="https://github.com/Afkhomie/AccessScan/blob/master/LICENSE" rel="noopener">LICENSE</a> file.</p>',
       },
       {
         h: 'What a scan is and is not',

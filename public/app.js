@@ -580,9 +580,27 @@ function updateHistoryEntry(id, patch) {
   list[i] = { ...list[i], ...patch };
   saveHistory(list);
 }
+function removeHistoryEntry(id) {
+  saveHistory(getHistory().filter((h) => h.id !== id));
+}
+
+// Scans stuck 'running' mean the page was closed mid-scan — they can never
+// resolve, so after this age we mark them expired instead of "scanning…".
+const STALE_RUNNING_MS = 5 * 60 * 1000;
+const EXPIRED_LABEL = window.COPY.index.recent.expiredLabel || 'expired';
 
 function loadHistory() {
   const scans = getHistory();
+  const now = Date.now();
+  let dirty = false;
+  for (const h of scans) {
+    if (h.status === 'running' && now - (h.at || 0) > STALE_RUNNING_MS) {
+      h.status = 'expired';
+      h.label = EXPIRED_LABEL;
+      dirty = true;
+    }
+  }
+  if (dirty) saveHistory(scans);
   if (!scans.length) { recentSection.hidden = true; return; }
 
   recentSection.hidden = false;
@@ -606,6 +624,12 @@ async function viewScan(id) {
   try {
     const res = await fetch(`/api/scan/${encodeURIComponent(id)}`);
     if (!res.ok) {
+      // 404 = server restarted and forgot this scan — drop the dead entry
+      // from history so the list self-cleans instead of erroring forever.
+      if (res.status === 404) {
+        removeHistoryEntry(id);
+        loadHistory();
+      }
       showError(AC.errors.historyGone);
       return;
     }
