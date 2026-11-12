@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 <style>
-/* reliability.html — page-specific layout on top of style.css tokens */
+/* reliability.html, page-specific layout on top of style.css tokens */
 
 .legal-hero {
   padding-top: 56px; padding-bottom: 32px;
@@ -75,7 +75,7 @@
   <section class="wrap legal-hero">
     <p class="hero-kicker">Reliability</p>
     <h1>Reliability &amp; limits</h1>
-    <p class="lede">AccessScan runs on a free hosted instance, so it has real limits: cold starts, one scan at a time, and history that lives only in memory. This page explains exactly what happens — including when things go wrong.</p>
+    <p class="lede">AccessScan runs on a free hosted instance, so it has real limits: cold starts, one scan at a time, and history that lives only in memory. This page explains exactly what happens, including when things go wrong.</p>
   </section>
 
   <div class="wrap legal-body">
@@ -83,30 +83,30 @@
     <p>If the server has been idle for a while, the first request can take roughly <strong>50 seconds</strong> while the free-tier host wakes up. You do not need to do anything special: submit your scan, watch the progress bar, and wait. The progress indicator is designed to show this wait rather than leave you guessing. Once the server is warm, scans start quickly again.</p>
 
     <h2>One scan at a time</h2>
-    <p>AccessScan runs <strong>a single scan at a time</strong>. If someone else is already scanning, your request is refused politely: the page shows a friendly “a scan is already running” message with the server’s suggested wait time (<code>Retry-After</code>), and you can simply try again a minute later. There is no queue — if you need several scans, run them one after another.</p>
+    <p>AccessScan runs <strong>a single scan at a time</strong>. If someone else is already scanning, your request is refused politely: the page shows a friendly “a scan is already running” message with the server’s suggested wait time (<code>Retry-After</code>), and you can simply try again a minute later. There is no queue, if you need several scans, run them one after another.</p>
 
     <h2>Scan deadline</h2>
-    <p>Every scan has a deadline of about <strong>3 minutes</strong>. A single scan fetches the target page, renders it, and runs the accessibility engine — on a slow or heavy site that can take a while, and the deadline keeps a runaway scan from holding the single slot forever. If the deadline is hit mid-scan, you still get the results collected so far.</p>
+    <p>Every scan has a deadline of about <strong>3 minutes</strong>. A single scan fetches the target page, renders it, and runs the accessibility engine, on a slow or heavy site that can take a while, and the deadline keeps a runaway scan from holding the single slot forever. If the deadline is hit mid-scan, you still get the results collected so far.</p>
 
     <h2>Partial results are normal</h2>
     <p>A single failing page does not kill the whole scan. If one page cannot be reached or times out, that page is marked with an error and the scan continues with the rest. When the overall time limit cuts a crawl short, the report says <strong>“Scan time limit reached”</strong> and marks which pages were not checked. Treat a partial report as “these pages were checked”; it is not a claim that the whole site is clean.</p>
 
     <h2>History is in-memory only</h2>
-    <p>Scan history is stored <strong>in the server’s memory</strong> and capped at the 20 most recent scans. That means history <strong>disappears whenever the server restarts or redeploys</strong> — which, on a free host that sleeps when idle, can happen often. To keep a report, export it (HTML, JSON, or PDF) right after the scan. Your browser separately keeps its own recent-scan list in local storage, so “Recent scans” in the interface may show scans the server no longer has — viewing one may fail until the server history is repopulated.</p>
+    <p>Scan history is stored <strong>in the server’s memory</strong> and capped at the 20 most recent scans. That means history <strong>disappears whenever the server restarts or redeploys</strong>, which, on a free host that sleeps when idle, can happen often. To keep a report, export it (HTML, JSON, or PDF) right after the scan. Your browser separately keeps its own recent-scan list in local storage, so “Recent scans” in the interface may show scans the server no longer has, viewing one may fail until the server history is repopulated.</p>
 
     <h2>Rate limits</h2>
     <p>To keep the free instance fair for everyone, requests are rate-limited: roughly <strong>10 requests per IP per 10 minutes</strong> plus a global cap of about <strong>60 requests overall</strong>. These limits are configurable via environment variables, so the exact numbers can change with deployments. Hitting a limit produces a clear message, not an error page.</p>
 
     <h2>What failures look like</h2>
     <ul>
-      <li><strong>Server waking up:</strong> a long wait with the progress bar — let it finish.</li>
+      <li><strong>Server waking up:</strong> a long wait with the progress bar, let it finish.</li>
       <li><strong>Scan already running:</strong> a friendly message with a suggested retry time.</li>
       <li><strong>Rate limited:</strong> a clear “too many requests” style message, not a raw error code.</li>
       <li><strong>Site unreachable or slow:</strong> the scan completes with per-page errors marked in the report.</li>
       <li><strong>Time limit reached:</strong> partial results, clearly labelled.</li>
-      <li><strong>History gone:</strong> recent scans may not load after a restart or redeploy — export reports you want to keep.</li>
+      <li><strong>History gone:</strong> recent scans may not load after a restart or redeploy, export reports you want to keep.</li>
     </ul>
-    <p>AccessScan is designed to explain problems in plain language. You should never see a bare HTTP status code as your only feedback — if you do, that is a bug worth reporting.</p>
+    <p>AccessScan is designed to explain problems in plain language. You should never see a bare HTTP status code as your only feedback, if you do, that is a bug worth reporting.</p>
 
     <h2>Contact</h2>
     <p>For questions or to report a failure that produced an unclear message, open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a>. AccessScan is operated by Afkhomie via GitHub.</p>

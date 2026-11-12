@@ -2,7 +2,7 @@
 
 > Free, local-first WCAG/EAA accessibility scanner. Checks any public website
 > for accessibility issues using axe-core via headless Chromium. No accounts,
-> no payments, no database, no cloud — results stay on your machine.
+> no payments, no database, no cloud, results stay on your machine.
 
 ## What it does
 
@@ -19,7 +19,7 @@
 
 ## Honest limits
 
-- Automated scanners catch roughly 30–57% of WCAG issues — a clean scan is
+- Automated scanners catch roughly 30–57% of WCAG issues, a clean scan is
   not a compliance guarantee. Manual audit still required for EAA.
 - Results are in-memory only; export reports before restarting.
 - Local tool: binds 127.0.0.1, single scan at a time, rate-limited.
@@ -29,8 +29,8 @@
 - Live: https://access-scan-tool.vercel.app
 - Repo: https://github.com/Afkhomie/AccessScan
 - Rules reference: /rules.html
-- Security model: /security.html — how scans are kept local and targets are hardened
-- Reliability & limits: /reliability.html — what the scanner can and can't detect
+- Security model: /security.html, how scans are kept local and targets are hardened
+- Reliability & limits: /reliability.html, what the scanner can and can't detect
 - License: MIT
 
 ## For agents

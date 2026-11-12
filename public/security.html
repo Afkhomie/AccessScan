@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 <style>
-/* security.html — page-specific layout on top of style.css tokens */
+/* security.html, page-specific layout on top of style.css tokens */
 
 .legal-hero {
   padding-top: 56px; padding-bottom: 32px;
@@ -79,12 +79,12 @@
   <section class="wrap legal-hero">
     <p class="hero-kicker">Security</p>
     <h1>Security transparency</h1>
-    <p class="lede">AccessScan is a tool that fetches and renders web pages — which makes it a potential vector for the very problems it scans for. This page states plainly what is protected, and what is not. No marketing, no claims we can't back.</p>
+    <p class="lede">AccessScan is a tool that fetches and renders web pages, which makes it a potential vector for the very problems it scans for. This page states plainly what is protected, and what is not. No marketing, no claims we can't back.</p>
   </section>
 
   <div class="wrap legal-body">
     <h2>What is protected</h2>
-    <p>AccessScan fetches pages you point it at, which means it could in principle be tricked into reaching places it shouldn't — like your router's admin page or a cloud metadata endpoint. Several independent guards exist to stop that.</p>
+    <p>AccessScan fetches pages you point it at, which means it could in principle be tricked into reaching places it shouldn't, like your router's admin page or a cloud metadata endpoint. Several independent guards exist to stop that.</p>
 
     <h3>SSRF guard: internal addresses are rejected</h3>
     <p>Before a scan ever starts, every submitted URL is checked:</p>
@@ -92,14 +92,14 @@
       <li><strong>Protocol:</strong> only <code>http://</code> and <code>https://</code> are accepted.</li>
       <li><strong>Private and reserved IPs:</strong> loopback (<code>127.x</code>), RFC&nbsp;1918 ranges (<code>10.x</code>, <code>172.16–31.x</code>, <code>192.168.x</code>), link-local and cloud-metadata addresses (<code>169.254.x</code>), CGNAT (<code>100.64–127.x</code>), multicast/reserved ranges, and IPv6 loopback, link-local, unique-local and mapped addresses are all refused.</li>
       <li><strong>Internal hostnames:</strong> <code>localhost</code>, <code>.localhost</code>, <code>.local</code>, <code>.internal</code>, <code>.lan</code>, <code>.home</code>, and known internal names like <code>metadata.google.internal</code> are refused.</li>
-      <li><strong>DNS resolution:</strong> for domain names, the hostname is resolved and <em>every</em> returned address must be public — if any answer is private or internal, the scan is refused.</li>
+      <li><strong>DNS resolution:</strong> for domain names, the hostname is resolved and <em>every</em> returned address must be public, if any answer is private or internal, the scan is refused.</li>
     </ul>
 
     <h3>Redirect hops are validated before connecting</h3>
     <p>A public URL can redirect to an internal one. AccessScan installs a per-page interception layer (via the browser's debugging protocol) that re-runs the same address check on <strong>every request, including each redirect hop, before it connects</strong>. A redirect to a disallowed address fails the request and the scan reports it as blocked rather than silently following it. Pop-up windows get the same treatment, and resource types the scan doesn't need are blocked outright.</p>
 
     <h3>Credentials are stripped from stored results</h3>
-    <p>If you scan a URL containing <code>user:password@</code>, the credentials are used for the fetch itself but are <strong>removed from the copy that is stored</strong> — scan history, reports, and exports never persist them.</p>
+    <p>If you scan a URL containing <code>user:password@</code>, the credentials are used for the fetch itself but are <strong>removed from the copy that is stored</strong>, scan history, reports, and exports never persist them.</p>
 
     <h3>Scan data is escaped everywhere it is rendered</h3>
     <p>Page content, rule descriptions, URLs, and error messages from scanned sites are untrusted input. All of it is HTML-escaped before it reaches the results page or an exported report, so a hostile page cannot inject markup or scripts into AccessScan's own interface.</p>
@@ -111,28 +111,28 @@
     <p>When deployed on a hosted platform, a shared-secret header (<code>PROXY_SECRET</code>) gates the backend: requests without the correct key are rejected before reaching the app, so only the front-end proxy can use the API.</p>
 
     <h3>Response headers and resource blocking</h3>
-    <p>Every response carries <code>X-Frame-Options: DENY</code> (no clickjacking) and <code>X-Content-Type-Options: nosniff</code> (no MIME confusion). During a scan, resource types that aren't needed for the accessibility check — images, media, fonts, and similar — are blocked, which both speeds scans up and reduces the attack surface of whatever the scanned page tries to load.</p>
+    <p>Every response carries <code>X-Frame-Options: DENY</code> (no clickjacking) and <code>X-Content-Type-Options: nosniff</code> (no MIME confusion). During a scan, resource types that aren't needed for the accessibility check, images, media, fonts, and similar, are blocked, which both speeds scans up and reduces the attack surface of whatever the scanned page tries to load.</p>
 
-    <h2>What is not protected — known limits</h2>
+    <h2>What is not protected, known limits</h2>
     <p>Honesty matters more than a clean-looking page. These are real limitations, stated plainly.</p>
 
     <h3>DNS rebinding (time-of-check vs. time-of-use)</h3>
-    <p>The SSRF guard resolves a hostname's DNS once, at submission time. The browser re-resolves DNS again when it actually navigates — seconds later. A malicious domain with very short DNS TTLs could in theory answer with a public IP for the check and a private IP for the navigation. This is a known shortcut, accepted because AccessScan is designed as a <strong>local, single-user tool</strong> where the person scanning controls the input. On the hosted instance the practical risk is limited by the <code>PROXY_SECRET</code> gate and rate limits, but the gap exists.</p>
+    <p>The SSRF guard resolves a hostname's DNS once, at submission time. The browser re-resolves DNS again when it actually navigates, seconds later. A malicious domain with very short DNS TTLs could in theory answer with a public IP for the check and a private IP for the navigation. This is a known shortcut, accepted because AccessScan is designed as a <strong>local, single-user tool</strong> where the person scanning controls the input. On the hosted instance the practical risk is limited by the <code>PROXY_SECRET</code> gate and rate limits, but the gap exists.</p>
 
     <h3>Scanned pages run real JavaScript</h3>
-    <p>AccessScan renders pages in a real browser so it can measure what users actually experience — which means <strong>the scanned site's JavaScript executes in the scanner's browser</strong>. This is by design, and it means a hostile site could attempt browser-level attacks (exploits, fingerprinting). Mitigations: resource blocking, no stored credentials beyond what you type, results are escaped, and the scan process holds no user session or sensitive data. It is still a reason to treat scan results from untrusted sites with normal caution.</p>
+    <p>AccessScan renders pages in a real browser so it can measure what users actually experience, which means <strong>the scanned site's JavaScript executes in the scanner's browser</strong>. This is by design, and it means a hostile site could attempt browser-level attacks (exploits, fingerprinting). Mitigations: resource blocking, no stored credentials beyond what you type, results are escaped, and the scan process holds no user session or sensitive data. It is still a reason to treat scan results from untrusted sites with normal caution.</p>
 
     <h3>Single-user trust model</h3>
     <p>AccessScan assumes the person running a scan is the person who chose the URL. There are no per-user accounts or per-user isolation: scan history, rate-limit buckets (when keyed by IP), and exported reports are shared across everyone using the same instance. On a multi-user deployment this model is weaker than a fully isolated service.</p>
 
     <h3>Scan IDs are unguessable, not secret</h3>
-    <p>Scan IDs are generated from 12 random bytes (<code>scan_</code> + 24 hex characters), so they can't be enumerated. However, <strong>anyone holding a scan link can view that scan's results</strong> — the report endpoints are unauthenticated by design, because there is no account system. Treat a scan URL like a shared document: fine for your own use, don't post links to sensitive scans publicly.</p>
+    <p>Scan IDs are generated from 12 random bytes (<code>scan_</code> + 24 hex characters), so they can't be enumerated. However, <strong>anyone holding a scan link can view that scan's results</strong>, the report endpoints are unauthenticated by design, because there is no account system. Treat a scan URL like a shared document: fine for your own use, don't post links to sensitive scans publicly.</p>
 
     <h3>No warranty</h3>
     <p>AccessScan is provided as-is under the MIT license. Security measures reduce risk; they do not eliminate it. See the <a href="terms.html">terms of use</a> for the full disclaimer.</p>
 
     <h2>Reporting a security issue</h2>
-    <p>If you believe you've found a security vulnerability in AccessScan itself — not in a site you scanned — please open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a> describing it responsibly. AccessScan is operated by Afkhomie via GitHub.</p>
+    <p>If you believe you've found a security vulnerability in AccessScan itself, not in a site you scanned, please open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a> describing it responsibly. AccessScan is operated by Afkhomie via GitHub.</p>
   </div>
 </main>
 

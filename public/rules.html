@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 <style>
-/* rules.html — page-specific layout on top of style.css tokens */
+/* rules.html, page-specific layout on top of style.css tokens */
 
 .rules-hero {
   padding-top: 56px; padding-bottom: 32px;
@@ -125,7 +125,7 @@ body.filter-empty .principle { display: none; }
   .coverage-grid { grid-template-columns: 1fr; }
 }
 
-/* coverage explainer — two callouts, stacks on narrow screens */
+/* coverage explainer, two callouts, stacks on narrow screens */
 .coverage { padding-top: 32px; padding-bottom: 8px; }
 .coverage h2 {
   font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em;
@@ -141,7 +141,7 @@ body.filter-empty .principle { display: none; }
 .coverage-links { margin: 0; font-size: 0.875rem; color: var(--ink-soft); }
 .coverage-links a { color: var(--blue); font-weight: 600; }
 .coverage-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
-/* first principle sits right after the explainer — tighten its usual 48px gap */
+/* first principle sits right after the explainer, tighten its usual 48px gap */
 .coverage + .rules-body .principle:first-child { margin-top: 24px; }
 </style>
 </head>
@@ -181,10 +181,10 @@ body.filter-empty .principle { display: none; }
     <p class="coverage-intro">Automated checks catch a lot, but not everything. A clean scan is a good sign, not a guarantee of full accessibility.</p>
     <div class="coverage-grid">
       <div class="disclaimer" role="note">
-        <strong>Automated — axe-core.</strong> The ~91 rules listed below are WCAG 2.x level A/AA checks run by <a href="https://github.com/dequelabs/axe-core" rel="noopener">axe-core</a> in a real browser. They catch roughly 30–57% of accessibility issues (per <a href="https://www.deque.com/axe/" rel="noopener">Deque</a>) — the objective, machine-checkable ones like missing alt text, contrast, labels and ARIA errors.
+        <strong>Automated, axe-core.</strong> The ~91 rules listed below are WCAG 2.x level A/AA checks run by <a href="https://github.com/dequelabs/axe-core" rel="noopener">axe-core</a> in a real browser. They catch roughly 30–57% of accessibility issues (per <a href="https://www.deque.com/axe/" rel="noopener">Deque</a>), the objective, machine-checkable ones like missing alt text, contrast, labels and ARIA errors.
       </div>
       <div class="review-box">
-        <strong>Manual review only.</strong> No tool can judge these automatically: keyboard trap testing beyond the basics, real screen-reader UX, cognitive accessibility, testing with real assistive technology, and legal compliance decisions. A page can pass every automated rule and still be hard to use — plan a manual pass before you ship.
+        <strong>Manual review only.</strong> No tool can judge these automatically: keyboard trap testing beyond the basics, real screen-reader UX, cognitive accessibility, testing with real assistive technology, and legal compliance decisions. A page can pass every automated rule and still be hard to use, plan a manual pass before you ship.
       </div>
     </div>
     <p class="coverage-links">See also: <a href="security.html">Security</a> · <a href="reliability.html">Reliability &amp; limits</a></p>
