@@ -609,7 +609,7 @@ if (toTopBtn) {
     if (window.scrollY < 300) { hide(); return; }
     show();
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(hide, 3500);
+    hideTimer = setTimeout(hide, 2000);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   toTopBtn.addEventListener('click', () => {
