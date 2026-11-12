@@ -9,13 +9,14 @@
 <meta name="theme-color" content="#003399">
 <script>
 /* Apply the saved theme before first paint to avoid a flash of the
-   wrong theme. Manual choice (localStorage) beats the OS preference. */
+   wrong theme. Light is the default: no saved choice means light,
+   the OS preference is never followed automatically. */
 (function () {
-  var t = null;
-  try { t = localStorage.getItem('accessscan-theme'); } catch (e) {}
-  if (t !== 'light' && t !== 'dark') {
-    t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
+  var t = 'light';
+  try {
+    var s = localStorage.getItem('accessscan-theme');
+    if (s === 'light' || s === 'dark') t = s;
+  } catch (e) {}
   document.documentElement.setAttribute('data-theme', t);
 })();
 </script>

@@ -1,9 +1,11 @@
 /* AccessScan theme toggle.
    - The inline <head> script has already set data-theme on <html> before
-     first paint (stored choice, else the OS preference), so this file only
-     keeps state in sync and handles the toggle.
+     first paint, so this file only keeps state in sync and handles the
+     toggle.
    - Choice persists in localStorage under 'accessscan-theme' as
-     'light' | 'dark'. A stored choice always beats the OS preference.
+     'light' | 'dark'. Light is the default: with no stored choice the
+     OS preference is never followed — the page stays light until the
+     visitor toggles.
    - The toggle uses the View Transitions API for a circular reveal from
      the button when available; otherwise the swap is instant. Both are
      skipped entirely under prefers-reduced-motion. */
@@ -13,7 +15,6 @@
   var STORAGE_KEY = 'accessscan-theme';
   var root = document.documentElement;
   var btn = document.getElementById('theme-toggle');
-  var mq = window.matchMedia('(prefers-color-scheme: dark)');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   function stored() {
@@ -22,8 +23,7 @@
 
   function effectiveTheme() {
     var s = stored();
-    if (s === 'light' || s === 'dark') return s;
-    return mq.matches ? 'dark' : 'light';
+    return (s === 'light' || s === 'dark') ? s : 'light';
   }
 
   function applyTheme(theme) {
@@ -39,14 +39,6 @@
 
   // Keep the button state honest on load (inline script owns first paint).
   applyTheme(effectiveTheme());
-
-  // OS preference changes only matter while the visitor hasn't chosen.
-  if (mq.addEventListener) {
-    mq.addEventListener('change', function () {
-      var s = stored();
-      if (s !== 'light' && s !== 'dark') applyTheme(mq.matches ? 'dark' : 'light');
-    });
-  }
 
   if (!btn) return;
 

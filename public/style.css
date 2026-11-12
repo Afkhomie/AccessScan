@@ -61,24 +61,26 @@
 
 /* ---------- Dark theme ----------
    Two entry points, same palette:
-   - the OS asks for dark and the visitor hasn't chosen manually
-     (the inline head script always writes data-theme, so this media
-     block mainly covers no-JS visitors following the system);
+   - the OS asks for dark and the visitor hasn't chosen manually —
+     only reachable with JS disabled, since the inline head script
+     always writes data-theme="light" when nothing is stored;
    - the visitor picked dark explicitly via the header toggle
-     (data-theme="dark"), which wins over a light system preference.
+     (data-theme="dark").
    Manual "light" is handled by :root[data-theme="light"] being excluded
    from the media block, so the light :root values simply apply. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    /* --blue becomes a light accent for text/links/borders; filled
-       controls move to --blue-fill so white text keeps ≥4.5:1. */
-    --blue: #8ea6ff;
-    --blue-dark: #b3c6ff;
+    /* Blues are desaturated steel tones — calm on the dark navy
+       surfaces instead of the bright neon of the light palette.
+       --blue stays ≥4.5:1 as text on every dark surface; filled
+       controls use --blue-fill so white text keeps ≥4.5:1. */
+    --blue: #6f8fd8;
+    --blue-dark: #a5b8ea;
     --blue-tint: #1a2540;
-    --blue-fill: #3f66ea;
-    --blue-fill-hover: #3458da;
+    --blue-fill: #5168d1;
+    --blue-fill-hover: #3e54b8;
     --navy: #001f4d;
 
     --ink: #e6eaf2;
@@ -90,18 +92,19 @@
     --line-strong: #55648a;
     --code-bg: #1a2334;
 
-    /* Severity — light text on deep tinted surfaces, all ≥6:1 */
-    --crit: #ffb0b0;   --crit-bg: #33161b;   --crit-line: #5c2a30;
-    --serious: #ffc48a; --serious-bg: #2e1f0d; --serious-line: #5f4526;
-    --moderate: #e8d98f; --moderate-bg: #28240f; --moderate-line: #4d4a26;
-    --minor: #8ea6ff;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
+    /* Severity — light text on deep tinted surfaces, all ≥6:1.
+       Saturation eased ~15% so badges read as tinted, not glowing. */
+    --crit: #f9b6b6;   --crit-bg: #33161b;   --crit-line: #5c2a30;
+    --serious: #f6c493; --serious-bg: #2e1f0d; --serious-line: #5f4526;
+    --moderate: #e1d596; --moderate-bg: #28240f; --moderate-line: #4d4a26;
+    --minor: #8299e0;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
     --info-line: #3c4a7d;
 
-    --error: #ff8a9e;
+    --error: #f693a4;
     --error-bg: #2f1420;
-    --error-text: #ffb3c0;
+    --error-text: #f9b9c4;
     --error-line: #5c2a30;
-    --warn: #f2b95c;
+    --warn: #e7b667;
     --warn-bg: #241b09;
     --warn-line: #4d3d1e;
 
@@ -112,11 +115,11 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --blue: #8ea6ff;
-  --blue-dark: #b3c6ff;
+  --blue: #6f8fd8;
+  --blue-dark: #a5b8ea;
   --blue-tint: #1a2540;
-  --blue-fill: #3f66ea;
-  --blue-fill-hover: #3458da;
+  --blue-fill: #5168d1;
+  --blue-fill-hover: #3e54b8;
   --navy: #001f4d;
 
   --ink: #e6eaf2;
@@ -128,17 +131,17 @@
   --line-strong: #55648a;
   --code-bg: #1a2334;
 
-  --crit: #ffb0b0;   --crit-bg: #33161b;   --crit-line: #5c2a30;
-  --serious: #ffc48a; --serious-bg: #2e1f0d; --serious-line: #5f4526;
-  --moderate: #e8d98f; --moderate-bg: #28240f; --moderate-line: #4d4a26;
-  --minor: #8ea6ff;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
+  --crit: #f9b6b6;   --crit-bg: #33161b;   --crit-line: #5c2a30;
+  --serious: #f6c493; --serious-bg: #2e1f0d; --serious-line: #5f4526;
+  --moderate: #e1d596; --moderate-bg: #28240f; --moderate-line: #4d4a26;
+  --minor: #8299e0;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
   --info-line: #3c4a7d;
 
-  --error: #ff8a9e;
+  --error: #f693a4;
   --error-bg: #2f1420;
-  --error-text: #ffb3c0;
+  --error-text: #f9b9c4;
   --error-line: #5c2a30;
-  --warn: #f2b95c;
+  --warn: #e7b667;
   --warn-bg: #241b09;
   --warn-line: #4d3d1e;
 
