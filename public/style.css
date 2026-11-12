@@ -106,28 +106,45 @@ body::before {
 
 /* ---------- Header ---------- */
 .site-header {
+  position: sticky; top: 0; z-index: 40;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
+/* Subtle lift once the page scrolls under the header. Pure CSS via
+   scroll-driven animations; browsers without support keep the hairline. */
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-shadow linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes header-shadow {
+    from { box-shadow: none; }
+    to { box-shadow: var(--shadow-lift); }
+  }
+}
 .header-inner {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
-  padding-top: 16px; padding-bottom: 16px;
-  min-height: 72px;
+  gap: 12px; flex-wrap: wrap;
+  padding-top: 10px; padding-bottom: 10px;
+  min-height: 56px;
 }
 .brand {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
   color: var(--blue); text-decoration: none;
-  font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em;
+  font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em;
 }
 .brand svg { display: block; border-radius: 4px; }
-.header-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.header-nav { display: flex; gap: 2px; flex-wrap: nowrap; }
 .header-nav a {
   color: var(--blue); text-decoration: none;
-  font-size: 1rem; font-weight: 600;
-  padding: 10px 12px; border-radius: var(--radius-sm);
+  font-size: 0.9375rem; font-weight: 600;
+  padding: 8px 10px; border-radius: var(--radius-sm);
 }
 .header-nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.header-nav a[aria-current="page"] {
+  color: var(--blue-dark);
+  text-decoration: underline; text-underline-offset: 4px;
+}
 
 /* ---------- Hero / form ---------- */
 .hero {
