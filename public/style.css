@@ -571,12 +571,21 @@ body::before {
 /* ---------- Back to top ---------- */
 .to-top {
   position: fixed; right: 20px; bottom: 20px; z-index: 50;
-  font: inherit; font-size: 0.875rem; font-weight: 600;
-  padding: 10px 16px; border-radius: 999px;
+  font: inherit; font-size: 1.25rem; line-height: 1;
+  width: 48px; height: 48px; padding: 0;
+  border-radius: 50%;
   background: var(--blue); color: #fff; border: none; cursor: pointer;
   box-shadow: var(--shadow);
+  display: inline-flex; align-items: center; justify-content: center;
+  animation: to-top-nudge 2.4s ease-in-out infinite;
 }
 .to-top:hover { background: var(--blue-dark, #002a80); }
+.to-top span { display: block; transition: transform 0.2s ease; }
+.to-top:hover span { transform: translateY(-3px); }
+@keyframes to-top-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
 
 ::selection { background: var(--blue-tint); }
 
@@ -589,7 +598,7 @@ a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 h1, h2, h3 { text-wrap: balance; }
 
 @media (prefers-reduced-motion: reduce) {
-  .progress-fill, .issue-chevron, .skip-link {
+  .progress-fill, .issue-chevron, .skip-link, .to-top, .to-top span {
     animation: none; transition: none;
   }
 }
