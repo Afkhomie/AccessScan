@@ -19,6 +19,18 @@
 <meta name="twitter:title" content="AccessScan · free WCAG/EAA accessibility scanner">
 <meta name="twitter:description" content="A free WCAG/EAA accessibility scanner. Checks any public website for accessibility issues. No account, no tracking.">
 <meta name="twitter:image" content="https://access-scan-tool.vercel.app/og-image.png">
+<script>
+/* Apply the saved theme before first paint to avoid a flash of the
+   wrong theme. Manual choice (localStorage) beats the OS preference. */
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('accessscan-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <link rel="stylesheet" href="style.css">
 <style>
 /* FAQ, hairline-separated disclosure list, same rhythm as .how-grid.
@@ -61,6 +73,9 @@
       <a href="rules.html" data-copy="chrome.navRuleReference">Rules</a>
       <a href="#faq" data-copy="index.navFaq">FAQ</a>
     </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g class="icon-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g><path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor" stroke="none"/></svg>
+    </button>
   </div>
 </header>
 
@@ -178,5 +193,6 @@
 <script src="copy.js"></script>
 <script src="rules-data.js"></script>
 <script src="app.js"></script>
+<script src="theme.js"></script>
 </body>
 </html>

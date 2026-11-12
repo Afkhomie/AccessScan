@@ -6,10 +6,14 @@
    has to model it. */
 
 :root {
+  color-scheme: light;
+
   /* Institutional palette */
   --blue: #003399;          /* EU institutional blue — 10.9:1 on white */
   --blue-dark: #002060;     /* hover/active — 15.3:1 */
   --blue-tint: #e8eefc;     /* info panels — blue text on it: 9.3:1 */
+  --blue-fill: #003399;     /* filled buttons/badges behind white text */
+  --blue-fill-hover: #002060;
   --navy: #001f4d;          /* footer base */
 
   /* Neutrals */
@@ -22,18 +26,22 @@
   --line-strong: #8a94a3;   /* input borders — 3.1:1 on white (WCAG 1.4.11) */
   --code-bg: #eef1f5;
 
-  /* Severity — tinted surfaces + dark text, all ≥6:1 measured */
-  --crit: #a50e0e;   --crit-bg: #fdecea;
-  --serious: #8a4b00; --serious-bg: #fdf1e3;
-  --moderate: #6b5a00; --moderate-bg: #fdf8e1;
-  --minor: #003399;  --minor-bg: #eaf0fd;
+  /* Severity — tinted surfaces + dark text, all ≥6:1 measured.
+     *-line tokens keep the tinted borders themeable. */
+  --crit: #a50e0e;   --crit-bg: #fdecea;   --crit-line: #e7b8b8;
+  --serious: #8a4b00; --serious-bg: #fdf1e3; --serious-line: #ecd3ae;
+  --moderate: #6b5a00; --moderate-bg: #fdf8e1; --moderate-line: #eadf9e;
+  --minor: #003399;  --minor-bg: #eaf0fd;  --minor-line: #c3d0f0;
+  --info-line: #c3d0f0; /* compare banner / tinted panels */
 
   /* State */
   --error: #b00020;         /* white on it: 7.3:1 */
   --error-bg: #fdecea;
   --error-text: #8a1c1c;    /* 8.1:1 on error-bg */
+  --error-line: #e7b8b8;
   --warn: #92400e;          /* review/manual-check amber — 6.7:1 on #fff8e1 */
   --warn-bg: #fff8e1;
+  --warn-line: #e8d48a;
 
   --radius: 8px;
   --radius-sm: 6px;
@@ -50,6 +58,95 @@
   --sans: Cantarell, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Open Sans", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
+
+/* ---------- Dark theme ----------
+   Two entry points, same palette:
+   - the OS asks for dark and the visitor hasn't chosen manually
+     (the inline head script always writes data-theme, so this media
+     block mainly covers no-JS visitors following the system);
+   - the visitor picked dark explicitly via the header toggle
+     (data-theme="dark"), which wins over a light system preference.
+   Manual "light" is handled by :root[data-theme="light"] being excluded
+   from the media block, so the light :root values simply apply. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    /* --blue becomes a light accent for text/links/borders; filled
+       controls move to --blue-fill so white text keeps ≥4.5:1. */
+    --blue: #8ea6ff;
+    --blue-dark: #b3c6ff;
+    --blue-tint: #1a2540;
+    --blue-fill: #3f66ea;
+    --blue-fill-hover: #3458da;
+    --navy: #001f4d;
+
+    --ink: #e6eaf2;
+    --ink-soft: #a9b4c7;
+    --paper: #0e1420;
+    --bg-soft: #151c2b;
+    --panel: #171f31;
+    --line: #28324a;
+    --line-strong: #55648a;
+    --code-bg: #1a2334;
+
+    /* Severity — light text on deep tinted surfaces, all ≥6:1 */
+    --crit: #ffb0b0;   --crit-bg: #33161b;   --crit-line: #5c2a30;
+    --serious: #ffc48a; --serious-bg: #2e1f0d; --serious-line: #5f4526;
+    --moderate: #e8d98f; --moderate-bg: #28240f; --moderate-line: #4d4a26;
+    --minor: #8ea6ff;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
+    --info-line: #3c4a7d;
+
+    --error: #ff8a9e;
+    --error-bg: #2f1420;
+    --error-text: #ffb3c0;
+    --error-line: #5c2a30;
+    --warn: #f2b95c;
+    --warn-bg: #241b09;
+    --warn-line: #4d3d1e;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.55);
+    --shadow-lift: 0 4px 12px rgba(0, 0, 0, 0.55);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --blue: #8ea6ff;
+  --blue-dark: #b3c6ff;
+  --blue-tint: #1a2540;
+  --blue-fill: #3f66ea;
+  --blue-fill-hover: #3458da;
+  --navy: #001f4d;
+
+  --ink: #e6eaf2;
+  --ink-soft: #a9b4c7;
+  --paper: #0e1420;
+  --bg-soft: #151c2b;
+  --panel: #171f31;
+  --line: #28324a;
+  --line-strong: #55648a;
+  --code-bg: #1a2334;
+
+  --crit: #ffb0b0;   --crit-bg: #33161b;   --crit-line: #5c2a30;
+  --serious: #ffc48a; --serious-bg: #2e1f0d; --serious-line: #5f4526;
+  --moderate: #e8d98f; --moderate-bg: #28240f; --moderate-line: #4d4a26;
+  --minor: #8ea6ff;  --minor-bg: #1b2547;  --minor-line: #3c4a7d;
+  --info-line: #3c4a7d;
+
+  --error: #ff8a9e;
+  --error-bg: #2f1420;
+  --error-text: #ffb3c0;
+  --error-line: #5c2a30;
+  --warn: #f2b95c;
+  --warn-bg: #241b09;
+  --warn-line: #4d3d1e;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.55);
+  --shadow-lift: 0 4px 12px rgba(0, 0, 0, 0.55);
+}
+/* Manual light choice beats a dark OS preference. */
+:root[data-theme="light"] { color-scheme: light; }
 
 * { box-sizing: border-box; }
 
@@ -96,7 +193,7 @@ body::before {
 
 .skip-link {
   position: absolute; left: 16px; top: -80px; z-index: 100;
-  background: var(--blue); color: #fff;
+  background: var(--blue-fill); color: #fff;
   font-weight: 600; font-size: 0.875rem;
   padding: 12px 18px; border-radius: var(--radius-sm);
   text-decoration: none;
@@ -134,7 +231,7 @@ body::before {
   font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em;
 }
 .brand svg { display: block; border-radius: 4px; }
-.header-nav { display: flex; gap: 2px; flex-wrap: nowrap; }
+.header-nav { display: flex; gap: 2px; flex-wrap: nowrap; margin-left: auto; }
 .header-nav a {
   color: var(--blue); text-decoration: none;
   font-size: 0.9375rem; font-weight: 600;
@@ -178,10 +275,10 @@ body::before {
   font: inherit; font-size: 1rem; font-weight: 600;
   padding: 13px 26px;
   border: 0; border-radius: var(--radius-sm);
-  background: var(--blue); color: #fff; cursor: pointer;
+  background: var(--blue-fill); color: #fff; cursor: pointer;
   white-space: nowrap;
 }
-#scan-btn:hover { background: var(--blue-dark); }
+#scan-btn:hover { background: var(--blue-fill-hover); }
 #scan-btn:disabled { background: var(--line); color: var(--ink-soft); cursor: wait; }
 
 /* Keyboard focus — thick blue ring, unmistakable. This tool audits
@@ -234,7 +331,7 @@ body::before {
 .form-error {
   margin: 16px 0 0;
   color: var(--error-text); background: var(--error-bg);
-  border: 1px solid #e7b8b8; border-left: 4px solid var(--error);
+  border: 1px solid var(--error-line); border-left: 4px solid var(--error);
   border-radius: var(--radius-sm);
   padding: 12px 16px; font-size: 1rem;
 }
@@ -332,7 +429,7 @@ body::before {
   text-decoration: none;
 }
 .btn-ghost:hover { background: var(--blue-tint); }
-.btn-ghost:active { background: var(--blue); color: #fff; }
+.btn-ghost:active { background: var(--blue-fill); color: #fff; }
 
 .summary-card {
   background: var(--paper); border: 1px solid var(--line);
@@ -357,10 +454,10 @@ body::before {
 .sev-tile .l {
   font-size: 0.875rem; font-weight: 600; margin-top: 6px;
 }
-.sev-tile.critical { background: var(--crit-bg); color: var(--crit); border-color: #e7b8b8; }
-.sev-tile.serious { background: var(--serious-bg); color: var(--serious); border-color: #ecd3ae; }
-.sev-tile.moderate { background: var(--moderate-bg); color: var(--moderate); border-color: #eadf9e; }
-.sev-tile.minor { background: var(--minor-bg); color: var(--minor); border-color: #c3d0f0; }
+.sev-tile.critical { background: var(--crit-bg); color: var(--crit); border-color: var(--crit-line); }
+.sev-tile.serious { background: var(--serious-bg); color: var(--serious); border-color: var(--serious-line); }
+.sev-tile.moderate { background: var(--moderate-bg); color: var(--moderate); border-color: var(--moderate-line); }
+.sev-tile.minor { background: var(--minor-bg); color: var(--minor); border-color: var(--minor-line); }
 .sev-tile.clean { background: var(--paper); color: var(--ink); }
 .sev-tile.clean .n { color: var(--blue); }
 .sev-tile .sev-note {
@@ -374,7 +471,7 @@ body::before {
 
 /* compare banner — vs previous scan of the same URL */
 .compare-banner {
-  background: var(--blue-tint); border: 1px solid #c3d0f0;
+  background: var(--blue-tint); border: 1px solid var(--info-line);
   border-left: 4px solid var(--blue);
   border-radius: var(--radius-sm);
   padding: 16px; margin-bottom: 16px; font-size: 0.875rem;
@@ -413,7 +510,7 @@ body::before {
   white-space: nowrap;
 }
 .page-tab:hover { background: var(--code-bg); }
-.page-tab.active { background: var(--blue); color: #fff; }
+.page-tab.active { background: var(--blue-fill); color: #fff; }
 
 /* filters */
 .filters {
@@ -429,7 +526,7 @@ body::before {
   color: var(--ink); cursor: pointer;
 }
 .chip:hover { border-color: var(--blue); color: var(--blue); }
-.chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.chip.active { background: var(--blue-fill); border-color: var(--blue-fill); color: #fff; }
 .filters input[type="search"] {
   font: inherit; font-size: 1rem;
   padding: 10px 14px; border-radius: var(--radius-sm);
@@ -509,7 +606,7 @@ body::before {
 
 /* axe "incomplete" — needs a human, honest-tooling callout */
 .review-box {
-  background: var(--warn-bg); border: 1px solid #e8d48a;
+  background: var(--warn-bg); border: 1px solid var(--warn-line);
   border-left: 4px solid var(--warn);
   border-radius: var(--radius-sm);
   padding: 16px 20px; margin-bottom: 16px; font-size: 0.875rem;
@@ -519,7 +616,9 @@ body::before {
 .review-box ul { margin: 0; padding-left: 22px; }
 .review-box li { margin: 4px 0; }
 .review-count {
-  font-size: 0.75rem; font-weight: 700; color: #fff;
+  /* --paper flips to near-black in dark mode, keeping ≥4.5:1 on the
+     light amber --warn badge; in light mode it's white as before. */
+  font-size: 0.75rem; font-weight: 700; color: var(--paper);
   background: var(--warn); border-radius: 4px; padding: 2px 8px;
 }
 .review-box a { color: var(--blue); font-weight: 600; }
@@ -527,7 +626,7 @@ body::before {
 
 /* page error */
 .page-error {
-  background: var(--error-bg); border: 1px solid #e7b8b8;
+  background: var(--error-bg); border: 1px solid var(--error-line);
   border-left: 4px solid var(--error);
   color: var(--error-text); border-radius: var(--radius-sm);
   padding: 16px 20px; margin-bottom: 0; font-size: 1rem; font-weight: 600;
@@ -562,6 +661,7 @@ body::before {
 .how-body span { font-size: 0.9375rem; color: var(--ink-soft); }
 .site-footer {
   background: var(--navy); color: #cdd7ea;
+  border-top: 1px solid var(--line);
   padding: 32px 24px; font-size: 0.875rem;
 }
 .site-footer p { margin: 0; }
@@ -574,7 +674,7 @@ body::before {
   font: inherit; font-size: 1.25rem; line-height: 1;
   width: 48px; height: 48px; padding: 0;
   border-radius: 50%;
-  background: var(--blue); color: #fff; border: none; cursor: pointer;
+  background: var(--blue-fill); color: #fff; border: none; cursor: pointer;
   box-shadow: var(--shadow);
   display: inline-flex; align-items: center; justify-content: center;
   opacity: 0; visibility: hidden;
@@ -584,7 +684,7 @@ body::before {
 .to-top.show {
   opacity: 1; visibility: visible; transform: translateY(0);
 }
-.to-top:hover { background: var(--blue-dark, #002a80); }
+.to-top:hover { background: var(--blue-fill-hover, #002060); }
 .to-top span { display: block; transition: transform 0.2s ease; }
 .to-top:hover span { transform: translateY(-3px); }
 
@@ -599,8 +699,68 @@ a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 h1, h2, h3 { text-wrap: balance; }
 
 @media (prefers-reduced-motion: reduce) {
-  .progress-fill, .issue-chevron, .skip-link, .to-top, .to-top span {
+  .progress-fill, .issue-chevron, .skip-link, .to-top, .to-top span,
+  .theme-toggle .icon-sun, .theme-toggle .icon-moon {
     animation: none; transition: none;
+  }
+}
+
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+  font: inherit; flex: 0 0 auto;
+  width: 40px; height: 40px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line-strong); border-radius: 50%;
+  background: var(--paper); color: var(--ink); cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--blue); outline-offset: 2px;
+}
+.theme-toggle svg { width: 20px; height: 20px; display: block; }
+
+/* Sun/moon swap: the outgoing icon shrinks and rotates away while the
+   incoming one grows in — reads as a circular wrap. transform-box keeps
+   the rotation centred on each SVG group. */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  transform-box: fill-box; transform-origin: center;
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.3); }
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  opacity: 0; transform: rotate(90deg) scale(0.3);
+}
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  opacity: 1; transform: none;
+}
+/* No-JS fallback: system dark still gets the right glyph. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun {
+    opacity: 0; transform: rotate(90deg) scale(0.3);
+  }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon {
+    opacity: 1; transform: none;
+  }
+}
+
+/* Circular theme reveal via the View Transitions API. theme.js sets
+   --theme-x/--theme-y (button centre) and --theme-r (reach) on <html>
+   before calling startViewTransition; the new snapshot is clipped to a
+   growing circle while the old one stays put underneath. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: none; }
+  ::view-transition-new(root) {
+    animation: theme-circle 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  @keyframes theme-circle {
+    from {
+      clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+    to {
+      clip-path: circle(var(--theme-r, 150vmax)
+        at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
   }
 }
 
