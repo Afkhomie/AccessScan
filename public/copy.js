@@ -32,8 +32,7 @@ window.COPY = {
     meta: {
       kicker: 'WCAG 2.x · EAA · axe-core · local-first',
       h1: 'Check whether your website is accessible.',
-      lede: 'Enter a URL to scan a public page for common WCAG 2.x failures relevant to the EU Accessibility Act. The scan runs locally, is free, and requires no account or tracking.',
-      heroNote: '',
+      lede: 'Scan a public page for common WCAG 2.x failures relevant to the EU Accessibility Act. Runs locally, is free, and requires no account or tracking.',
     },
     navLimitations: 'Limitations',
     form: {
@@ -62,7 +61,7 @@ window.COPY = {
       failedLabel: 'failed',
     },
     disclaimer: {
-      html: '<strong>Important limitation:</strong> automated scans of this kind detect approximately <strong>30–57%</strong> of WCAG issues (per Deque\u2019s research). A clean result does <em>not</em> mean the site is compliant, and reported issues do not by themselves establish a legal violation. They indicate problems that warrant attention. EAA enforcement applies in the EU as of June 2025. For assurance, obtain a manual audit.',
+      html: '<strong>Important limitation:</strong> Automated scans of this kind detect approximately <strong>30–57%</strong> of WCAG issues (per Deque\u2019s research). A clean result does <em>not</em> mean the site is compliant, and reported issues do not by themselves establish a legal violation. They indicate problems that warrant attention. EAA enforcement applies in the EU as of June 2025. For assurance, obtain a manual audit.',
     },
     results: {
       heading: 'Report',
@@ -80,7 +79,7 @@ window.COPY = {
       ],
     },
     faq: {
-      heading: 'Frequently asked questions',
+      heading: 'FAQs',
       items: [
         {
           q: 'Does a clean scan demonstrate WCAG or EAA compliance?',
