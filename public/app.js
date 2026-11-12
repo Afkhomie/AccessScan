@@ -600,10 +600,18 @@ loadHistory();
 /* ---------- Back to top ---------- */
 const toTopBtn = document.getElementById('to-top');
 if (toTopBtn) {
-  const onScroll = () => { toTopBtn.hidden = window.scrollY < 400; };
+  let hideTimer = null;
+  const onScroll = () => {
+    // Show while scrolling (past a small threshold), auto-hide ~3.5s after
+    // the user stops — keeps the corner uncluttered.
+    if (window.scrollY < 300) { toTopBtn.hidden = true; return; }
+    toTopBtn.hidden = false;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => { toTopBtn.hidden = true; }, 3500);
+  };
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
   toTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: smoothScroll });
+    toTopBtn.hidden = true;
   });
 }
