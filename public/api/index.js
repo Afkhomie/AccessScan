@@ -10,6 +10,10 @@ const RENDER_ORIGIN = 'https://accessscan-9gcz.onrender.com';
 const HOP_BY_HOP = new Set([
   'connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization',
   'te', 'trailer', 'transfer-encoding', 'upgrade', 'host', 'content-length',
+  // Compression is handled hop-by-hop: fetch decompresses upstream bodies, so
+  // forwarding accept-encoding/content-encoding would mislabel the payload
+  // (this caused empty bodies for responses >~1KB, which Render gzips).
+  'accept-encoding', 'content-encoding',
 ]);
 
 async function handler(req, res) {
@@ -43,19 +47,15 @@ async function handler(req, res) {
     return res.status(502).json({ error: 'Backend unreachable.' });
   }
 
-  // Return a Web Response — Vercel's res.write/send helpers dropped bodies
-  // for larger payloads on this runtime; returning Response frames correctly.
-  const outHeaders = new Headers();
+  res.status(upstream.status);
   upstream.headers.forEach((value, key) => {
-    if (!HOP_BY_HOP.has(key.toLowerCase())) outHeaders.set(key, value);
+    if (!HOP_BY_HOP.has(key.toLowerCase())) res.setHeader(key, value);
   });
+
   // shortcut: body is buffered in function memory; fine at current report
-  // sizes (JSON status, HTML/PDF export), upgrade if exports grow huge.
-  const body = upstream.body ? await upstream.arrayBuffer() : null;
-  return new Response(body, {
-    status: upstream.status,
-    headers: outHeaders,
-  });
+  // sizes (JSON status, HTML/PDF export), upgrade to true streaming if
+  // exports grow huge.
+  res.send(Buffer.from(await upstream.arrayBuffer()));
 }
 
 module.exports = handler;
