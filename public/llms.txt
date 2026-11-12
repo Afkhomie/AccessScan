@@ -29,12 +29,14 @@
 - Live: https://access-scan-tool.vercel.app
 - Repo: https://github.com/Afkhomie/AccessScan
 - Rules reference: /rules.html
+- Security model: /security.html — how scans are kept local and targets are hardened
+- Reliability & limits: /reliability.html — what the scanner can and can't detect
 - License: MIT
 
 ## For agents
 
 - API: POST /api/scan {url, crawl?, maxPages?} → 202 {id}; poll
-  GET /api/scan/:id; GET /api/scans (history); GET /api/scans/:id/compare;
+  GET /api/scan/:id; GET /api/scans/:id/compare;
   GET /api/scan/:id/export?format=html|json|pdf
 - Run: `npm install && node server.js` → http://localhost:3000
 - Tests: `node test/smoke.js && node test/smoke2.js`
