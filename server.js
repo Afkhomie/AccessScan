@@ -168,7 +168,13 @@ async function getBrowser() {
   if (!browser || !browser.isConnected()) {
     browser = await chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      args: [
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        // Bound the renderer's JS heap — a hostile/challenge page spinning
+        // JS should kill the tab, not the whole Node process (512MB hosts).
+        '--js-flags=--max-old-space-size=256',
+      ],
     });
   }
   return browser;
@@ -225,29 +231,52 @@ async function scanOnePage(page, url) {
   // Give late scripts a moment, but don't hang on networkidle.
   await page.waitForLoadState('networkidle', { timeout: 6_000 }).catch(() => {});
 
+  const httpStatus = resp?.status() ?? null;
+
+  // Error pages and bot-challenge interstitials aren't real content —
+  // report them honestly instead of scanning a 503/challenge page and
+  // returning violations that look authoritative.
+  if (httpStatus !== null && httpStatus >= 400) {
+    return {
+      url,
+      error: httpStatus === 403 || httpStatus === 429 || httpStatus === 503
+        ? `The site returned "${httpStatus}" — it may be down or blocking automated scans.`
+        : `The site returned an error (${httpStatus}). It may be down.`,
+      status: httpStatus,
+    };
+  }
+  const earlyTitle = await page.title().catch(() => '');
+  if (/just a moment|attention required|checking your browser|verify you are human|cf-chl|are you a robot/i.test(earlyTitle)) {
+    return {
+      url,
+      error: 'This site blocked the scan with bot protection. Try again later or scan a different page.',
+      status: httpStatus,
+    };
+  }
+
   // A redirect may have landed on an internal host — re-validate the
   // final URL the same way the submitted URL was validated.
   const finalUrl = page.url();
   if (finalUrl && finalUrl !== url) {
     const check = await validateScanUrl(finalUrl);
     if (check.error) {
-      return { url, error: `Redirected to a disallowed address. ${check.error}`, status: resp?.status() ?? null };
+      return { url, error: `Redirected to a disallowed address. ${check.error}`, status: httpStatus };
     }
   }
 
   const html = await page.content();
   if (Buffer.byteLength(html, 'utf8') > MAX_HTML_BYTES) {
-    return { url, error: 'Page is too large to scan safely.', status: resp?.status() ?? null };
+    return { url, error: 'Page is too large to scan safely.', status: httpStatus };
   }
 
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze();
 
-  const title = await page.title().catch(() => '');
+  const title = earlyTitle || (await page.title().catch(() => ''));
   return mapAxeResults(results, {
     url,
-    status: resp?.status() ?? null,
+    status: httpStatus,
     title,
   });
 }
