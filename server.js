@@ -239,6 +239,15 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
       viewport: { width: 1280, height: 900 },
       userAgent: 'AccessScan/0.1 (+local accessibility checker; https://github.com)',
     });
+    // axe-core analyzes the DOM, not pixels — abort heavy subresources to
+    // keep memory/bandwidth low (Render free tier is 512MB; images, video,
+    // and fonts are the biggest offenders on media-heavy pages).
+    await context.route('**/*', (route) => {
+      const t = route.request().resourceType();
+      return (t === 'image' || t === 'media' || t === 'font')
+        ? route.abort()
+        : route.continue();
+    });
     const page = await context.newPage();
     const pages = [];
 

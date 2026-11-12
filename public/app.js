@@ -9,6 +9,8 @@ const formError = document.getElementById('form-error');
 const progress = document.getElementById('progress');
 const progressPhase = document.getElementById('progress-phase');
 const progressSub = document.getElementById('progress-sub');
+const progressPct = document.getElementById('progress-pct');
+const progressFill = document.getElementById('progress-fill');
 const results = document.getElementById('results');
 const resultsBody = document.getElementById('results-body');
 const newScanBtn = document.getElementById('new-scan');
@@ -81,6 +83,36 @@ function fmtPhase(phase) {
   return 'Working…';
 }
 
+// Map server phase strings to a rough percentage for the progress bar.
+function phaseToPct(phase) {
+  if (phase === 'queued' || phase === 'loading') return 10;
+  if (phase === 'finding-links') return 20;
+  if (typeof phase === 'string' && phase.startsWith('scanning')) {
+    const m = /scanning (\d+)\/(\d+)/.exec(phase);
+    if (m && +m[2] > 0) return Math.min(95, Math.round(20 + (75 * +m[1]) / +m[2]));
+    return 45;
+  }
+  return 8;
+}
+
+function setProgress(phase) {
+  progressPhase.textContent = fmtPhase(phase);
+  const pct = phaseToPct(phase);
+  progressPct.textContent = `${pct}%`;
+  progressFill.style.width = `${pct}%`;
+}
+
+// User-facing error text — never leak raw HTTP codes like "502".
+function friendlyHttpError(res, data) {
+  if (res.status === 429) {
+    return `A scan is already running. ${data.error || 'Please wait for it to finish, then try again.'}`;
+  }
+  if (res.status >= 500) {
+    return 'Something went wrong on our side — the service may be waking up. Please try again in a minute.';
+  }
+  return data.error || 'Something went wrong. Please try again.';
+}
+
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -91,6 +123,8 @@ async function startScan(url, crawl, maxPages) {
   showError('');
   setBusy(true);
   progressPhase.textContent = 'Starting scan…';
+  progressPct.textContent = '0%';
+  progressFill.style.width = '0%';
   progressSub.textContent = 'This can take up to a minute on slow sites.';
   scanStartedAt = Date.now();
   slowHintShown = false;
@@ -111,15 +145,12 @@ async function startScan(url, crawl, maxPages) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     setBusy(false);
-    if (res.status === 429) {
-      showError(`A scan is already running. ${data.error || 'Please wait for it to finish, then try again.'}`);
-    } else {
-      showError(data.error || `Request failed (${res.status}). Please try again.`);
-    }
+    showError(friendlyHttpError(res, data));
     return;
   }
 
   currentScanId = data.id;
+  addHistoryEntry(data.id, url);
   pollFailures = 0;
   pollTimer = setInterval(pollScan, 900);
   pollScan();
@@ -145,7 +176,9 @@ async function pollScan() {
     if (!res.ok) {
       abortScan(res.status === 404
         ? 'The scan result expired before it finished (the server keeps only recent scans). Start a new scan to try again.'
-        : `The server returned an error (${res.status}) while checking scan status. Try again in a moment.`);
+        : res.status >= 500
+          ? 'The service hiccuped while checking progress. Please try again in a moment.'
+          : `Something went wrong while checking scan status. Try again in a moment.`);
       return;
     }
     data = await res.json();
@@ -164,7 +197,7 @@ async function pollScan() {
     slowHintShown = true;
     progressSub.textContent = 'Still working. This one is taking longer than usual.';
   }
-  progressPhase.textContent = fmtPhase(data.phase);
+  setProgress(data.phase);
 
   if (data.status === 'done') {
     const doneId = currentScanId;
@@ -172,14 +205,18 @@ async function pollScan() {
     pollTimer = null;
     currentScanId = null;
     setBusy(false);
+    const nRules = data.result?.totals?.rules || 0;
+    updateHistoryEntry(doneId, { label: `${nRules} issue rule${nRules === 1 ? '' : 's'}`, status: 'done' });
     renderReport(data.result, doneId);
     announceScan(`Scan complete. ${data.result?.totals?.rules || 0} issue rule${(data.result?.totals?.rules || 0) === 1 ? '' : 's'} found`);
     loadHistory();
   } else if (data.status === 'error') {
+    const errId = currentScanId;
     clearInterval(pollTimer);
     pollTimer = null;
     currentScanId = null;
     setBusy(false);
+    updateHistoryEntry(errId, { label: 'failed', status: 'error' });
     loadHistory();
     results.hidden = false;
     const errMsg = data.error || 'Unknown error.';
@@ -467,29 +504,45 @@ newScanBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: smoothScroll });
 });
 
-/* ---------- Recent scans (in-memory history) ---------- */
+/* ---------- Recent scans (per-browser localStorage history) ---------- */
+// History is client-side only: the server keeps a global in-memory list for
+// the API, but "Recent scans" must show what THIS browser scanned — never
+// other visitors' URLs.
+const HISTORY_KEY = 'accessscan-history';
 
-async function loadHistory() {
-  let data;
-  try {
-    const res = await fetch('/api/scans');
-    if (!res.ok) return;
-    data = await res.json();
-  } catch { return; }
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+  catch { return []; }
+}
+function saveHistory(list) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 20))); }
+  catch { /* storage full/blocked — history is best-effort */ }
+}
+function addHistoryEntry(id, url) {
+  const list = getHistory().filter((h) => h.id !== id);
+  list.unshift({ id, url, at: Date.now(), label: 'scanning…', status: 'running' });
+  saveHistory(list);
+}
+function updateHistoryEntry(id, patch) {
+  const list = getHistory();
+  const i = list.findIndex((h) => h.id === id);
+  if (i === -1) return;
+  list[i] = { ...list[i], ...patch };
+  saveHistory(list);
+}
 
-  const scans = (data.scans || []).filter((s) => s.status === 'done' || s.status === 'error');
+function loadHistory() {
+  const scans = getHistory();
   if (!scans.length) { recentSection.hidden = true; return; }
 
   recentSection.hidden = false;
-  recentList.innerHTML = scans.slice(0, 10).map((s) => {
-    const when = s.scannedAt ? new Date(s.scannedAt).toLocaleString() : new Date(s.createdAt).toLocaleString();
-    const label = s.status === 'done'
-      ? `${s.totals?.rules || 0} issue rule${(s.totals?.rules || 0) === 1 ? '' : 's'}`
-      : 'failed';
+  recentList.innerHTML = scans.slice(0, 10).map((h) => {
+    const when = new Date(h.at).toLocaleString();
+    const label = h.label || 'scan';
     return `<li class="recent-item">
-      <span class="r-url" title="${esc(s.url || '')}">${esc(safeHostPath(s.url || ''))}</span>
+      <span class="r-url" title="${esc(h.url || '')}">${esc(safeHostPath(h.url || ''))}</span>
       <span class="r-meta">${esc(when)} · ${esc(label)}</span>
-      <button class="btn-mini" type="button" data-scan="${esc(s.id)}" aria-label="View scan of ${esc(safeHostPath(s.url || ''))} from ${esc(when)}">View</button>
+      <button class="btn-mini" type="button" data-scan="${esc(h.id)}" aria-label="View scan of ${esc(safeHostPath(h.url || ''))} from ${esc(when)}">View</button>
     </li>`;
   }).join('');
 

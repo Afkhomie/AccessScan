@@ -239,24 +239,15 @@ body::before {
   margin-top: 12px; height: 8px; border-radius: 999px;
   background: var(--code-bg); overflow: hidden; position: relative;
 }
-.progress-bar::after {
-  content: ""; position: absolute; inset: 0;
-  width: 40%; border-radius: 999px;
+.progress-fill {
+  height: 100%; width: 0%; border-radius: 999px;
   background: var(--blue);
-  animation: bar-slide 1.1s ease-in-out infinite;
+  transition: width 0.4s ease;
 }
-@keyframes bar-slide {
-  0%   { transform: translateX(-110%); }
-  100% { transform: translateX(360%); }
+.progress-pct {
+  float: right; font-variant-numeric: tabular-nums;
+  color: var(--ink-soft); font-weight: 600;
 }
-.spinner {
-  flex: 0 0 22px; width: 22px; height: 22px; margin-top: 2px;
-  border: 3px solid var(--blue-tint);
-  border-top-color: var(--blue);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
 .progress-phase {
   margin: 0; font-weight: 600; font-size: 1rem;
 }
@@ -575,11 +566,9 @@ a:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 h1, h2, h3 { text-wrap: balance; }
 
 @media (prefers-reduced-motion: reduce) {
-  .progress-bar::after, .spinner, .issue-chevron, .skip-link {
+  .progress-fill, .issue-chevron, .skip-link {
     animation: none; transition: none;
   }
-  .spinner { border-top-color: var(--blue-tint); }
-  .progress-bar::after { width: 100%; opacity: 0.35; }
 }
 
 @media (max-width: 480px) {
