@@ -577,15 +577,10 @@ body::before {
   background: var(--blue); color: #fff; border: none; cursor: pointer;
   box-shadow: var(--shadow);
   display: inline-flex; align-items: center; justify-content: center;
-  animation: to-top-nudge 2.4s ease-in-out infinite;
 }
 .to-top:hover { background: var(--blue-dark, #002a80); }
 .to-top span { display: block; transition: transform 0.2s ease; }
 .to-top:hover span { transform: translateY(-3px); }
-@keyframes to-top-nudge {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
 
 ::selection { background: var(--blue-tint); }
 
