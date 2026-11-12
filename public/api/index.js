@@ -53,7 +53,9 @@ async function handler(req, res) {
   // shortcut: a very large export would buffer in function memory; fine at
   // current report sizes, upgrade to true streaming if exports grow.
   try {
-    res.send(Buffer.from(await upstream.arrayBuffer()));
+    const buf = Buffer.from(await upstream.arrayBuffer());
+    console.log('proxy', req.method, incoming.pathname, '->', upstream.status, buf.length, 'bytes');
+    res.send(buf);
   } catch {
     if (!res.headersSent) res.status(502).json({ error: 'Backend response failed.' });
     else res.end();
