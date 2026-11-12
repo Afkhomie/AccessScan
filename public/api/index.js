@@ -43,23 +43,19 @@ async function handler(req, res) {
     return res.status(502).json({ error: 'Backend unreachable.' });
   }
 
-  res.status(upstream.status);
+  // Return a Web Response — Vercel's res.write/send helpers dropped bodies
+  // for larger payloads on this runtime; returning Response frames correctly.
+  const outHeaders = new Headers();
   upstream.headers.forEach((value, key) => {
-    if (!HOP_BY_HOP.has(key.toLowerCase())) res.setHeader(key, value);
+    if (!HOP_BY_HOP.has(key.toLowerCase())) outHeaders.set(key, value);
   });
-
-  // Buffer the body: responses are small (JSON status, HTML/PDF export) and
-  // manual chunk streaming returned empty bodies on Vercel's runtime.
-  // shortcut: a very large export would buffer in function memory; fine at
-  // current report sizes, upgrade to true streaming if exports grow.
-  try {
-    const buf = Buffer.from(await upstream.arrayBuffer());
-    console.log('proxy', req.method, incoming.pathname, '->', upstream.status, buf.length, 'bytes');
-    res.end(buf);
-  } catch {
-    if (!res.headersSent) res.status(502).json({ error: 'Backend response failed.' });
-    else res.end();
-  }
+  // shortcut: body is buffered in function memory; fine at current report
+  // sizes (JSON status, HTML/PDF export), upgrade if exports grow huge.
+  const body = upstream.body ? await upstream.arrayBuffer() : null;
+  return new Response(body, {
+    status: upstream.status,
+    headers: outHeaders,
+  });
 }
 
 module.exports = handler;
