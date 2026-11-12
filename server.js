@@ -30,6 +30,12 @@ const CRAWL_CONCURRENCY = 2;
 const MAX_HTML_BYTES = 3 * 1024 * 1024;
 
 const app = express();
+// Two proxy hops in production: client -> Vercel edge -> Render LB -> app.
+// trust proxy=2 makes req.ip the real client IP so rate limits bucket
+// per-user instead of sharing Vercel's egress IP. Caveat: a direct-to-Render
+// attacker can spoof X-Forwarded-For to rotate buckets — bounded by the
+// global cap (RATE_LIMIT_GLOBAL_MAX) which ignores IPs entirely.
+app.set('trust proxy', 2);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
