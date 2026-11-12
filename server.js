@@ -36,6 +36,19 @@ const app = express();
 // attacker can spoof X-Forwarded-For to rotate buckets — bounded by the
 // global cap (RATE_LIMIT_GLOBAL_MAX) which ignores IPs entirely.
 app.set('trust proxy', 2);
+// Shared-secret gate: when PROXY_SECRET is set (production), every request —
+// static and API — must carry the matching x-proxy-key header, which only the
+// Vercel serverless proxy adds. Direct hits on the Render URL get a bare 403
+// so nothing leaks about what is expected. Unset locally → dev unaffected.
+const PROXY_SECRET = process.env.PROXY_SECRET;
+if (PROXY_SECRET) {
+  app.use((req, res, next) => {
+    if (req.get('x-proxy-key') !== PROXY_SECRET) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    next();
+  });
+}
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 

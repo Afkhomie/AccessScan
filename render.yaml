@@ -12,3 +12,8 @@ services:
         value: production
       - key: HOST
         value: 0.0.0.0
+      # Shared secret required on every request (x-proxy-key header). Set in
+      # the Render dashboard / API — never commit the value. Must match the
+      # PROXY_SECRET env var on the Vercel project.
+      - key: PROXY_SECRET
+        sync: false
