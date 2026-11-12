@@ -69,6 +69,7 @@ const sevRank = (impact) => {
 
 let currentScanId = null;
 let lastReportId = null;
+let lastPlannedPages = null;
 let pollTimer = null;
 let pollFailures = 0;
 let scanStartedAt = 0;
@@ -109,6 +110,24 @@ function phaseToPct(phase) {
   return 8;
 }
 
+// Planned page count from the "scanning N/M" phase, when the server reports it.
+function plannedFromPhase(phase) {
+  const m = typeof phase === 'string' && phase.startsWith('scanning')
+    ? /scanning \d+\/(\d+)/.exec(phase)
+    : null;
+  return m ? +m[1] : null;
+}
+
+// A scan is partial when any page carries an error, or fewer pages were
+// produced than the crawl planned (e.g. the time limit hit early).
+function partialScanInfo(result, plannedPages) {
+  const pages = result?.pages || [];
+  const failed = pages.filter((p) => p.error).length;
+  const planned = plannedPages || pages.length;
+  const scanned = pages.length - failed;
+  return { failed, scanned, planned, partial: failed > 0 || pages.length < planned };
+}
+
 function setProgress(phase) {
   progressPhase.textContent = fmtPhase(phase);
   const pct = phaseToPct(phase);
@@ -142,6 +161,7 @@ async function startScan(url, crawl, maxPages) {
   progressSub.textContent = window.COPY.index.progress.subInitial;
   scanStartedAt = Date.now();
   slowHintShown = false;
+  lastPlannedPages = null;
 
   let res;
   try {
@@ -205,6 +225,8 @@ async function pollScan() {
     return;
   }
   pollFailures = 0;
+  const planned = plannedFromPhase(data.phase);
+  if (planned) lastPlannedPages = planned;
 
   // After 60s, gently warn that the scan is slower than usual (server caps ~3min).
   if (!slowHintShown && Date.now() - scanStartedAt > 60_000) {
@@ -221,8 +243,13 @@ async function pollScan() {
     setBusy(false);
     const nRules = data.result?.totals?.rules || 0;
     updateHistoryEntry(doneId, { label: `${nRules} ${issueRuleWord(nRules)}`, status: 'done' });
-    renderReport(data.result, doneId);
-    announceScan(fmt(RPT.scanComplete, { n: data.result?.totals?.rules || 0, ruleWord: issueRuleWord(data.result?.totals?.rules || 0) }));
+    renderReport(data.result, doneId, lastPlannedPages);
+    const pi = partialScanInfo(data.result, lastPlannedPages);
+    let doneMsg = fmt(RPT.scanComplete, { n: nRules, ruleWord: issueRuleWord(nRules) });
+    if (pi.partial) {
+      doneMsg = `${fmt(RPT.partialTitle, { n: pi.scanned, m: pi.planned, pageWord: pageWord(pi.planned) })}. ${doneMsg}`;
+    }
+    announceScan(doneMsg);
     loadHistory();
   } else if (data.status === 'error') {
     const errId = currentScanId;
@@ -246,7 +273,7 @@ function sevTile(label, n, cls, note) {
   return `<div class="sev-tile ${cls}"><div class="n">${n}</div><div class="l">${label}</div>${note ? `<div class="sev-note">${note}</div>` : ''}</div>`;
 }
 
-function renderReport(result, scanId) {
+function renderReport(result, scanId, plannedPages) {
   ui = { activePage: 0, severity: 'all', query: '' };
   lastReportId = scanId || null;
   results.hidden = false;
@@ -263,6 +290,7 @@ function renderReport(result, scanId) {
   const t = result.totals;
   const allClean = t.rules === 0;
   const scannedAt = new Date(result.scannedAt).toLocaleString();
+  const partial = partialScanInfo(result, plannedPages);
 
   let html = `
     <div class="summary-card">
@@ -287,9 +315,15 @@ function renderReport(result, scanId) {
         ${(t.passes || 0) + (t.incomplete || 0) > 0
           ? fmt(RPT.passesNote, { passes: t.passes || 0, passWord: passWord(t.passes || 0), incomplete: t.incomplete || 0, incompleteWord: incompleteWord(t.incomplete || 0) })
           : ''}
+        ${partial.partial ? ` ${RPT.partialTotalsNote}` : ''}
       </p>
       <p class="summary-note next-step">${RPT.nextStep}</p>
     </div>
+    ${partial.partial ? `
+    <div class="review-box partial-results">
+      <strong>${fmt(RPT.partialTitle, { n: partial.scanned, m: partial.planned, pageWord: pageWord(partial.planned) })}</strong>
+      <p class="review-sub">${RPT.partialSub}</p>
+    </div>` : ''}
     <div id="compare-banner" class="compare-banner" hidden></div>`;
 
   if (result.pages.length > 1) {

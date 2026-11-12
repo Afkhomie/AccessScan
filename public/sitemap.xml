@@ -6,4 +6,10 @@
   <url>
     <loc>https://access-scan-tool.vercel.app/rules</loc>
   </url>
+  <url>
+    <loc>https://access-scan-tool.vercel.app/security</loc>
+  </url>
+  <url>
+    <loc>https://access-scan-tool.vercel.app/reliability</loc>
+  </url>
 </urlset>

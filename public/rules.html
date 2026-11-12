@@ -122,7 +122,27 @@ body.filter-empty .principle { display: none; }
   .rule { padding: 16px 16px 14px; }
   .rule-meta { gap: 8px; }
   .rule-meta a { margin-left: 0; }
+  .coverage-grid { grid-template-columns: 1fr; }
 }
+
+/* coverage explainer — two callouts, stacks on narrow screens */
+.coverage { padding-top: 32px; padding-bottom: 8px; }
+.coverage h2 {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  padding-bottom: 12px; border-bottom: 2px solid var(--blue);
+}
+.coverage-intro { margin: 0 0 20px; max-width: 72ch; }
+.coverage-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; margin-bottom: 20px;
+}
+.coverage-grid .disclaimer, .coverage-grid .review-box { margin-bottom: 0; }
+.coverage-links { margin: 0; font-size: 0.875rem; color: var(--ink-soft); }
+.coverage-links a { color: var(--blue); font-weight: 600; }
+.coverage-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* first principle sits right after the explainer — tighten its usual 48px gap */
+.coverage + .rules-body .principle:first-child { margin-top: 24px; }
 </style>
 </head>
 <body>
@@ -154,6 +174,20 @@ body.filter-empty .principle { display: none; }
              placeholder="Filter rules, e.g. “contrast” or “label”…" data-copy-placeholder="rulesPage.filterPlaceholder">
       <span id="filter-count" aria-live="polite"></span>
     </div>
+  </section>
+
+  <section class="wrap coverage" aria-labelledby="coverage-h">
+    <h2 id="coverage-h">What we test vs what needs manual review</h2>
+    <p class="coverage-intro">Automated checks catch a lot, but not everything. A clean scan is a good sign, not a guarantee of full accessibility.</p>
+    <div class="coverage-grid">
+      <div class="disclaimer" role="note">
+        <strong>Automated — axe-core.</strong> The ~91 rules listed below are WCAG 2.x level A/AA checks run by <a href="https://github.com/dequelabs/axe-core" rel="noopener">axe-core</a> in a real browser. They catch roughly 30–57% of accessibility issues (per <a href="https://www.deque.com/axe/" rel="noopener">Deque</a>) — the objective, machine-checkable ones like missing alt text, contrast, labels and ARIA errors.
+      </div>
+      <div class="review-box">
+        <strong>Manual review only.</strong> No tool can judge these automatically: keyboard trap testing beyond the basics, real screen-reader UX, cognitive accessibility, testing with real assistive technology, and legal compliance decisions. A page can pass every automated rule and still be hard to use — plan a manual pass before you ship.
+      </div>
+    </div>
+    <p class="coverage-links">See also: <a href="security.html">Security</a> · <a href="reliability.html">Reliability &amp; limits</a></p>
   </section>
 
   <div class="wrap rules-body">
@@ -1736,7 +1770,7 @@ body.filter-empty .principle { display: none; }
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><span data-copy="chrome.footer.line">Free, runs locally, no account needed. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="/" data-copy="chrome.footer.linkScanner">Scanner</a></p>
+    <p><span data-copy="chrome.footer.line">Free, runs locally, no account needed. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="/" data-copy="chrome.footer.linkScanner">Scanner</a> · <a href="security.html">Security</a> · <a href="reliability.html">Reliability</a></p>
   </div>
 </footer>
 
