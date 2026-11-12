@@ -48,16 +48,15 @@ async function handler(req, res) {
     if (!HOP_BY_HOP.has(key.toLowerCase())) res.setHeader(key, value);
   });
 
-  if (!upstream.body) return res.end();
-  const reader = upstream.body.getReader();
+  // Buffer the body: responses are small (JSON status, HTML/PDF export) and
+  // manual chunk streaming returned empty bodies on Vercel's runtime.
+  // shortcut: a very large export would buffer in function memory; fine at
+  // current report sizes, upgrade to true streaming if exports grow.
   try {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      res.write(Buffer.from(value));
-    }
-  } finally {
-    res.end();
+    res.send(Buffer.from(await upstream.arrayBuffer()));
+  } catch {
+    if (!res.headersSent) res.status(502).json({ error: 'Backend response failed.' });
+    else res.end();
   }
 }
 
