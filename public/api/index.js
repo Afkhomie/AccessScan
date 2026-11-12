@@ -55,7 +55,7 @@ async function handler(req, res) {
   try {
     const buf = Buffer.from(await upstream.arrayBuffer());
     console.log('proxy', req.method, incoming.pathname, '->', upstream.status, buf.length, 'bytes');
-    res.send(buf);
+    res.end(buf);
   } catch {
     if (!res.headersSent) res.status(502).json({ error: 'Backend response failed.' });
     else res.end();
