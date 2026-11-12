@@ -551,6 +551,16 @@ body::before {
 .site-footer a { color: #fff; font-weight: 600; }
 .site-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
+/* ---------- Back to top ---------- */
+.to-top {
+  position: fixed; right: 20px; bottom: 20px; z-index: 50;
+  font: inherit; font-size: 0.875rem; font-weight: 600;
+  padding: 10px 16px; border-radius: 999px;
+  background: var(--blue); color: #fff; border: none; cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.to-top:hover { background: var(--blue-dark, #002a80); }
+
 ::selection { background: var(--blue-tint); }
 
 a { color: var(--blue); }

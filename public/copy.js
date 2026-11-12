@@ -18,6 +18,7 @@ window.COPY = {
     navLabel: 'Main',
     navScanner: 'Scanner',
     navRuleReference: 'Rule reference',
+    toTop: 'Back to top',
     footer: {
       line: 'AccessScan: no accounts, no payments, no database, no cloud. MIT licensed.',
       linkRuleReference: 'WCAG rule reference',

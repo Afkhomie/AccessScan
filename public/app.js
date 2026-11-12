@@ -596,3 +596,14 @@ async function viewScan(id) {
 }
 
 loadHistory();
+
+/* ---------- Back to top ---------- */
+const toTopBtn = document.getElementById('to-top');
+if (toTopBtn) {
+  const onScroll = () => { toTopBtn.hidden = window.scrollY < 400; };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  toTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: smoothScroll });
+  });
+}
