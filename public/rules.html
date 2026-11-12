@@ -144,27 +144,1599 @@ body.filter-empty .principle { display: none; }
 
 <main id="main">
   <section class="wrap rules-hero">
-    <p class="hero-kicker" data-copy="rulesPage.kicker">Rule reference · axe-core 4.14</p>
-    <h1 data-copy="rulesPage.h1">WCAG rule reference</h1>
-    <p class="lede" data-copy="rulesPage.lede">Plain-language explanations of the accessibility rules AccessScan checks.</p>
-    <div class="disclaimer" role="note" data-copy-html="rulesPage.disclaimerHtml"></div>
+    <p class="hero-kicker" data-copy="rulesPage.kicker">Rule reference</p>
+    <h1 data-copy="rulesPage.h1">Accessibility rule reference</h1>
+    <p class="lede" data-copy="rulesPage.lede">What the scanner checks, in plain language. Each rule links to the full reference.</p>
+    <div class="disclaimer" role="note" data-copy-html="rulesPage.disclaimerHtml"><strong>Not the full list.</strong> This covers the most common rules. For everything, see the <a href="https://dequeuniversity.com/rules/axe/4.14" rel="noopener">axe rule index</a>. Rules tagged “best practice” are recommendations, not failures.</div>
     <div class="rule-filter-row">
       <label class="sr-only" for="rule-filter" data-copy="rulesPage.filterLabel">Filter rules</label>
       <input id="rule-filter" type="search" autocomplete="off" spellcheck="false"
-             placeholder="Filter rules" data-copy-placeholder="rulesPage.filterPlaceholder">
+             placeholder="Filter rules, e.g. “contrast” or “label”…" data-copy-placeholder="rulesPage.filterPlaceholder">
       <span id="filter-count" aria-live="polite"></span>
     </div>
   </section>
 
   <div class="wrap rules-body">
-    <div id="rules-root"><!-- populated by rules-data.js --></div>
-    <p class="empty-filter" id="empty-filter" data-copy-html="rulesPage.emptyFilterHtml"></p>
+    <div id="rules-root">
+      <section class="principle" id="principle-p" aria-labelledby="principle-p-h">
+        <h2 id="principle-p-h">1. Perceivable</h2>
+        <p class="principle-blurb">Information must be perceivable; not by colour alone, not silently, not at unreadable sizes.</p>
+        <div class="rule-list">
+    <article class="rule" id="color-contrast" data-search="color-contrast elements must meet minimum color contrast ratio thresholds text does not meet the minimum contrast ratio against its background (4.5:1 for normal text, 3:1 for large text), making it difficult to read. 1.4.3">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>color-contrast</code></h3>
+        <a class="rule-permalink" href="#color-contrast" aria-label="Permalink to color-contrast">#</a>
+      </header>
+      <p class="rule-help">Elements must meet minimum color contrast ratio thresholds</p>
+      <p class="rule-means">Text does not meet the minimum contrast ratio against its background (4.5:1 for normal text, 3:1 for large text), making it difficult to read.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Darken the text or lighten the background until the ratio passes.</li><li>Check background images and gradients behind the text, not only the flat colour.</li><li>Do not rely on colour alone to convey meaning; pair it with an icon or label.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.4.3</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="image-alt" data-search="image-alt images must have alternative text an &lt;img&gt; element has no alt text (or an empty value where one is required), so screen readers cannot describe it. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>image-alt</code></h3>
+        <a class="rule-permalink" href="#image-alt" aria-label="Permalink to image-alt">#</a>
+      </header>
+      <p class="rule-help">Images must have alternative text</p>
+      <p class="rule-means">An &lt;img&gt; element has no alt text (or an empty value where one is required), so screen readers cannot describe it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add alt=&quot;...&quot; describing the purpose of the image, not merely its appearance.</li><li>For purely decorative images, use alt=&quot;&quot; so that screen readers skip them.</li><li>For images that function as links or buttons, the alt text becomes the accessible name of that control.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/image-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="input-image-alt" data-search="input-image-alt image buttons must have alternative text an &lt;input type=&quot;image&quot;&gt; button has no alt text, so its purpose is invisible to assistive technology. 1.1.1 / 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>input-image-alt</code></h3>
+        <a class="rule-permalink" href="#input-image-alt" aria-label="Permalink to input-image-alt">#</a>
+      </header>
+      <p class="rule-help">Image buttons must have alternative text</p>
+      <p class="rule-means">An &lt;input type=&quot;image&quot;&gt; button has no alt text, so its purpose is invisible to assistive technology.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add alt=&quot;...&quot; describing the action, for example alt=&quot;Search&quot;.</li><li>Alternatively, use a regular &lt;button&gt; element containing text.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1 / 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/input-image-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="svg-img-alt" data-search="svg-img-alt &lt;svg&gt; elements with an img or image role must have alternative text an svg used as an image has no accessible name; screen readers may announce it as &quot;graphic&quot; or skip it entirely. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>svg-img-alt</code></h3>
+        <a class="rule-permalink" href="#svg-img-alt" aria-label="Permalink to svg-img-alt">#</a>
+      </header>
+      <p class="rule-help">&lt;svg&gt; elements with an img or image role must have alternative text</p>
+      <p class="rule-means">An SVG used as an image has no accessible name; screen readers may announce it as &quot;graphic&quot; or skip it entirely.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add role=&quot;img&quot; together with aria-label, or a &lt;title&gt; element inside the SVG.</li><li>For decorative SVGs, add aria-hidden=&quot;true&quot; and focusable=&quot;false&quot;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/svg-img-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="role-img-alt" data-search="role-img-alt [role=&quot;img&quot;] and [role=&quot;image&quot;] elements must have alternative text an element marked role=&quot;img&quot; has no accessible name describing the image it represents. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>role-img-alt</code></h3>
+        <a class="rule-permalink" href="#role-img-alt" aria-label="Permalink to role-img-alt">#</a>
+      </header>
+      <p class="rule-help">[role=&quot;img&quot;] and [role=&quot;image&quot;] elements must have alternative text</p>
+      <p class="rule-means">An element marked role=&quot;img&quot; has no accessible name describing the image it represents.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label or aria-labelledby with a description.</li><li>If the element is decorative, use role=&quot;presentation&quot; or aria-hidden instead.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/role-img-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="object-alt" data-search="object-alt &lt;object&gt; elements must have alternative text an &lt;object&gt; embed (a pdf or similar content) provides no fallback text if the content cannot load. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>object-alt</code></h3>
+        <a class="rule-permalink" href="#object-alt" aria-label="Permalink to object-alt">#</a>
+      </header>
+      <p class="rule-help">&lt;object&gt; elements must have alternative text</p>
+      <p class="rule-means">An &lt;object&gt; embed (a PDF or similar content) provides no fallback text if the content cannot load.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Provide fallback content inside the &lt;object&gt; tags.</li><li>Prefer modern embed methods, or link to the file directly.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/object-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="video-caption" data-search="video-caption &lt;video&gt; elements must have captions a &lt;video&gt; element has no captions track, so deaf and hard-of-hearing users cannot follow the audio content. 1.2.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>video-caption</code></h3>
+        <a class="rule-permalink" href="#video-caption" aria-label="Permalink to video-caption">#</a>
+      </header>
+      <p class="rule-help">&lt;video&gt; elements must have captions</p>
+      <p class="rule-means">A &lt;video&gt; element has no captions track, so deaf and hard-of-hearing users cannot follow the audio content.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add a &lt;track kind=&quot;captions&quot;&gt; element referencing a .vtt file.</li><li>For background video, mute it or provide a transcript nearby.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.2.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/video-caption?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="audio-caption" data-search="audio-caption &lt;audio&gt; elements must have a captions track an &lt;audio&gt; element has no captions, so its spoken content is unavailable to deaf users. 1.2.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>audio-caption</code></h3>
+        <a class="rule-permalink" href="#audio-caption" aria-label="Permalink to audio-caption">#</a>
+      </header>
+      <p class="rule-help">&lt;audio&gt; elements must have a captions track</p>
+      <p class="rule-means">An &lt;audio&gt; element has no captions, so its spoken content is unavailable to deaf users.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add a captions track, or provide a link to a transcript.</li><li>If the audio is ambient or background, determine whether captions are required at all.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.2.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/audio-caption?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="no-autoplay-audio" data-search="no-autoplay-audio &lt;video&gt; or &lt;audio&gt; elements must not play automatically media plays automatically for more than three seconds without a mechanism to pause or control it, which is disruptive for screen reader and low-vision users. 1.4.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>no-autoplay-audio</code></h3>
+        <a class="rule-permalink" href="#no-autoplay-audio" aria-label="Permalink to no-autoplay-audio">#</a>
+      </header>
+      <p class="rule-help">&lt;video&gt; or &lt;audio&gt; elements must not play automatically</p>
+      <p class="rule-means">Media plays automatically for more than three seconds without a mechanism to pause or control it, which is disruptive for screen reader and low-vision users.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove autoplay, or provide controls and pause playback after three seconds.</li><li>Never autoplay media with sound.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.4.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/no-autoplay-audio?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="link-in-text-block" data-search="link-in-text-block links must be distinguishable without relying on color links within paragraphs are distinguished only by colour; users who cannot perceive that difference cannot identify them as links. 1.4.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>link-in-text-block</code></h3>
+        <a class="rule-permalink" href="#link-in-text-block" aria-label="Permalink to link-in-text-block">#</a>
+      </header>
+      <p class="rule-help">Links must be distinguishable without relying on color</p>
+      <p class="rule-means">Links within paragraphs are distinguished only by colour; users who cannot perceive that difference cannot identify them as links.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add an underline (default link styling already provides one).</li><li>Or use a non-colour cue such as bold text or an icon.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.4.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/link-in-text-block?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="meta-viewport" data-search="meta-viewport zooming and scaling must not be disabled the viewport meta tag sets user-scalable=no or maximum-scale=1, preventing users from zooming the page. 1.4.4">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>meta-viewport</code></h3>
+        <a class="rule-permalink" href="#meta-viewport" aria-label="Permalink to meta-viewport">#</a>
+      </header>
+      <p class="rule-help">Zooming and scaling must not be disabled</p>
+      <p class="rule-means">The viewport meta tag sets user-scalable=no or maximum-scale=1, preventing users from zooming the page.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove user-scalable=no and maximum-scale restrictions.</li><li>A plain content=&quot;width=device-width, initial-scale=1&quot; is sufficient.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.4.4</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/meta-viewport?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="avoid-inline-spacing" data-search="avoid-inline-spacing inline text spacing must be adjustable with custom stylesheets text containers clip content when users apply their own letter, word, or line spacing overrides; this particularly affects users with dyslexia and low vision. 1.4.12">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>avoid-inline-spacing</code></h3>
+        <a class="rule-permalink" href="#avoid-inline-spacing" aria-label="Permalink to avoid-inline-spacing">#</a>
+      </header>
+      <p class="rule-help">Inline text spacing must be adjustable with custom stylesheets</p>
+      <p class="rule-means">Text containers clip content when users apply their own letter, word, or line spacing overrides; this particularly affects users with dyslexia and low vision.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove fixed heights on text containers so content can grow.</li><li>Avoid !important on line-height and letter-spacing rules.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.4.12</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/avoid-inline-spacing?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="table-fake-caption" data-search="table-fake-caption data or header cells must not be used to give caption to a data table a table caption is simulated with a cell rather than a real &lt;caption&gt; element, so assistive technology does not announce the table’s purpose. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>table-fake-caption</code></h3>
+        <a class="rule-permalink" href="#table-fake-caption" aria-label="Permalink to table-fake-caption">#</a>
+      </header>
+      <p class="rule-help">Data or header cells must not be used to give caption to a data table</p>
+      <p class="rule-means">A table caption is simulated with a cell rather than a real &lt;caption&gt; element, so assistive technology does not announce the table’s purpose.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use &lt;caption&gt; as the first child of &lt;table&gt;.</li><li>Or use aria-label / aria-labelledby on the table.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/table-fake-caption?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="th-has-data-cells" data-search="th-has-data-cells table headers in a data table must refer to data cells a header cell (&lt;th&gt;) is not associated with any data cells; screen reader users hear a heading with no content beneath it. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>th-has-data-cells</code></h3>
+        <a class="rule-permalink" href="#th-has-data-cells" aria-label="Permalink to th-has-data-cells">#</a>
+      </header>
+      <p class="rule-help">Table headers in a data table must refer to data cells</p>
+      <p class="rule-means">A header cell (&lt;th&gt;) is not associated with any data cells; screen reader users hear a heading with no content beneath it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Ensure each &lt;th&gt; governs at least one data cell through correct row and column structure.</li><li>If the cell is decorative, use &lt;td&gt; or aria-hidden instead.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/th-has-data-cells?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="autocomplete-valid" data-search="autocomplete-valid autocomplete attribute must be used correctly a form field uses an autocomplete token that does not match the field’s purpose (for example, autocomplete=&quot;email&quot; on a phone number field). 1.3.5">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>autocomplete-valid</code></h3>
+        <a class="rule-permalink" href="#autocomplete-valid" aria-label="Permalink to autocomplete-valid">#</a>
+      </header>
+      <p class="rule-help">autocomplete attribute must be used correctly</p>
+      <p class="rule-means">A form field uses an autocomplete token that does not match the field’s purpose (for example, autocomplete=&quot;email&quot; on a phone number field).</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use the correct token from the HTML specification (name, email, tel, street-address, and so on).</li><li>Set autocomplete=&quot;off&quot; explicitly if the field should genuinely not autofill.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.5</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/autocomplete-valid?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-meter-name" data-search="aria-meter-name aria meter nodes must have an accessible name a meter widget (role=&quot;meter&quot;) has no accessible name, so screen readers announce a value without indicating what is being measured. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-meter-name</code></h3>
+        <a class="rule-permalink" href="#aria-meter-name" aria-label="Permalink to aria-meter-name">#</a>
+      </header>
+      <p class="rule-help">ARIA meter nodes must have an accessible name</p>
+      <p class="rule-means">A meter widget (role=&quot;meter&quot;) has no accessible name, so screen readers announce a value without indicating what is being measured.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label or aria-labelledby describing what the meter measures.</li><li>Or use the native &lt;meter&gt; or &lt;progress&gt; element where its semantics apply.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-meter-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-progressbar-name" data-search="aria-progressbar-name aria progressbar nodes must have an accessible name a progressbar widget has no accessible name, so screen readers announce a percentage without context. 1.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-progressbar-name</code></h3>
+        <a class="rule-permalink" href="#aria-progressbar-name" aria-label="Permalink to aria-progressbar-name">#</a>
+      </header>
+      <p class="rule-help">ARIA progressbar nodes must have an accessible name</p>
+      <p class="rule-means">A progressbar widget has no accessible name, so screen readers announce a percentage without context.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label or aria-labelledby (for example, &quot;Upload progress&quot;).</li><li>Or use the native &lt;progress&gt; element.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-progressbar-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="css-orientation-lock" data-search="css-orientation-lock css must not lock display orientation css forces the page into portrait or landscape only, so users whose device is oriented differently cannot use it. 1.3.4">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>css-orientation-lock</code></h3>
+        <a class="rule-permalink" href="#css-orientation-lock" aria-label="Permalink to css-orientation-lock">#</a>
+      </header>
+      <p class="rule-help">CSS must not lock display orientation</p>
+      <p class="rule-means">CSS forces the page into portrait or landscape only, so users whose device is oriented differently cannot use it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove orientation-locking CSS and allow the layout to reflow in both orientations.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.4</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/css-orientation-lock?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="p-as-heading" data-search="p-as-heading styled &lt;p&gt; elements must not be used as headings a &lt;p&gt; element styled to look like a heading (large and bold) is not a real heading, so screen reader heading navigation skips it. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>p-as-heading</code></h3>
+        <a class="rule-permalink" href="#p-as-heading" aria-label="Permalink to p-as-heading">#</a>
+      </header>
+      <p class="rule-help">Styled &lt;p&gt; elements must not be used as headings</p>
+      <p class="rule-means">A &lt;p&gt; element styled to look like a heading (large and bold) is not a real heading, so screen reader heading navigation skips it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Replace it with an &lt;h1&gt;–&lt;h6&gt; element and move the styling into CSS.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/p-as-heading?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="td-has-header" data-search="td-has-header non-empty &lt;td&gt; elements in larger &lt;table&gt; must have an associated table header a data cell in a multi-row or multi-column table has no associated header, so screen readers cannot announce what the value represents. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>td-has-header</code></h3>
+        <a class="rule-permalink" href="#td-has-header" aria-label="Permalink to td-has-header">#</a>
+      </header>
+      <p class="rule-help">Non-empty &lt;td&gt; elements in larger &lt;table&gt; must have an associated table header</p>
+      <p class="rule-means">A data cell in a multi-row or multi-column table has no associated header, so screen readers cannot announce what the value represents.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use &lt;th scope=&quot;col&quot;&gt; or &lt;th scope=&quot;row&quot;&gt; for headers, or headers=&quot;...&quot; referencing the appropriate &lt;th&gt;.</li><li>For simple data tables, correct &lt;th&gt; markup is usually sufficient.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/td-has-header?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="td-headers-attr" data-search="td-headers-attr table cell headers attributes must refer to other &lt;th&gt; elements in the same table a headers=&quot;...&quot; attribute points to an id that does not exist, is not a &lt;th&gt;, or belongs to a different table. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>td-headers-attr</code></h3>
+        <a class="rule-permalink" href="#td-headers-attr" aria-label="Permalink to td-headers-attr">#</a>
+      </header>
+      <p class="rule-help">Table cell headers attributes must refer to other &lt;th&gt; elements in the same table</p>
+      <p class="rule-means">A headers=&quot;...&quot; attribute points to an id that does not exist, is not a &lt;th&gt;, or belongs to a different table.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Ensure every id in headers= matches a real &lt;th id=&quot;...&quot;&gt; in the same table.</li><li>Keep ids unique across the page.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/td-headers-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="list" data-search="list &lt;ul&gt; and &lt;ol&gt; must only directly contain &lt;li&gt;, &lt;script&gt; or &lt;template&gt; elements a list contains non-&lt;li&gt; children (divs, spans, or other elements), breaking the list structure that screen readers rely on. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>list</code></h3>
+        <a class="rule-permalink" href="#list" aria-label="Permalink to list">#</a>
+      </header>
+      <p class="rule-help">&lt;ul&gt; and &lt;ol&gt; must only directly contain &lt;li&gt;, &lt;script&gt; or &lt;template&gt; elements</p>
+      <p class="rule-means">A list contains non-&lt;li&gt; children (divs, spans, or other elements), breaking the list structure that screen readers rely on.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Make every direct child an &lt;li&gt;; if wrappers are needed, place them inside the &lt;li&gt;.</li><li>If the content is not genuinely a list, do not use &lt;ul&gt; or &lt;ol&gt;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/list?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="listitem" data-search="listitem &lt;li&gt; elements must be contained in a &lt;ul&gt; or &lt;ol&gt; an &lt;li&gt; element sits outside any list, so it is announced as a stray list item. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>listitem</code></h3>
+        <a class="rule-permalink" href="#listitem" aria-label="Permalink to listitem">#</a>
+      </header>
+      <p class="rule-help">&lt;li&gt; elements must be contained in a &lt;ul&gt; or &lt;ol&gt;</p>
+      <p class="rule-means">An &lt;li&gt; element sits outside any list, so it is announced as a stray list item.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Wrap it in &lt;ul&gt; or &lt;ol&gt;, or change it to a &lt;div&gt; or &lt;p&gt;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/listitem?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="definition-list" data-search="definition-list &lt;dl&gt; elements must only directly contain properly-ordered &lt;dt&gt; and &lt;dd&gt; groups a definition list has broken structure: &lt;dd&gt; without &lt;dt&gt;, incorrect ordering, or stray elements. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>definition-list</code></h3>
+        <a class="rule-permalink" href="#definition-list" aria-label="Permalink to definition-list">#</a>
+      </header>
+      <p class="rule-help">&lt;dl&gt; elements must only directly contain properly-ordered &lt;dt&gt; and &lt;dd&gt; groups</p>
+      <p class="rule-means">A definition list has broken structure: &lt;dd&gt; without &lt;dt&gt;, incorrect ordering, or stray elements.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Each &lt;dt&gt; should be followed by its &lt;dd&gt; element(s); only &lt;div&gt; wrappers are permitted between groups.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/definition-list?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="dlitem" data-search="dlitem &lt;dt&gt; and &lt;dd&gt; elements must be contained by a &lt;dl&gt; a &lt;dt&gt; or &lt;dd&gt; element is used outside a &lt;dl&gt; definition list. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>dlitem</code></h3>
+        <a class="rule-permalink" href="#dlitem" aria-label="Permalink to dlitem">#</a>
+      </header>
+      <p class="rule-help">&lt;dt&gt; and &lt;dd&gt; elements must be contained by a &lt;dl&gt;</p>
+      <p class="rule-means">A &lt;dt&gt; or &lt;dd&gt; element is used outside a &lt;dl&gt; definition list.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Wrap them in a &lt;dl&gt;, or use regular headings and paragraphs.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/dlitem?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-required-children" data-search="aria-required-children certain aria roles must contain particular children a parent role such as menu, listbox, or tablist is missing the child roles it requires (menuitem, option, tab), so the widget structure is broken. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-required-children</code></h3>
+        <a class="rule-permalink" href="#aria-required-children" aria-label="Permalink to aria-required-children">#</a>
+      </header>
+      <p class="rule-help">Certain ARIA roles must contain particular children</p>
+      <p class="rule-means">A parent role such as menu, listbox, or tablist is missing the child roles it requires (menuitem, option, tab), so the widget structure is broken.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add the required child roles, or use native &lt;ul&gt; or &lt;table&gt; markup that implies the structure.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-required-children?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-required-parent" data-search="aria-required-parent certain aria roles must be contained by particular parents an element has a role that requires a specific parent (for example, role=&quot;menuitem&quot; outside role=&quot;menu&quot;), breaking the announced structure. 1.3.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-required-parent</code></h3>
+        <a class="rule-permalink" href="#aria-required-parent" aria-label="Permalink to aria-required-parent">#</a>
+      </header>
+      <p class="rule-help">Certain ARIA roles must be contained by particular parents</p>
+      <p class="rule-means">An element has a role that requires a specific parent (for example, role=&quot;menuitem&quot; outside role=&quot;menu&quot;), breaking the announced structure.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Wrap it in the required parent role, or use native list or table markup.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-required-parent?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-hidden-body" data-search="aria-hidden-body aria-hidden=&quot;true&quot; must not be present on the document body aria-hidden=&quot;true&quot; on &lt;body&gt; hides the entire page from screen readers; this is usually a leftover from a modal or dialog script. 1.3.1 / 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-hidden-body</code></h3>
+        <a class="rule-permalink" href="#aria-hidden-body" aria-label="Permalink to aria-hidden-body">#</a>
+      </header>
+      <p class="rule-help">aria-hidden=&quot;true&quot; must not be present on the document body</p>
+      <p class="rule-means">aria-hidden=&quot;true&quot; on &lt;body&gt; hides the entire page from screen readers; this is usually a leftover from a modal or dialog script.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove it, or scope aria-hidden to the specific overlay element only.</li><li>Ensure it is removed when the modal closes.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 1.3.1 / 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-hidden-body?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article></div>
+      </section>
+      <section class="principle" id="principle-o" aria-labelledby="principle-o-h">
+        <h2 id="principle-o-h">2. Operable</h2>
+        <p class="principle-blurb">Interfaces must be operable; keyboard reachable, no traps, no seizure risks.</p>
+        <div class="rule-list">
+    <article class="rule" id="area-alt" data-search="area-alt active &lt;area&gt; elements must have alternative text an &lt;area&gt; inside an image map is a clickable link with no alt text, so its destination is invisible to screen readers. 2.4.4 / 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>area-alt</code></h3>
+        <a class="rule-permalink" href="#area-alt" aria-label="Permalink to area-alt">#</a>
+      </header>
+      <p class="rule-help">Active &lt;area&gt; elements must have alternative text</p>
+      <p class="rule-means">An &lt;area&gt; inside an image map is a clickable link with no alt text, so its destination is invisible to screen readers.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add alt=&quot;...&quot; describing where the area links to.</li><li>Remove &lt;area&gt; elements that are not in use.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.4.4 / 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/area-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="bypass" data-search="bypass page must have means to bypass repeated blocks keyboard users must tab through the entire navigation and header on every page before reaching the content; no skip link or landmark shortcut is provided. 2.4.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>bypass</code></h3>
+        <a class="rule-permalink" href="#bypass" aria-label="Permalink to bypass">#</a>
+      </header>
+      <p class="rule-help">Page must have means to bypass repeated blocks</p>
+      <p class="rule-means">Keyboard users must tab through the entire navigation and header on every page before reaching the content; no skip link or landmark shortcut is provided.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add a &quot;Skip to main content&quot; link as the first focusable element.</li><li>Or ensure a &lt;main&gt; landmark exists and is reachable.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.4.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/bypass?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="document-title" data-search="document-title documents must have &lt;title&gt; element to aid in navigation the page has no &lt;title&gt; element (or an empty one), so browser tabs, bookmarks, and screen reader page lists display nothing useful. 2.4.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>document-title</code></h3>
+        <a class="rule-permalink" href="#document-title" aria-label="Permalink to document-title">#</a>
+      </header>
+      <p class="rule-help">Documents must have &lt;title&gt; element to aid in navigation</p>
+      <p class="rule-means">The page has no &lt;title&gt; element (or an empty one), so browser tabs, bookmarks, and screen reader page lists display nothing useful.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add a unique, descriptive &lt;title&gt; to every page.</li><li>Lead with the page topic and keep it under approximately 60 characters.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.4.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/document-title?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="link-name" data-search="link-name links must have discernible text a link has no accessible name: icon-only links, empty anchors, or links whose only content is an unlabelled image. 2.4.4 / 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>link-name</code></h3>
+        <a class="rule-permalink" href="#link-name" aria-label="Permalink to link-name">#</a>
+      </header>
+      <p class="rule-help">Links must have discernible text</p>
+      <p class="rule-means">A link has no accessible name: icon-only links, empty anchors, or links whose only content is an unlabelled image.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add visible text, aria-label, or aria-labelledby.</li><li>For icon links, give the SVG or icon an accessible name.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.4.4 / 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/link-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="marquee" data-search="marquee &lt;marquee&gt; elements are deprecated and must not be used scrolling &lt;marquee&gt; text cannot be paused and presents a distraction and seizure risk; modern browsers also handle it inconsistently. 2.2.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>marquee</code></h3>
+        <a class="rule-permalink" href="#marquee" aria-label="Permalink to marquee">#</a>
+      </header>
+      <p class="rule-help">&lt;marquee&gt; elements are deprecated and must not be used</p>
+      <p class="rule-means">Scrolling &lt;marquee&gt; text cannot be paused and presents a distraction and seizure risk; modern browsers also handle it inconsistently.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove it; use static text or a proper animation with a pause control.</li><li>CSS animation alone is insufficient; WCAG 2.2.2 still requires a stop mechanism.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.2.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/marquee?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="blink" data-search="blink &lt;blink&gt; elements are deprecated and must not be used blinking &lt;blink&gt; text is a seizure hazard and is not supported by modern browsers in any case. 2.2.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>blink</code></h3>
+        <a class="rule-permalink" href="#blink" aria-label="Permalink to blink">#</a>
+      </header>
+      <p class="rule-help">&lt;blink&gt; elements are deprecated and must not be used</p>
+      <p class="rule-means">Blinking &lt;blink&gt; text is a seizure hazard and is not supported by modern browsers in any case.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove it entirely; never reimplement flashing text with CSS or JavaScript.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.2.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/blink?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="meta-refresh" data-search="meta-refresh delayed refresh under 20 hours must not be used a &lt;meta http-equiv=&quot;refresh&quot;&gt; tag reloads the page automatically, abruptly removing users (including screen reader users mid-sentence) from the content. 2.2.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>meta-refresh</code></h3>
+        <a class="rule-permalink" href="#meta-refresh" aria-label="Permalink to meta-refresh">#</a>
+      </header>
+      <p class="rule-help">Delayed refresh under 20 hours must not be used</p>
+      <p class="rule-means">A &lt;meta http-equiv=&quot;refresh&quot;&gt; tag reloads the page automatically, abruptly removing users (including screen reader users mid-sentence) from the content.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove the meta refresh; use a real link or JavaScript with user control.</li><li>Session timeouts require a warning and an option to extend the session instead.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.2.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/meta-refresh?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="meta-refresh-no-exceptions" data-search="meta-refresh-no-exceptions delayed refresh must not be used the stricter aaa-level variant: no timed refresh is permitted at all, even with user control. 2.2.4 / 3.2.5">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>meta-refresh-no-exceptions</code></h3>
+        <a class="rule-permalink" href="#meta-refresh-no-exceptions" aria-label="Permalink to meta-refresh-no-exceptions">#</a>
+      </header>
+      <p class="rule-help">Delayed refresh must not be used</p>
+      <p class="rule-means">The stricter AAA-level variant: no timed refresh is permitted at all, even with user control.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove timed refreshes entirely.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.2.4 / 3.2.5</span><span class="wcag-tag">AAA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/meta-refresh-no-exceptions?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="scrollable-region-focusable" data-search="scrollable-region-focusable scrollable region must have keyboard access a scrollable &lt;div&gt; (overflow:auto or scroll) cannot be reached or scrolled using a keyboard alone. 2.1.1 / 2.1.3">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>scrollable-region-focusable</code></h3>
+        <a class="rule-permalink" href="#scrollable-region-focusable" aria-label="Permalink to scrollable-region-focusable">#</a>
+      </header>
+      <p class="rule-help">Scrollable region must have keyboard access</p>
+      <p class="rule-means">A scrollable &lt;div&gt; (overflow:auto or scroll) cannot be reached or scrolled using a keyboard alone.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add tabindex=&quot;0&quot; to the scrollable region.</li><li>Or preferably, use a natively scrollable element with real content.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.1.1 / 2.1.3</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="target-size" data-search="target-size all touch targets must be 24px large, or leave sufficient space buttons and links are too small or too close together to be tapped reliably; the wcag 2.2 minimum target size is 24×24 css pixels, subject to spacing exceptions. 2.5.8">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>target-size</code></h3>
+        <a class="rule-permalink" href="#target-size" aria-label="Permalink to target-size">#</a>
+      </header>
+      <p class="rule-help">All touch targets must be 24px large, or leave sufficient space</p>
+      <p class="rule-means">Buttons and links are too small or too close together to be tapped reliably; the WCAG 2.2 minimum target size is 24×24 CSS pixels, subject to spacing exceptions.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Increase padding or size to at least 24px in each dimension.</li><li>Or ensure sufficient spacing between adjacent targets.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.5.8</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/target-size?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="identical-links-same-purpose" data-search="identical-links-same-purpose links with the same name must have a similar purpose two links share the same text (for example, &quot;read more&quot;) but lead to different destinations; screen reader link lists become meaningless. 2.4.9">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>identical-links-same-purpose</code></h3>
+        <a class="rule-permalink" href="#identical-links-same-purpose" aria-label="Permalink to identical-links-same-purpose">#</a>
+      </header>
+      <p class="rule-help">Links with the same name must have a similar purpose</p>
+      <p class="rule-means">Two links share the same text (for example, &quot;read more&quot;) but lead to different destinations; screen reader link lists become meaningless.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Make link text unique and descriptive (for example, &quot;Read more about pricing&quot;).</li><li>Or add context via aria-describedby if the visible text must remain short.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.4.9</span><span class="wcag-tag">AAA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/identical-links-same-purpose?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="frame-focusable-content" data-search="frame-focusable-content frames with focusable content must not have tabindex=-1 an &lt;iframe&gt; contains focusable content but has tabindex=&quot;-1&quot;, which can trap or break keyboard focus within the frame. 2.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>frame-focusable-content</code></h3>
+        <a class="rule-permalink" href="#frame-focusable-content" aria-label="Permalink to frame-focusable-content">#</a>
+      </header>
+      <p class="rule-help">Frames with focusable content must not have tabindex=-1</p>
+      <p class="rule-means">An &lt;iframe&gt; contains focusable content but has tabindex=&quot;-1&quot;, which can trap or break keyboard focus within the frame.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove tabindex=&quot;-1&quot; from frames that contain interactive content.</li><li>Ensure keyboard focus can move into and out of the frame.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/frame-focusable-content?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="label-content-name-mismatch" data-search="label-content-name-mismatch elements must have their visible text as part of their accessible name the visible text of a control is not part of its accessible name (for example, aria-label overrides the button text), so voice-control users who speak the visible label cannot activate it. 2.5.3">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>label-content-name-mismatch</code></h3>
+        <a class="rule-permalink" href="#label-content-name-mismatch" aria-label="Permalink to label-content-name-mismatch">#</a>
+      </header>
+      <p class="rule-help">Elements must have their visible text as part of their accessible name</p>
+      <p class="rule-means">The visible text of a control is not part of its accessible name (for example, aria-label overrides the button text), so voice-control users who speak the visible label cannot activate it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Make the accessible name begin with the visible text, or match it exactly.</li><li>Do not allow aria-label to contradict the text shown on screen.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.5.3</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/label-content-name-mismatch?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="server-side-image-map" data-search="server-side-image-map server-side image maps must not be used an old-style server-side image map (&lt;img ismap&gt;) produces click coordinates rather than focusable links; keyboard and screen reader users cannot operate it. 2.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>server-side-image-map</code></h3>
+        <a class="rule-permalink" href="#server-side-image-map" aria-label="Permalink to server-side-image-map">#</a>
+      </header>
+      <p class="rule-help">Server-side image maps must not be used</p>
+      <p class="rule-means">An old-style server-side image map (&lt;img ismap&gt;) produces click coordinates rather than focusable links; keyboard and screen reader users cannot operate it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Replace it with a client-side image map of real &lt;a&gt; links, or a plain list of links.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 2.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/server-side-image-map?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article></div>
+      </section>
+      <section class="principle" id="principle-u" aria-labelledby="principle-u-h">
+        <h2 id="principle-u-h">3. Understandable</h2>
+        <p class="principle-blurb">Interfaces must be understandable; clear labels, declared language, consistent structure.</p>
+        <div class="rule-list">
+    <article class="rule" id="valid-lang" data-search="valid-lang lang attribute must have a valid value a lang attribute (on html or on a part of the page) uses a value that bcp47 or the specification does not recognise. 3.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>valid-lang</code></h3>
+        <a class="rule-permalink" href="#valid-lang" aria-label="Permalink to valid-lang">#</a>
+      </header>
+      <p class="rule-help">lang attribute must have a valid value</p>
+      <p class="rule-means">A lang attribute (on html or on a part of the page) uses a value that BCP47 or the specification does not recognise.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use a valid language tag such as &quot;en&quot;, &quot;en-US&quot;, or &quot;fr&quot;.</li><li>Check for typos; an incorrect value silently breaks pronunciation and translation tools.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 3.1.2</span><span class="wcag-tag">AA</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/valid-lang?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="html-has-lang" data-search="html-has-lang &lt;html&gt; element must have a lang attribute the &lt;html&gt; tag has no lang attribute, so screen readers cannot determine the language and correct pronunciation. 3.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>html-has-lang</code></h3>
+        <a class="rule-permalink" href="#html-has-lang" aria-label="Permalink to html-has-lang">#</a>
+      </header>
+      <p class="rule-help">&lt;html&gt; element must have a lang attribute</p>
+      <p class="rule-means">The &lt;html&gt; tag has no lang attribute, so screen readers cannot determine the language and correct pronunciation.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add lang=&quot;en&quot; (or the correct BCP47 tag) to &lt;html&gt;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 3.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/html-has-lang?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="html-lang-valid" data-search="html-lang-valid &lt;html&gt; element must have a valid value for the lang attribute the lang attribute is present but its value is not a recognised language tag. 3.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>html-lang-valid</code></h3>
+        <a class="rule-permalink" href="#html-lang-valid" aria-label="Permalink to html-lang-valid">#</a>
+      </header>
+      <p class="rule-help">&lt;html&gt; element must have a valid value for the lang attribute</p>
+      <p class="rule-means">The lang attribute is present but its value is not a recognised language tag.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use a valid tag: &quot;en&quot;, &quot;en-US&quot;, &quot;pt-BR&quot;, and so on.</li><li>Check for typos such as lang=&quot;eng&quot; or lang=&quot;english&quot;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 3.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/html-lang-valid?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="html-xml-lang-mismatch" data-search="html-xml-lang-mismatch html elements with lang and xml:lang must have the same base language the lang and xml:lang attributes disagree on the same element, which is common in xhtml-era markup. 3.1.1">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>html-xml-lang-mismatch</code></h3>
+        <a class="rule-permalink" href="#html-xml-lang-mismatch" aria-label="Permalink to html-xml-lang-mismatch">#</a>
+      </header>
+      <p class="rule-help">HTML elements with lang and xml:lang must have the same base language</p>
+      <p class="rule-means">The lang and xml:lang attributes disagree on the same element, which is common in XHTML-era markup.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Set both attributes to the same language, or remove xml:lang (rarely needed in HTML5).</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 3.1.1</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/html-xml-lang-mismatch?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="form-field-multiple-labels" data-search="form-field-multiple-labels form field must not have multiple label elements a field has more than one &lt;label&gt; associated with it, which can produce confusing or duplicated announcements. 3.3.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>form-field-multiple-labels</code></h3>
+        <a class="rule-permalink" href="#form-field-multiple-labels" aria-label="Permalink to form-field-multiple-labels">#</a>
+      </header>
+      <p class="rule-help">Form field must not have multiple label elements</p>
+      <p class="rule-means">A field has more than one &lt;label&gt; associated with it, which can produce confusing or duplicated announcements.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Keep one label per field; merge additional text into aria-describedby if required.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 3.3.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/form-field-multiple-labels?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article></div>
+      </section>
+      <section class="principle" id="principle-r" aria-labelledby="principle-r-h">
+        <h2 id="principle-r-h">4. Robust</h2>
+        <p class="principle-blurb">Content must work with assistive tech; valid markup and unique IDs.</p>
+        <div class="rule-list">
+    <article class="rule" id="button-name" data-search="button-name buttons must have discernible text a &lt;button&gt; (or role=&quot;button&quot;) element has no accessible name; screen readers announce only &quot;button&quot;. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>button-name</code></h3>
+        <a class="rule-permalink" href="#button-name" aria-label="Permalink to button-name">#</a>
+      </header>
+      <p class="rule-help">Buttons must have discernible text</p>
+      <p class="rule-means">A &lt;button&gt; (or role=&quot;button&quot;) element has no accessible name; screen readers announce only &quot;button&quot;.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add text content, aria-label, or aria-labelledby.</li><li>Icon-only buttons require an aria-label describing the action.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/button-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="input-button-name" data-search="input-button-name input buttons must have discernible text an &lt;input type=&quot;button|submit|reset&quot;&gt; has no value or text, so its purpose is unknown. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>input-button-name</code></h3>
+        <a class="rule-permalink" href="#input-button-name" aria-label="Permalink to input-button-name">#</a>
+      </header>
+      <p class="rule-help">Input buttons must have discernible text</p>
+      <p class="rule-means">An &lt;input type=&quot;button|submit|reset&quot;&gt; has no value or text, so its purpose is unknown.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Set the value attribute (for example, value=&quot;Search&quot;).</li><li>Or use a &lt;button&gt; element containing text.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/input-button-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="summary-name" data-search="summary-name summary elements must have discernible text a &lt;summary&gt; element (the clickable part of &lt;details&gt;) has no text, so users cannot determine what it expands. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>summary-name</code></h3>
+        <a class="rule-permalink" href="#summary-name" aria-label="Permalink to summary-name">#</a>
+      </header>
+      <p class="rule-help">Summary elements must have discernible text</p>
+      <p class="rule-means">A &lt;summary&gt; element (the clickable part of &lt;details&gt;) has no text, so users cannot determine what it expands.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Place descriptive text inside &lt;summary&gt;.</li><li>If it is icon-only, add an aria-label.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/summary-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-command-name" data-search="aria-command-name aria commands must have an accessible name an element with an aria role such as link, button, or menuitem has no accessible name. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-command-name</code></h3>
+        <a class="rule-permalink" href="#aria-command-name" aria-label="Permalink to aria-command-name">#</a>
+      </header>
+      <p class="rule-help">ARIA commands must have an accessible name</p>
+      <p class="rule-means">An element with an ARIA role such as link, button, or menuitem has no accessible name.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label, aria-labelledby, or text content.</li><li>Prefer native elements (&lt;a&gt;, &lt;button&gt;) over ARIA roles where possible.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-command-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="label" data-search="label form elements must have labels an input, select, or textarea has no associated &lt;label&gt;, aria-label, or aria-labelledby; screen readers announce &quot;edit text&quot; without indicating the field’s purpose. 4.1.2 / 3.3.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>label</code></h3>
+        <a class="rule-permalink" href="#label" aria-label="Permalink to label">#</a>
+      </header>
+      <p class="rule-help">Form elements must have labels</p>
+      <p class="rule-means">An input, select, or textarea has no associated &lt;label&gt;, aria-label, or aria-labelledby; screen readers announce &quot;edit text&quot; without indicating the field’s purpose.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Wrap the input in a &lt;label&gt;, or use for=&quot;id&quot; matching the input’s id.</li><li>Or add aria-label=&quot;...&quot; or aria-labelledby.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2 / 3.3.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/label?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="select-name" data-search="select-name select element must have an accessible name a &lt;select&gt; dropdown has no label, so users cannot determine what they are choosing. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>select-name</code></h3>
+        <a class="rule-permalink" href="#select-name" aria-label="Permalink to select-name">#</a>
+      </header>
+      <p class="rule-help">Select element must have an accessible name</p>
+      <p class="rule-means">A &lt;select&gt; dropdown has no label, so users cannot determine what they are choosing.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Associate a &lt;label&gt;, or add aria-label / aria-labelledby.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/select-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-valid-attr" data-search="aria-valid-attr aria attributes must conform to valid names an aria-* attribute is misspelled or does not exist (for example, aria-lable), so browsers ignore it. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-valid-attr</code></h3>
+        <a class="rule-permalink" href="#aria-valid-attr" aria-label="Permalink to aria-valid-attr">#</a>
+      </header>
+      <p class="rule-help">ARIA attributes must conform to valid names</p>
+      <p class="rule-means">An aria-* attribute is misspelled or does not exist (for example, aria-lable), so browsers ignore it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Correct the typo; valid names are defined by the ARIA specification (aria-label, aria-hidden, aria-describedby, and so on).</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-valid-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-roles" data-search="aria-roles aria roles used must conform to valid values a role=&quot;...&quot; value is misspelled or is not a real aria role, so assistive technology cannot interpret the element. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-roles</code></h3>
+        <a class="rule-permalink" href="#aria-roles" aria-label="Permalink to aria-roles">#</a>
+      </header>
+      <p class="rule-help">ARIA roles used must conform to valid values</p>
+      <p class="rule-means">A role=&quot;...&quot; value is misspelled or is not a real ARIA role, so assistive technology cannot interpret the element.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use a valid role from the ARIA specification, or remove the role and rely on native HTML.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-roles?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-required-attr" data-search="aria-required-attr required aria attributes must be provided an aria role requires companion attributes that are missing (for example, role=&quot;checkbox&quot; without aria-checked). 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-required-attr</code></h3>
+        <a class="rule-permalink" href="#aria-required-attr" aria-label="Permalink to aria-required-attr">#</a>
+      </header>
+      <p class="rule-help">Required ARIA attributes must be provided</p>
+      <p class="rule-means">An ARIA role requires companion attributes that are missing (for example, role=&quot;checkbox&quot; without aria-checked).</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add the attributes required for that role; consult the ARIA specification or MDN.</li><li>Or use the native HTML element, which handles this automatically.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-required-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-hidden-focus" data-search="aria-hidden-focus aria hidden element must not be focusable or contain focusable elements content hidden with aria-hidden still contains keyboard-focusable elements, so keyboard users tab into invisible content. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-hidden-focus</code></h3>
+        <a class="rule-permalink" href="#aria-hidden-focus" aria-label="Permalink to aria-hidden-focus">#</a>
+      </header>
+      <p class="rule-help">ARIA hidden element must not be focusable or contain focusable elements</p>
+      <p class="rule-means">Content hidden with aria-hidden still contains keyboard-focusable elements, so keyboard users tab into invisible content.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove tabindex from hidden elements, or do not apply aria-hidden to containers with focusable children.</li><li>For modals, move focus into the dialog and trap it correctly.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-hidden-focus?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-prohibited-attr" data-search="aria-prohibited-attr elements must only use permitted aria attributes an element uses an aria attribute that its role forbids (for example, aria-label on a generic &lt;div&gt; with no role). 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-prohibited-attr</code></h3>
+        <a class="rule-permalink" href="#aria-prohibited-attr" aria-label="Permalink to aria-prohibited-attr">#</a>
+      </header>
+      <p class="rule-help">Elements must only use permitted ARIA attributes</p>
+      <p class="rule-means">An element uses an ARIA attribute that its role forbids (for example, aria-label on a generic &lt;div&gt; with no role).</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove the prohibited attribute, or assign the element a role that permits it.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="duplicate-id-aria" data-search="duplicate-id-aria ids used in aria and labels must be unique the same id appears twice and is referenced by aria-labelledby, aria-describedby, or a label for attribute; browsers select one, possibly the wrong one. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>duplicate-id-aria</code></h3>
+        <a class="rule-permalink" href="#duplicate-id-aria" aria-label="Permalink to duplicate-id-aria">#</a>
+      </header>
+      <p class="rule-help">IDs used in ARIA and labels must be unique</p>
+      <p class="rule-means">The same id appears twice and is referenced by aria-labelledby, aria-describedby, or a label for attribute; browsers select one, possibly the wrong one.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Make every id unique and rename duplicates.</li><li>Verify that aria references point to the intended element.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/duplicate-id-aria?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="nested-interactive" data-search="nested-interactive interactive controls must not be nested a link, button, or other control sits inside another interactive element (for example, an &lt;a&gt; inside a &lt;button&gt;, or a card link wrapping buttons); screen readers cannot parse this correctly. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>nested-interactive</code></h3>
+        <a class="rule-permalink" href="#nested-interactive" aria-label="Permalink to nested-interactive">#</a>
+      </header>
+      <p class="rule-help">Interactive controls must not be nested</p>
+      <p class="rule-means">A link, button, or other control sits inside another interactive element (for example, an &lt;a&gt; inside a &lt;button&gt;, or a card link wrapping buttons); screen readers cannot parse this correctly.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Restructure so interactive elements are siblings rather than nested.</li><li>For clickable cards, make the title the link and keep buttons separate.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/nested-interactive?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="frame-title" data-search="frame-title frames must have an accessible name an &lt;iframe&gt; or &lt;frame&gt; has no title, so screen reader users hear &quot;frame&quot; without knowing what it contains. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>frame-title</code></h3>
+        <a class="rule-permalink" href="#frame-title" aria-label="Permalink to frame-title">#</a>
+      </header>
+      <p class="rule-help">Frames must have an accessible name</p>
+      <p class="rule-means">An &lt;iframe&gt; or &lt;frame&gt; has no title, so screen reader users hear &quot;frame&quot; without knowing what it contains.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add title=&quot;...&quot; describing the frame’s content.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/frame-title?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="frame-title-unique" data-search="frame-title-unique frames must have a unique title attribute two or more frames share the same title, so screen reader users cannot distinguish them in the frame list. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>frame-title-unique</code></h3>
+        <a class="rule-permalink" href="#frame-title-unique" aria-label="Permalink to frame-title-unique">#</a>
+      </header>
+      <p class="rule-help">Frames must have a unique title attribute</p>
+      <p class="rule-means">Two or more frames share the same title, so screen reader users cannot distinguish them in the frame list.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Give each frame a unique, descriptive title.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/frame-title-unique?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-allowed-attr" data-search="aria-allowed-attr elements must only use supported aria attributes an element uses an aria-* attribute that its role does not support (for example, aria-label on a plain &lt;div&gt; with no role); browsers and assistive technology may ignore it. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-allowed-attr</code></h3>
+        <a class="rule-permalink" href="#aria-allowed-attr" aria-label="Permalink to aria-allowed-attr">#</a>
+      </header>
+      <p class="rule-help">Elements must only use supported ARIA attributes</p>
+      <p class="rule-means">An element uses an aria-* attribute that its role does not support (for example, aria-label on a plain &lt;div&gt; with no role); browsers and assistive technology may ignore it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove the unsupported attribute, or add a role that permits it.</li><li>Consult the ARIA specification for which attributes each role allows.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-allowed-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-braille-equivalent" data-search="aria-braille-equivalent aria-braille attributes must have a non-braille equivalent an aria-braillelabel or aria-brailleroledescription has no plain-text equivalent (aria-label or aria-roledescription), so refreshable braille displays cannot adapt it. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-braille-equivalent</code></h3>
+        <a class="rule-permalink" href="#aria-braille-equivalent" aria-label="Permalink to aria-braille-equivalent">#</a>
+      </header>
+      <p class="rule-help">aria-braille attributes must have a non-braille equivalent</p>
+      <p class="rule-means">An aria-braillelabel or aria-brailleroledescription has no plain-text equivalent (aria-label or aria-roledescription), so refreshable braille displays cannot adapt it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Provide the matching aria-label or aria-roledescription alongside the braille attribute.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-braille-equivalent?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-conditional-attr" data-search="aria-conditional-attr aria attributes must be used as specified for the element’s role an aria attribute is used in a way its conditions forbid; for example, a value valid only on certain roles, or a required companion attribute that is missing. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-conditional-attr</code></h3>
+        <a class="rule-permalink" href="#aria-conditional-attr" aria-label="Permalink to aria-conditional-attr">#</a>
+      </header>
+      <p class="rule-help">ARIA attributes must be used as specified for the element’s role</p>
+      <p class="rule-means">An ARIA attribute is used in a way its conditions forbid; for example, a value valid only on certain roles, or a required companion attribute that is missing.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Check the attribute’s conditions in the ARIA specification; add required companions or remove the attribute.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-conditional-attr?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-deprecated-role" data-search="aria-deprecated-role deprecated aria roles must not be used a role=&quot;...&quot; value uses a deprecated aria role (for example, directory) that assistive technology may stop supporting. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-deprecated-role</code></h3>
+        <a class="rule-permalink" href="#aria-deprecated-role" aria-label="Permalink to aria-deprecated-role">#</a>
+      </header>
+      <p class="rule-help">Deprecated ARIA roles must not be used</p>
+      <p class="rule-means">A role=&quot;...&quot; value uses a deprecated ARIA role (for example, directory) that assistive technology may stop supporting.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Replace it with the modern equivalent or native HTML (for example, &lt;ul&gt;/&lt;li&gt; instead of role=&quot;directory&quot;).</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-deprecated-role?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-input-field-name" data-search="aria-input-field-name aria input fields must have an accessible name an input-like aria widget (textbox, searchbox, spinbutton, and so on) has no accessible name, so screen readers announce an unlabelled field. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-input-field-name</code></h3>
+        <a class="rule-permalink" href="#aria-input-field-name" aria-label="Permalink to aria-input-field-name">#</a>
+      </header>
+      <p class="rule-help">ARIA input fields must have an accessible name</p>
+      <p class="rule-means">An input-like ARIA widget (textbox, searchbox, spinbutton, and so on) has no accessible name, so screen readers announce an unlabelled field.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label, aria-labelledby, or associate a visible &lt;label&gt;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-input-field-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-roledescription" data-search="aria-roledescription aria-roledescription must be on elements with a semantic role aria-roledescription is set on an element with no semantic role (or a prohibited one), so assistive technology may announce a made-up role that users cannot map. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-roledescription</code></h3>
+        <a class="rule-permalink" href="#aria-roledescription" aria-label="Permalink to aria-roledescription">#</a>
+      </header>
+      <p class="rule-help">aria-roledescription must be on elements with a semantic role</p>
+      <p class="rule-means">aria-roledescription is set on an element with no semantic role (or a prohibited one), so assistive technology may announce a made-up role that users cannot map.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use it only on elements with a real role, or remove it.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-roledescription?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-tab-name" data-search="aria-tab-name aria tab nodes must have an accessible name an element with role=&quot;tab&quot; has no accessible name, so the tab strip announces unlabelled tabs. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-tab-name</code></h3>
+        <a class="rule-permalink" href="#aria-tab-name" aria-label="Permalink to aria-tab-name">#</a>
+      </header>
+      <p class="rule-help">ARIA tab nodes must have an accessible name</p>
+      <p class="rule-means">An element with role=&quot;tab&quot; has no accessible name, so the tab strip announces unlabelled tabs.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add visible text or aria-label / aria-labelledby to each tab.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-tab-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-toggle-field-name" data-search="aria-toggle-field-name aria toggle fields must have an accessible name a toggle widget (checkbox, switch, menuitemcheckbox, and so on) has no accessible name, so screen readers announce an unnamed control. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-toggle-field-name</code></h3>
+        <a class="rule-permalink" href="#aria-toggle-field-name" aria-label="Permalink to aria-toggle-field-name">#</a>
+      </header>
+      <p class="rule-help">ARIA toggle fields must have an accessible name</p>
+      <p class="rule-means">A toggle widget (checkbox, switch, menuitemcheckbox, and so on) has no accessible name, so screen readers announce an unnamed control.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label, aria-labelledby, or a visible &lt;label&gt;.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-toggle-field-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-tooltip-name" data-search="aria-tooltip-name aria tooltip nodes must have an accessible name a role=&quot;tooltip&quot; element has no accessible name or content for assistive technology to announce. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-tooltip-name</code></h3>
+        <a class="rule-permalink" href="#aria-tooltip-name" aria-label="Permalink to aria-tooltip-name">#</a>
+      </header>
+      <p class="rule-help">ARIA tooltip nodes must have an accessible name</p>
+      <p class="rule-means">A role=&quot;tooltip&quot; element has no accessible name or content for assistive technology to announce.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Give the tooltip text content or an aria-label describing the hint.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-tooltip-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-valid-attr-value" data-search="aria-valid-attr-value aria attributes must conform to valid values an aria-* attribute has an invalid value (for example, aria-expanded=&quot;yes&quot; instead of true or false), so assistive technology ignores it. 4.1.2">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-valid-attr-value</code></h3>
+        <a class="rule-permalink" href="#aria-valid-attr-value" aria-label="Permalink to aria-valid-attr-value">#</a>
+      </header>
+      <p class="rule-help">ARIA attributes must conform to valid values</p>
+      <p class="rule-means">An aria-* attribute has an invalid value (for example, aria-expanded=&quot;yes&quot; instead of true or false), so assistive technology ignores it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use the permitted values defined by the ARIA specification (true/false, tokens, ids, and so on).</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">WCAG 4.1.2</span><span class="wcag-tag">A</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-valid-attr-value?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article></div>
+      </section>
+      <section class="principle" id="principle-b" aria-labelledby="principle-b-h">
+        <h2 id="principle-b-h">B. Best practices</h2>
+        <p class="principle-blurb">axe flags these as good practice, not WCAG failures; fixing them still helps users.</p>
+        <div class="rule-list">
+    <article class="rule" id="image-redundant-alt" data-search="image-redundant-alt alternative text of images should not be repeated as text an image’s alt text is also rendered as visible text adjacent to the image, so screen readers announce it twice. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>image-redundant-alt</code></h3>
+        <a class="rule-permalink" href="#image-redundant-alt" aria-label="Permalink to image-redundant-alt">#</a>
+      </header>
+      <p class="rule-help">Alternative text of images should not be repeated as text</p>
+      <p class="rule-means">An image’s alt text is also rendered as visible text adjacent to the image, so screen readers announce it twice.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Keep the alt text concise and remove the duplicated visible text, or do the reverse.</li><li>If the visible text conveys additional information, shorten the alt text instead.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/image-redundant-alt?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-dialog-name" data-search="aria-dialog-name aria dialog and alertdialog nodes should have an accessible name a role=&quot;dialog&quot; or role=&quot;alertdialog&quot; element has no accessible name, so users cannot determine the purpose of the dialog. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-dialog-name</code></h3>
+        <a class="rule-permalink" href="#aria-dialog-name" aria-label="Permalink to aria-dialog-name">#</a>
+      </header>
+      <p class="rule-help">ARIA dialog and alertdialog nodes should have an accessible name</p>
+      <p class="rule-means">A role=&quot;dialog&quot; or role=&quot;alertdialog&quot; element has no accessible name, so users cannot determine the purpose of the dialog.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label or aria-labelledby pointing to the dialog’s heading.</li><li>Prefer the native &lt;dialog&gt; element.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-dialog-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-treeitem-name" data-search="aria-treeitem-name aria treeitem nodes should have an accessible name a role=&quot;treeitem&quot; element has no accessible name. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-treeitem-name</code></h3>
+        <a class="rule-permalink" href="#aria-treeitem-name" aria-label="Permalink to aria-treeitem-name">#</a>
+      </header>
+      <p class="rule-help">ARIA treeitem nodes should have an accessible name</p>
+      <p class="rule-means">A role=&quot;treeitem&quot; element has no accessible name.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label, aria-labelledby, or text content to the treeitem.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-treeitem-name?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="tabindex" data-search="tabindex elements should not have tabindex greater than zero tabindex=&quot;1+&quot; overrides the natural tab order, forcing keyboard users into an unexpected sequence. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>tabindex</code></h3>
+        <a class="rule-permalink" href="#tabindex" aria-label="Permalink to tabindex">#</a>
+      </header>
+      <p class="rule-help">Elements should not have tabindex greater than zero</p>
+      <p class="rule-means">tabindex=&quot;1+&quot; overrides the natural tab order, forcing keyboard users into an unexpected sequence.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use tabindex=&quot;0&quot; to add an element to the tab order, or tabindex=&quot;-1&quot; for programmatic focus only.</li><li>Correct the DOM order instead of overriding it.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/tabindex?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="focus-order-semantics" data-search="focus-order-semantics elements in the focus order should have an appropriate role a focusable element has no semantic role (for example, a plain &lt;div tabindex=&quot;0&quot;&gt; that behaves like a button but is not announced as one). best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>focus-order-semantics</code></h3>
+        <a class="rule-permalink" href="#focus-order-semantics" aria-label="Permalink to focus-order-semantics">#</a>
+      </header>
+      <p class="rule-help">Elements in the focus order should have an appropriate role</p>
+      <p class="rule-means">A focusable element has no semantic role (for example, a plain &lt;div tabindex=&quot;0&quot;&gt; that behaves like a button but is not announced as one).</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Use the appropriate native element (&lt;button&gt;, &lt;a href&gt;) or add a role.</li><li>For custom widgets, implement the complete ARIA pattern.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/focus-order-semantics?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="skip-link" data-search="skip-link the skip-link target should exist and be focusable a &quot;skip to content&quot; link points to an element that does not exist or cannot receive focus. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>skip-link</code></h3>
+        <a class="rule-permalink" href="#skip-link" aria-label="Permalink to skip-link">#</a>
+      </header>
+      <p class="rule-help">The skip-link target should exist and be focusable</p>
+      <p class="rule-means">A &quot;skip to content&quot; link points to an element that does not exist or cannot receive focus.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Ensure the skip link’s href targets a real element, usually &lt;main id=&quot;main&quot;&gt;.</li><li>The target requires tabindex=&quot;-1&quot; so it can receive programmatic focus.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/skip-link?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="label-title-only" data-search="label-title-only form elements should have a visible label a form field is labelled only via the title attribute or placeholder; visible labels are significantly more usable, particularly on mobile and for low-vision users. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>label-title-only</code></h3>
+        <a class="rule-permalink" href="#label-title-only" aria-label="Permalink to label-title-only">#</a>
+      </header>
+      <p class="rule-help">Form elements should have a visible label</p>
+      <p class="rule-means">A form field is labelled only via the title attribute or placeholder; visible labels are significantly more usable, particularly on mobile and for low-vision users.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add a real visible &lt;label&gt;; do not rely on placeholder text alone.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/label-title-only?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="page-has-heading-one" data-search="page-has-heading-one page should contain a level-one heading the page has no &lt;h1&gt;, so there is no clear top-level topic for screen reader users navigating by headings. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>page-has-heading-one</code></h3>
+        <a class="rule-permalink" href="#page-has-heading-one" aria-label="Permalink to page-has-heading-one">#</a>
+      </header>
+      <p class="rule-help">Page should contain a level-one heading</p>
+      <p class="rule-means">The page has no &lt;h1&gt;, so there is no clear top-level topic for screen reader users navigating by headings.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add exactly one &lt;h1&gt; describing the page’s main topic.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/page-has-heading-one?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="heading-order" data-search="heading-order heading levels should only increase by one headings skip levels (for example, h1 to h3), which confuses the document outline that screen readers construct. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>heading-order</code></h3>
+        <a class="rule-permalink" href="#heading-order" aria-label="Permalink to heading-order">#</a>
+      </header>
+      <p class="rule-help">Heading levels should only increase by one</p>
+      <p class="rule-means">Headings skip levels (for example, h1 to h3), which confuses the document outline that screen readers construct.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Do not skip levels: use h1, then h2, then h3 in order.</li><li>Apply styling with CSS rather than choosing a heading level for appearance.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/heading-order?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="empty-heading" data-search="empty-heading headings should not be empty a heading element has no text; screen reader users hear &quot;heading level 2&quot; with nothing following it. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>empty-heading</code></h3>
+        <a class="rule-permalink" href="#empty-heading" aria-label="Permalink to empty-heading">#</a>
+      </header>
+      <p class="rule-help">Headings should not be empty</p>
+      <p class="rule-means">A heading element has no text; screen reader users hear &quot;heading level 2&quot; with nothing following it.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Give it real text, or remove the heading element.</li><li>If populated by JavaScript, ensure it is filled before axe runs.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/empty-heading?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="empty-table-header" data-search="empty-table-header table header text should not be empty a &lt;th&gt; element has no text, so screen reader users hear a column or row header with no label. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>empty-table-header</code></h3>
+        <a class="rule-permalink" href="#empty-table-header" aria-label="Permalink to empty-table-header">#</a>
+      </header>
+      <p class="rule-help">Table header text should not be empty</p>
+      <p class="rule-means">A &lt;th&gt; element has no text, so screen reader users hear a column or row header with no label.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add text or an aria-label to the header cell, or use aria-hidden if it is decorative.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/empty-table-header?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="aria-text" data-search="aria-text &quot;role=text&quot; should have no focusable descendants a role=&quot;text&quot; element (a non-standard technique for flattening the accessibility tree) contains focusable elements that become unreachable. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>aria-text</code></h3>
+        <a class="rule-permalink" href="#aria-text" aria-label="Permalink to aria-text">#</a>
+      </header>
+      <p class="rule-help">&quot;role=text&quot; should have no focusable descendants</p>
+      <p class="rule-means">A role=&quot;text&quot; element (a non-standard technique for flattening the accessibility tree) contains focusable elements that become unreachable.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove role=&quot;text&quot;, or move the focusable elements outside it.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/aria-text?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="presentation-role-conflict" data-search="presentation-role-conflict elements marked as presentational should be consistently ignored an element has role=&quot;presentation&quot; or role=&quot;none&quot; but also carries global aria attributes or is focusable; the conflicting signals confuse assistive technology. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>presentation-role-conflict</code></h3>
+        <a class="rule-permalink" href="#presentation-role-conflict" aria-label="Permalink to presentation-role-conflict">#</a>
+      </header>
+      <p class="rule-help">Elements marked as presentational should be consistently ignored</p>
+      <p class="rule-means">An element has role=&quot;presentation&quot; or role=&quot;none&quot; but also carries global ARIA attributes or is focusable; the conflicting signals confuse assistive technology.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Remove the conflicting attributes, or remove the presentational role.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/presentation-role-conflict?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="landmark-one-main" data-search="landmark-one-main document should have one main landmark the page has no &lt;main&gt; (or role=&quot;main&quot;) landmark, or more than one; screen reader users cannot jump directly to the content. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>landmark-one-main</code></h3>
+        <a class="rule-permalink" href="#landmark-one-main" aria-label="Permalink to landmark-one-main">#</a>
+      </header>
+      <p class="rule-help">Document should have one main landmark</p>
+      <p class="rule-means">The page has no &lt;main&gt; (or role=&quot;main&quot;) landmark, or more than one; screen reader users cannot jump directly to the content.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Wrap the primary content in a single &lt;main&gt; element.</li><li>If multiple mains exist (for example, in frames), give them distinct labels.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="landmark-unique" data-search="landmark-unique landmarks should have a unique role or role/label/title combination two landmarks share the same role and have no distinguishing label, so they are indistinguishable during landmark navigation. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>landmark-unique</code></h3>
+        <a class="rule-permalink" href="#landmark-unique" aria-label="Permalink to landmark-unique">#</a>
+      </header>
+      <p class="rule-help">Landmarks should have a unique role or role/label/title combination</p>
+      <p class="rule-means">Two landmarks share the same role and have no distinguishing label, so they are indistinguishable during landmark navigation.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Add aria-label or aria-labelledby to differentiate them (for example, two &lt;nav&gt; elements labelled &quot;Main&quot; and &quot;Footer&quot;).</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="landmark-no-duplicate-banner" data-search="landmark-no-duplicate-banner document should not have more than one banner landmark more than one banner landmark (a top-level &lt;header&gt;) exists on the page. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>landmark-no-duplicate-banner</code></h3>
+        <a class="rule-permalink" href="#landmark-no-duplicate-banner" aria-label="Permalink to landmark-no-duplicate-banner">#</a>
+      </header>
+      <p class="rule-help">Document should not have more than one banner landmark</p>
+      <p class="rule-means">More than one banner landmark (a top-level &lt;header&gt;) exists on the page.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Keep a single page header; nested &lt;header&gt; elements inside &lt;article&gt; or &lt;section&gt; are acceptable.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-no-duplicate-banner?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="landmark-no-duplicate-contentinfo" data-search="landmark-no-duplicate-contentinfo document should not have more than one contentinfo landmark more than one footer landmark (a top-level &lt;footer&gt;) exists on the page. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>landmark-no-duplicate-contentinfo</code></h3>
+        <a class="rule-permalink" href="#landmark-no-duplicate-contentinfo" aria-label="Permalink to landmark-no-duplicate-contentinfo">#</a>
+      </header>
+      <p class="rule-help">Document should not have more than one contentinfo landmark</p>
+      <p class="rule-means">More than one footer landmark (a top-level &lt;footer&gt;) exists on the page.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Keep a single page footer; section-level &lt;footer&gt; elements are acceptable.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-no-duplicate-contentinfo?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="landmark-no-duplicate-main" data-search="landmark-no-duplicate-main document should not have more than one main landmark more than one &lt;main&gt; landmark exists on the page. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>landmark-no-duplicate-main</code></h3>
+        <a class="rule-permalink" href="#landmark-no-duplicate-main" aria-label="Permalink to landmark-no-duplicate-main">#</a>
+      </header>
+      <p class="rule-help">Document should not have more than one main landmark</p>
+      <p class="rule-means">More than one &lt;main&gt; landmark exists on the page.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>There should be exactly one main content area.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-no-duplicate-main?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article>
+    <article class="rule" id="meta-viewport-large" data-search="meta-viewport-large users should be able to zoom and scale the text up to 500% even without disabled zoom, the layout breaks before users can reach 500% text zoom. best-practice">
+      <header class="rule-head">
+        <h3 class="rule-id"><code>meta-viewport-large</code></h3>
+        <a class="rule-permalink" href="#meta-viewport-large" aria-label="Permalink to meta-viewport-large">#</a>
+      </header>
+      <p class="rule-help">Users should be able to zoom and scale the text up to 500%</p>
+      <p class="rule-means">Even without disabled zoom, the layout breaks before users can reach 500% text zoom.</p>
+      <div class="rule-fix">
+        <h4>How to fix</h4>
+        <ul><li>Test at 500% zoom and at 320px width; correct horizontal scrolling and clipping.</li></ul>
+      </div>
+      <footer class="rule-meta">
+        <span class="wcag-tag">best practice</span>
+        <a href="https://dequeuniversity.com/rules/axe/4.14/meta-viewport-large?application=axeAPI" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
+        <a href="/">← Back to scanner</a>
+      </footer>
+    </article></div>
+      </section></div>
+    <p class="empty-filter" id="empty-filter" data-copy-html="rulesPage.emptyFilterHtml">No rules match that filter. Try a different term, or <a href="https://dequeuniversity.com/rules/axe/4.14" rel="noopener">browse the full axe rule index</a>.</p>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><span data-copy="chrome.footer.line"></span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy"></a> · <a href="terms.html" data-copy="chrome.footer.linkTerms"></a> · <a href="/" data-copy="chrome.footer.linkScanner"></a></p>
+    <p><span data-copy="chrome.footer.line">Free, runs locally, no account needed. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="/" data-copy="chrome.footer.linkScanner">Scanner</a></p>
   </div>
 </footer>
 

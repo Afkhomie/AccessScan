@@ -75,37 +75,37 @@
   <section class="wrap legal-hero">
     <p class="hero-kicker" data-copy="privacy.kicker">Privacy</p>
     <h1 data-copy="privacy.h1">Privacy policy</h1>
-    <p class="lede" data-copy="privacy.lede">AccessScan is a local tool with nothing to track.</p>
+    <p class="lede" data-copy="privacy.lede">AccessScan is a local tool with nothing to track. This page states exactly what data exists and where it is sent, which in practice is nowhere.</p>
   </section>
 
   <div class="wrap legal-body">
     <h2 data-copy="privacy.sections.0.h">What data exists</h2>
-    <div data-copy-html="privacy.sections.0.bodyHtml"></div>
+    <div data-copy-html="privacy.sections.0.bodyHtml"><p>Only two things: <strong>the URLs you submit</strong> and <strong>the scan results</strong> for them. Both are held in the memory (RAM) of the server process on your own machine, where the tool itself runs. There is no database, no scan log file, and nothing is written to disk.</p><p>Your browser stores nothing either: no cookies, no local storage, no session state. Closing the tab or restarting the server removes everything.</p></div>
 
     <h2 data-copy="privacy.sections.1.h">What leaves your machine</h2>
-    <div data-copy-html="privacy.sections.1.bodyHtml"></div>
+    <div data-copy-html="privacy.sections.1.bodyHtml"><p>Your browser communicates only with the AccessScan server on <code>127.0.0.1</code>, your own computer. From there, the single outbound action is the purpose of the tool itself: <strong>the server retrieves the website URL you supplied</strong> and performs an accessibility check on the rendered page, in the same manner as your browser. The target site receives a normal page request bearing a User-Agent string that identifies AccessScan.</p><p>There are no third-party requests: no analytics, no telemetry, no CDN-hosted scripts or fonts, no external fonts or trackers. Every script and stylesheet is served by the same local server. The only external links on this site are documentation references (such as the axe-core rule index) that load only if you choose to open them.</p></div>
 
     <h2 data-copy="privacy.sections.2.h">What AccessScan does not do</h2>
     <ul>
-      <li data-copy="privacy.sections.2.list.0"></li>
-      <li data-copy="privacy.sections.2.list.1"></li>
-      <li data-copy="privacy.sections.2.list.2"></li>
-      <li data-copy="privacy.sections.2.list.3"></li>
-      <li data-copy="privacy.sections.2.list.4"></li>
-      <li data-copy="privacy.sections.2.list.5"></li>
+      <li data-copy="privacy.sections.2.list.0">Set cookies or track users in any form</li>
+      <li data-copy="privacy.sections.2.list.1">Require accounts, registration, or login</li>
+      <li data-copy="privacy.sections.2.list.2">Collect analytics or usage statistics</li>
+      <li data-copy="privacy.sections.2.list.3">Load third-party SDKs or external services</li>
+      <li data-copy="privacy.sections.2.list.4">Process payments; the tool is free</li>
+      <li data-copy="privacy.sections.2.list.5">Use a database or cloud storage</li>
     </ul>
 
     <h2 data-copy="privacy.sections.3.h">Data retention</h2>
-    <div data-copy-html="privacy.sections.3.bodyHtml"></div>
+    <div data-copy-html="privacy.sections.3.bodyHtml"><p>Scan records are retained in memory only, capped at the 20 most recent scans, and are deleted when the server process stops. To keep a copy of a report, export it (HTML, JSON, or PDF) before restarting. Exports are generated locally and downloaded to your browser like any ordinary file.</p></div>
 
     <h2 data-copy="privacy.sections.4.h">Contact</h2>
-    <div data-copy-html="privacy.sections.4.bodyHtml"></div>
+    <div data-copy-html="privacy.sections.4.bodyHtml"><p>For questions or concerns, open an issue at <a href="https://github.com/Afkhomie/AccessScan/issues" rel="noopener">github.com/Afkhomie/AccessScan/issues</a>. AccessScan is operated by Afkhomie via GitHub.</p></div>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><span data-copy="chrome.footer.line"></span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy"></a> · <a href="terms.html" data-copy="chrome.footer.linkTerms"></a> · <a href="rules.html" data-copy="chrome.footer.linkRuleReference"></a></p>
+    <p><span data-copy="chrome.footer.line">Free, runs locally, no account needed. MIT licensed.</span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy">Privacy Policy</a> · <a href="terms.html" data-copy="chrome.footer.linkTerms">Terms of Use</a> · <a href="rules.html" data-copy="chrome.footer.linkRuleReference">Rule reference</a></p>
   </div>
 </footer>
 
