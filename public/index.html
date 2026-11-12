@@ -4,20 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AccessScan · free WCAG / EAA accessibility checker</title>
-<meta name="description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
+<meta name="description" content="A free WCAG/EAA accessibility scanner. Checks any public website for accessibility issues. Runs locally; no account required.">
 <meta name="theme-color" content="#003399">
 <link rel="canonical" href="https://access-scan-tool.vercel.app">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AccessScan">
 <meta property="og:title" content="AccessScan · free WCAG/EAA accessibility scanner">
-<meta property="og:description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
+<meta property="og:description" content="A free WCAG/EAA accessibility scanner. Checks any public website for accessibility issues. Runs locally; no account required.">
 <meta property="og:url" content="https://access-scan-tool.vercel.app">
 <meta property="og:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AccessScan · free WCAG/EAA accessibility scanner">
-<meta name="twitter:description" content="Free WCAG/EAA accessibility scanner. Check any website for accessibility issues. Runs locally, no signup.">
+<meta name="twitter:description" content="A free WCAG/EAA accessibility scanner. Checks any public website for accessibility issues. Runs locally; no account required.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -49,7 +49,7 @@
 </head>
 <body>
 
-<a class="skip-link" href="#main">Skip to main content</a>
+<a class="skip-link" href="#main" data-copy="chrome.skipToContent">Skip to main content</a>
 
 <header class="site-header">
   <div class="wrap header-inner">
@@ -58,35 +58,35 @@
       <span>AccessScan</span>
     </a>
     <nav class="header-nav" aria-label="Main">
-      <a href="rules.html">Rule reference</a>
-      <a href="#how">How it works</a>
-      <a href="#limits">Limits</a>
+      <a href="rules.html" data-copy="chrome.navRuleReference">Rule reference</a>
+      <a href="#how" data-copy="index.how.heading">How it works</a>
+      <a href="#limits" data-copy="index.navLimitations">Limitations</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
   <section class="hero wrap">
-    <p class="hero-kicker">WCAG 2.x · EAA · axe-core · local-first</p>
-    <h1>Is your website accessible?</h1>
-    <p class="lede">Paste a URL. We scan it for common WCAG&nbsp;2.x failures relevant to the EU Accessibility Act. The scan runs locally, is free, and needs no account or tracking.</p>
-    <p class="hero-note">No Node.js? Send this page to your web developer.</p>
+    <p class="hero-kicker" data-copy="index.meta.kicker">WCAG 2.x · EAA · axe-core · local-first</p>
+    <h1 data-copy="index.meta.h1">Check whether your website is accessible.</h1>
+    <p class="lede" data-copy="index.meta.lede">Enter a URL to scan a public page for common WCAG 2.x failures relevant to the EU Accessibility Act.</p>
+    <p class="hero-note" data-copy="index.meta.heroNote">If you cannot run Node.js locally, send this page to your web developer.</p>
 
     <form id="scan-form" class="scan-form" novalidate>
-      <label class="sr-only" for="url-input">Website URL</label>
+      <label class="sr-only" for="url-input" data-copy="index.form.urlLabel">Website URL</label>
       <div class="url-row">
         <input id="url-input" type="url" inputmode="url" autocomplete="off" spellcheck="false"
-               placeholder="example.com" required>
-        <button type="submit" id="scan-btn">Scan</button>
+               placeholder="example.com" required data-copy-placeholder="index.form.urlPlaceholder">
+        <button type="submit" id="scan-btn" data-copy="app.busy.scan">Scan</button>
       </div>
       <label class="crawl-opt">
         <input type="checkbox" id="crawl-input">
-        Also scan linked pages on the same site:
-        <select id="maxpages-input" disabled aria-label="Maximum pages to scan">
-          <option value="1">just this page</option>
-          <option value="3">up to 3 pages</option>
-          <option value="5" selected>up to 5 pages</option>
-          <option value="10">up to 10 pages</option>
+        <span data-copy="index.form.crawlLabel">Also scan linked pages on the same site:</span>
+        <select id="maxpages-input" disabled aria-label="Maximum pages to scan" data-copy-aria-label="index.form.maxPagesLabel">
+          <option value="1" data-copy="index.form.maxPages1">just this page</option>
+          <option value="3" data-copy="index.form.maxPages3">up to 3 pages</option>
+          <option value="5" selected data-copy="index.form.maxPages5">up to 5 pages</option>
+          <option value="10" data-copy="index.form.maxPages10">up to 10 pages</option>
         </select>
       </label>
       <p class="form-error" id="form-error" role="alert" hidden></p>
@@ -94,34 +94,32 @@
 
     <div class="progress" id="progress" hidden aria-live="polite">
       <div>
-        <p class="progress-phase"><span id="progress-phase">Starting…</span> <span class="progress-pct" id="progress-pct">0%</span></p>
-        <p class="progress-sub" id="progress-sub">This can take up to a minute on slow sites.</p>
+        <p class="progress-phase"><span id="progress-phase" data-copy="index.progress.starting">Starting…</span> <span class="progress-pct" id="progress-pct">0%</span></p>
+        <p class="progress-sub" id="progress-sub" data-copy="index.progress.subInitial">This can take up to a minute on slow sites.</p>
         <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
       </div>
     </div>
   </section>
 
   <section class="wrap recent" id="recent" hidden>
-    <h2>Recent scans</h2>
-    <p class="recent-note">Kept in memory only. Gone when the server restarts.</p>
+    <h2 data-copy="index.recent.heading">Recent scans</h2>
+    <p class="recent-note" data-copy="index.recent.note">Retained in memory only. Deleted when the server restarts.</p>
     <ul class="recent-list" id="recent-list"></ul>
   </section>
 
   <section class="wrap" id="limits">
-    <div class="disclaimer">
-      <strong>Honest disclaimer:</strong> automated scans like this find roughly <strong>30–57%</strong> of WCAG issues (per Deque's research). A clean result does <em>not</em> mean your site is compliant, and issues found don't automatically mean you're breaking the law. They mean real problems worth fixing. EAA enforcement is live in the EU since June 2025. When in doubt, get a manual audit.
-    </div>
+    <div class="disclaimer" data-copy-html="index.disclaimer.html"></div>
   </section>
 
   <div id="scan-status" class="sr-only" role="status" aria-live="polite"></div>
   <section class="results wrap" id="results" hidden tabindex="-1">
     <div class="results-head">
-      <h2>Report</h2>
+      <h2 data-copy="index.results.heading">Report</h2>
       <div class="results-actions">
-        <a class="btn-ghost btn-link" id="export-html" href="#" download hidden>Download HTML</a>
-        <a class="btn-ghost btn-link" id="export-json" href="#" download hidden>Download JSON</a>
-        <a class="btn-ghost btn-link" id="export-pdf" href="#" download hidden>Download PDF</a>
-        <button class="btn-ghost" id="new-scan" type="button">Scan another URL</button>
+        <a class="btn-ghost btn-link" id="export-html" href="#" download hidden data-copy="index.results.downloadHtml">Download HTML</a>
+        <a class="btn-ghost btn-link" id="export-json" href="#" download hidden data-copy="index.results.downloadJson">Download JSON</a>
+        <a class="btn-ghost btn-link" id="export-pdf" href="#" download hidden data-copy="index.results.downloadPdf">Download PDF</a>
+        <button class="btn-ghost" id="new-scan" type="button" data-copy="index.results.newScan">Scan another URL</button>
       </div>
     </div>
 
@@ -129,44 +127,44 @@
   </section>
 
   <section class="wrap how" id="how">
-    <h2>How it works</h2>
+    <h2 data-copy="index.how.heading">How it works</h2>
     <ol class="how-grid">
-      <li><div class="how-body"><strong>Paste a URL</strong><span>Any public http(s) page. Private/internal addresses are blocked.</span></div></li>
-      <li><div class="how-body"><strong>We load it in a headless browser</strong><span>Same rendering engine users get, then axe-core checks the DOM against WCAG&nbsp;2.x rules.</span></div></li>
-      <li><div class="how-body"><strong>You get a plain report</strong><span>Issues grouped by severity with the exact element, a code snippet, and a fix hint. Optionally scan up to 10 pages including same-site links.</span></div></li>
+      <li><div class="how-body"><strong data-copy="index.how.items.0.title">Enter a URL</strong><span data-copy="index.how.items.0.body">Any public http(s) page.</span></div></li>
+      <li><div class="how-body"><strong data-copy="index.how.items.1.title">The page is loaded in a headless browser</strong><span data-copy="index.how.items.1.body">The rendered DOM is checked against WCAG 2.x rules using axe-core.</span></div></li>
+      <li><div class="how-body"><strong data-copy="index.how.items.2.title">Review the report</strong><span data-copy="index.how.items.2.body">Issues are grouped by severity.</span></div></li>
     </ol>
   </section>
 
   <section class="wrap faq" id="faq">
-    <h2>Frequently asked questions</h2>
+    <h2 data-copy="index.faq.heading">Frequently asked questions</h2>
     <div class="faq-list">
       <details>
-        <summary>Is a clean scan proof of WCAG or EAA compliance?</summary>
-        <p>No. Automated tools like this catch roughly <strong>30–57%</strong> of WCAG issues (per Deque's research) — many criteria need human judgment that no scanner can apply. A clean report means "no common automated failures found," not "compliant." For real assurance, pair it with a manual audit.</p>
+        <summary data-copy="index.faq.items.0.q">Does a clean scan demonstrate WCAG or EAA compliance?</summary>
+        <p data-copy-html="index.faq.items.0.a"></p>
       </details>
       <details>
-        <summary>Does it cost anything? Do I need an account?</summary>
-        <p>No and no. AccessScan is free, MIT licensed, and needs no signup, payment, or tracking. It runs on whatever machine hosts it — if that's your own install, the only thing that leaves is the request to load the site you ask it to scan.</p>
+        <summary data-copy="index.faq.items.1.q">Is AccessScan free? Is an account required?</summary>
+        <p data-copy-html="index.faq.items.1.a"></p>
       </details>
       <details>
-        <summary>Where does my data go?</summary>
-        <p>Scan URLs and results live in server memory only — the last 20 scans are kept in memory and everything vanishes when the server restarts. Nothing is written to disk or sent anywhere; the only outbound traffic is the headless browser loading the page you gave it. Credentials in a submitted URL are stripped before anything is stored.</p>
+        <summary data-copy="index.faq.items.2.q">Where is scan data stored?</summary>
+        <p data-copy-html="index.faq.items.2.a"></p>
       </details>
       <details>
-        <summary>What does it actually check?</summary>
-        <p><a href="rules.html">axe-core</a> WCAG&nbsp;2.x rules at A/AA level (2.0, 2.1 and 2.2 success criteria). Each scan reports violations grouped by severity — critical, serious, moderate, minor — with the exact element, a code snippet and a fix hint, plus items axe flagged as <em>needs manual review</em> because a human has to decide.</p>
+        <summary data-copy="index.faq.items.3.q">Which rules does the scanner check?</summary>
+        <p data-copy-html="index.faq.items.3.a"></p>
       </details>
       <details>
-        <summary>Can it scan my whole site?</summary>
-        <p>Yes — the optional crawl mode follows links on the same origin and scans up to 10 pages total (you choose 1, 3, 5 or 10). Pages are scanned two at a time with a ~3-minute wall-clock cap, so very large sites may only be partially covered. Pick the most important pages for the best signal.</p>
+        <summary data-copy="index.faq.items.4.q">Can the scanner cover an entire site?</summary>
+        <p data-copy-html="index.faq.items.4.a"></p>
       </details>
       <details>
-        <summary>How is this different from Lighthouse?</summary>
-        <p>Lighthouse folds accessibility into a quick lab score alongside performance and SEO. AccessScan is focused accessibility depth: every axe rule explained in plain English at <a href="rules.html">the rule reference</a>, per-element snippets you can hand to a developer, and reports you can export as HTML, JSON or PDF. They complement each other — run both.</p>
+        <summary data-copy="index.faq.items.5.q">How does AccessScan differ from Lighthouse?</summary>
+        <p data-copy-html="index.faq.items.5.a"></p>
       </details>
       <details>
-        <summary>Is it legal or safe to scan any site?</summary>
-        <p>Only scan sites you own or have explicit permission to test. AccessScan blocks private/internal network addresses as a safety measure, but safeguards are not permission. Automated scanning can still load pages and trigger rate limits on someone else's server — see the <a href="terms.html">acceptable use</a> section of the terms.</p>
+        <summary data-copy="index.faq.items.6.q">Is it lawful to scan any website?</summary>
+        <p data-copy-html="index.faq.items.6.a"></p>
       </details>
     </div>
   </section>
@@ -174,10 +172,11 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine: no accounts, no payments, no database, no cloud. MIT licensed. · <a href="rules.html">WCAG rule reference</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
+    <p><span data-copy="chrome.footer.line"></span> · <a href="rules.html" data-copy="chrome.footer.linkRuleReference"></a> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy"></a> · <a href="terms.html" data-copy="chrome.footer.linkTerms"></a></p>
   </div>
 </footer>
 
+<script src="copy.js"></script>
 <script src="rules-data.js"></script>
 <script src="app.js"></script>
 </body>

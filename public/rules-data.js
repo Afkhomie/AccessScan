@@ -2,11 +2,14 @@
  *
  * Rule ids, axe help text and helpUrls come from axe-core 4.14 rule metadata
  * (the version bundled in node_modules). WCAG criteria are derived from the
- * rule's wcag2* tags. Rules tagged best-practice are grouped separately —
+ * rule's wcag2* tags. Rules tagged best-practice are grouped separately;
  * axe flags them as good practice, not WCAG failures.
  *
  * Each entry renders as <article id="rule-id"> so app.js can deep-link with
- * rules.html#<rule-id>. The "←" anchor links back to the report/scanner.
+ * rules.html#<rule-id>. The "#" anchor links back to the report/scanner.
+ *
+ * All user-facing strings come from window.COPY (copy.js), which must be
+ * loaded before this file.
  */
 'use strict';
 
@@ -16,11 +19,11 @@ const RULES = [
     id: 'color-contrast',
     help: 'Elements must meet minimum color contrast ratio thresholds',
     wcag: '1.4.3', level: 'AA',
-    means: 'Text is too hard to read against its background — the color difference doesn\u2019t meet the minimum contrast ratio (4.5:1 for normal text, 3:1 for large text).',
+    means: 'Text does not meet the minimum contrast ratio against its background (4.5:1 for normal text, 3:1 for large text), making it difficult to read.',
     fix: [
       'Darken the text or lighten the background until the ratio passes.',
-      'Check background images/gradients behind the text, not just the flat color.',
-      'Don\u2019t rely on color alone to convey meaning (pair with an icon or label).',
+      'Check background images and gradients behind the text, not only the flat colour.',
+      'Do not rely on colour alone to convey meaning; pair it with an icon or label.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI',
   },
@@ -28,11 +31,11 @@ const RULES = [
     id: 'image-alt',
     help: 'Images must have alternative text',
     wcag: '1.1.1', level: 'A',
-    means: 'An <img> has no alt text (or a missing/empty value where one is needed), so screen readers can\u2019t describe it.',
+    means: 'An <img> element has no alt text (or an empty value where one is required), so screen readers cannot describe it.',
     fix: [
-      'Add alt="..." describing the image\u2019s purpose — not just what it looks like.',
-      'For purely decorative images, use alt="" so screen readers skip them.',
-      'For images that are links/buttons, the alt text becomes the link name.',
+      'Add alt="..." describing the purpose of the image, not merely its appearance.',
+      'For purely decorative images, use alt="" so that screen readers skip them.',
+      'For images that function as links or buttons, the alt text becomes the accessible name of that control.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/image-alt?application=axeAPI',
   },
@@ -40,10 +43,10 @@ const RULES = [
     id: 'input-image-alt',
     help: 'Image buttons must have alternative text',
     wcag: '1.1.1 / 4.1.2', level: 'A',
-    means: 'An <input type="image"> button has no alt text, so its purpose is invisible to assistive tech.',
+    means: 'An <input type="image"> button has no alt text, so its purpose is invisible to assistive technology.',
     fix: [
-      'Add alt="..." describing the action (e.g. alt="Search").',
-      'Or use a regular <button> with text instead.',
+      'Add alt="..." describing the action, for example alt="Search".',
+      'Alternatively, use a regular <button> element containing text.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/input-image-alt?application=axeAPI',
   },
@@ -51,9 +54,9 @@ const RULES = [
     id: 'svg-img-alt',
     help: '<svg> elements with an img or image role must have alternative text',
     wcag: '1.1.1', level: 'A',
-    means: 'An SVG used as an image has no accessible name — screen readers may announce it as "graphic" or skip it.',
+    means: 'An SVG used as an image has no accessible name; screen readers may announce it as "graphic" or skip it entirely.',
     fix: [
-      'Add role="img" plus aria-label or <title> inside the SVG.',
+      'Add role="img" together with aria-label, or a <title> element inside the SVG.',
       'For decorative SVGs, add aria-hidden="true" and focusable="false".',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/svg-img-alt?application=axeAPI',
@@ -65,7 +68,7 @@ const RULES = [
     means: 'An element marked role="img" has no accessible name describing the image it represents.',
     fix: [
       'Add aria-label or aria-labelledby with a description.',
-      'Or give it role="presentation"/aria-hidden if it\u2019s decorative.',
+      'If the element is decorative, use role="presentation" or aria-hidden instead.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/role-img-alt?application=axeAPI',
   },
@@ -73,10 +76,10 @@ const RULES = [
     id: 'object-alt',
     help: '<object> elements must have alternative text',
     wcag: '1.1.1', level: 'A',
-    means: 'An <object> embed (PDF, Flash-era content, etc.) has no fallback text if it can\u2019t load.',
+    means: 'An <object> embed (a PDF or similar content) provides no fallback text if the content cannot load.',
     fix: [
       'Provide fallback content inside the <object> tags.',
-      'Prefer modern embeds or a link to the file instead.',
+      'Prefer modern embed methods, or link to the file directly.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/object-alt?application=axeAPI',
   },
@@ -84,9 +87,9 @@ const RULES = [
     id: 'video-caption',
     help: '<video> elements must have captions',
     wcag: '1.2.2', level: 'A',
-    means: 'A <video> has no captions track, so deaf/hard-of-hearing users can\u2019t follow the audio.',
+    means: 'A <video> element has no captions track, so deaf and hard-of-hearing users cannot follow the audio content.',
     fix: [
-      'Add a <track kind="captions"> with a .vtt file.',
+      'Add a <track kind="captions"> element referencing a .vtt file.',
       'For background video, mute it or provide a transcript nearby.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/video-caption?application=axeAPI',
@@ -95,10 +98,10 @@ const RULES = [
     id: 'audio-caption',
     help: '<audio> elements must have a captions track',
     wcag: '1.2.1', level: 'A',
-    means: 'An <audio> element has no captions, so its spoken content isn\u2019t available to deaf users.',
+    means: 'An <audio> element has no captions, so its spoken content is unavailable to deaf users.',
     fix: [
-      'Add a captions track, or link to a transcript.',
-      'If it\u2019s ambient/background, consider whether it needs captions at all.',
+      'Add a captions track, or provide a link to a transcript.',
+      'If the audio is ambient or background, determine whether captions are required at all.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/audio-caption?application=axeAPI',
   },
@@ -106,10 +109,10 @@ const RULES = [
     id: 'no-autoplay-audio',
     help: '<video> or <audio> elements must not play automatically',
     wcag: '1.4.2', level: 'A',
-    means: 'Media plays automatically for more than 3 seconds without a way to pause or control it — disruptive for screen reader and low-vision users.',
+    means: 'Media plays automatically for more than three seconds without a mechanism to pause or control it, which is disruptive for screen reader and low-vision users.',
     fix: [
-      'Remove autoplay, or add controls and pause after 3 seconds.',
-      'Never autoplay with sound.',
+      'Remove autoplay, or provide controls and pause playback after three seconds.',
+      'Never autoplay media with sound.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/no-autoplay-audio?application=axeAPI',
   },
@@ -117,10 +120,10 @@ const RULES = [
     id: 'link-in-text-block',
     help: 'Links must be distinguishable without relying on color',
     wcag: '1.4.1', level: 'A',
-    means: 'Links inside paragraphs are only set apart by color — users who can\u2019t perceive that color can\u2019t tell they\u2019re links.',
+    means: 'Links within paragraphs are distinguished only by colour; users who cannot perceive that difference cannot identify them as links.',
     fix: [
-      'Add an underline (default link styling already does this).',
-      'Or use a non-color cue like bold or an icon.',
+      'Add an underline (default link styling already provides one).',
+      'Or use a non-colour cue such as bold text or an icon.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/link-in-text-block?application=axeAPI',
   },
@@ -131,7 +134,7 @@ const RULES = [
     means: 'The viewport meta tag sets user-scalable=no or maximum-scale=1, preventing users from zooming the page.',
     fix: [
       'Remove user-scalable=no and maximum-scale restrictions.',
-      'A plain content="width=device-width, initial-scale=1" is fine.',
+      'A plain content="width=device-width, initial-scale=1" is sufficient.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/meta-viewport?application=axeAPI',
   },
@@ -139,10 +142,10 @@ const RULES = [
     id: 'valid-lang',
     help: 'lang attribute must have a valid value',
     wcag: '3.1.2', level: 'AA',
-    means: 'A lang attribute (on html or a part) uses a value BCP47/the spec doesn\u2019t recognize.',
+    means: 'A lang attribute (on html or on a part of the page) uses a value that BCP47 or the specification does not recognise.',
     fix: [
-      'Use a valid language tag like "en", "en-US", "fr".',
-      'Check for typos — a wrong value silently breaks pronunciation and translation tools.',
+      'Use a valid language tag such as "en", "en-US", or "fr".',
+      'Check for typos; an incorrect value silently breaks pronunciation and translation tools.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/valid-lang?application=axeAPI',
   },
@@ -150,10 +153,10 @@ const RULES = [
     id: 'avoid-inline-spacing',
     help: 'Inline text spacing must be adjustable with custom stylesheets',
     wcag: '1.4.12', level: 'AA',
-    means: 'Text containers clip content when users apply their own letter/word/line spacing overrides — important for dyslexia and low-vision users.',
+    means: 'Text containers clip content when users apply their own letter, word, or line spacing overrides; this particularly affects users with dyslexia and low vision.',
     fix: [
-      'Remove fixed heights on text containers; let content grow.',
-      'Avoid !important on line-height/letter-spacing rules.',
+      'Remove fixed heights on text containers so content can grow.',
+      'Avoid !important on line-height and letter-spacing rules.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/avoid-inline-spacing?application=axeAPI',
   },
@@ -161,7 +164,7 @@ const RULES = [
     id: 'table-fake-caption',
     help: 'Data or header cells must not be used to give caption to a data table',
     wcag: '1.3.1', level: 'A',
-    means: 'A table\u2019s "caption" is faked with a cell instead of a real <caption> element, so assistive tech doesn\u2019t announce the table\u2019s purpose.',
+    means: 'A table caption is simulated with a cell rather than a real <caption> element, so assistive technology does not announce the table\u2019s purpose.',
     fix: [
       'Use <caption> as the first child of <table>.',
       'Or use aria-label / aria-labelledby on the table.',
@@ -172,10 +175,10 @@ const RULES = [
     id: 'th-has-data-cells',
     help: 'Table headers in a data table must refer to data cells',
     wcag: '1.3.1', level: 'A',
-    means: 'A header cell (<th>) isn\u2019t associated with any data cells — screen reader users hear a heading with no content under it.',
+    means: 'A header cell (<th>) is not associated with any data cells; screen reader users hear a heading with no content beneath it.',
     fix: [
-      'Make sure each <th> governs at least one data cell (correct row/col structure).',
-      'If the cell is decorative, use <td> or aria-hidden.',
+      'Ensure each <th> governs at least one data cell through correct row and column structure.',
+      'If the cell is decorative, use <td> or aria-hidden instead.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/th-has-data-cells?application=axeAPI',
   },
@@ -183,10 +186,10 @@ const RULES = [
     id: 'autocomplete-valid',
     help: 'autocomplete attribute must be used correctly',
     wcag: '1.3.5', level: 'AA',
-    means: 'A form field uses an autocomplete token that doesn\u2019t match the field\u2019s purpose (e.g. autocomplete="email" on a phone field).',
+    means: 'A form field uses an autocomplete token that does not match the field\u2019s purpose (for example, autocomplete="email" on a phone number field).',
     fix: [
-      'Use the correct token from the HTML spec (name, email, tel, street-address, etc.).',
-      'Set autocomplete="off" explicitly if the field genuinely shouldn\u2019t autofill.',
+      'Use the correct token from the HTML specification (name, email, tel, street-address, and so on).',
+      'Set autocomplete="off" explicitly if the field should genuinely not autofill.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/autocomplete-valid?application=axeAPI',
   },
@@ -194,10 +197,10 @@ const RULES = [
     id: 'image-redundant-alt',
     help: 'Alternative text of images should not be repeated as text',
     wcag: 'best-practice',
-    means: 'An image\u2019s alt text is also written out next to the image, so screen readers hear it twice.',
+    means: 'An image\u2019s alt text is also rendered as visible text adjacent to the image, so screen readers announce it twice.',
     fix: [
-      'Keep the alt text concise; remove the duplicated visible text, or vice versa.',
-      'If the visible text adds info, shorten the alt instead.',
+      'Keep the alt text concise and remove the duplicated visible text, or do the reverse.',
+      'If the visible text conveys additional information, shorten the alt text instead.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/image-redundant-alt?application=axeAPI',
   },
@@ -208,7 +211,7 @@ const RULES = [
     means: 'An <area> inside an image map is a clickable link with no alt text, so its destination is invisible to screen readers.',
     fix: [
       'Add alt="..." describing where the area links to.',
-      'Remove <area> elements that aren\u2019t used.',
+      'Remove <area> elements that are not in use.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/area-alt?application=axeAPI',
   },
@@ -216,10 +219,10 @@ const RULES = [
     id: 'aria-meter-name',
     help: 'ARIA meter nodes must have an accessible name',
     wcag: '1.1.1', level: 'A',
-    means: 'A meter widget (role="meter") has no accessible name, so screen readers announce a value with no idea what is being measured.',
+    means: 'A meter widget (role="meter") has no accessible name, so screen readers announce a value without indicating what is being measured.',
     fix: [
       'Add aria-label or aria-labelledby describing what the meter measures.',
-      'Or use <meter> / <progress> where native semantics fit.',
+      'Or use the native <meter> or <progress> element where its semantics apply.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-meter-name?application=axeAPI',
   },
@@ -227,9 +230,9 @@ const RULES = [
     id: 'aria-progressbar-name',
     help: 'ARIA progressbar nodes must have an accessible name',
     wcag: '1.1.1', level: 'A',
-    means: 'A progressbar widget has no accessible name, so screen readers announce a percentage with no context.',
+    means: 'A progressbar widget has no accessible name, so screen readers announce a percentage without context.',
     fix: [
-      'Add aria-label or aria-labelledby (e.g. "Upload progress").',
+      'Add aria-label or aria-labelledby (for example, "Upload progress").',
       'Or use the native <progress> element.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-progressbar-name?application=axeAPI',
@@ -238,9 +241,9 @@ const RULES = [
     id: 'css-orientation-lock',
     help: 'CSS must not lock display orientation',
     wcag: '1.3.4', level: 'AA',
-    means: 'CSS forces the page into portrait or landscape only, so users who mounted their device differently can\u2019t use it.',
+    means: 'CSS forces the page into portrait or landscape only, so users whose device is oriented differently cannot use it.',
     fix: [
-      'Remove orientation-locking CSS; let the layout reflow in both orientations.',
+      'Remove orientation-locking CSS and allow the layout to reflow in both orientations.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/css-orientation-lock?application=axeAPI',
   },
@@ -248,9 +251,9 @@ const RULES = [
     id: 'p-as-heading',
     help: 'Styled <p> elements must not be used as headings',
     wcag: '1.3.1', level: 'A',
-    means: 'A <p> styled to look like a heading (big, bold) isn\u2019t a real heading, so screen reader heading navigation skips it.',
+    means: 'A <p> element styled to look like a heading (large and bold) is not a real heading, so screen reader heading navigation skips it.',
     fix: [
-      'Replace it with <h1>\u2013<h6> and move the styling to CSS.',
+      'Replace it with an <h1>\u2013<h6> element and move the styling into CSS.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/p-as-heading?application=axeAPI',
   },
@@ -258,10 +261,10 @@ const RULES = [
     id: 'td-has-header',
     help: 'Non-empty <td> elements in larger <table> must have an associated table header',
     wcag: '1.3.1', level: 'A',
-    means: 'A data cell in a multi-row/column table has no header association, so screen readers can\u2019t announce what the value means.',
+    means: 'A data cell in a multi-row or multi-column table has no associated header, so screen readers cannot announce what the value represents.',
     fix: [
-      'Use <th scope="col"/"row"> for headers, or headers="..." referencing the right <th>.',
-      'For simple layout-free data tables, proper <th> markup is usually enough.',
+      'Use <th scope="col"> or <th scope="row"> for headers, or headers="..." referencing the appropriate <th>.',
+      'For simple data tables, correct <th> markup is usually sufficient.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/td-has-header?application=axeAPI',
   },
@@ -269,9 +272,9 @@ const RULES = [
     id: 'td-headers-attr',
     help: 'Table cell headers attributes must refer to other <th> elements in the same table',
     wcag: '1.3.1', level: 'A',
-    means: 'A headers="..." attribute points at an id that doesn\u2019t exist, isn\u2019t a <th>, or lives in a different table.',
+    means: 'A headers="..." attribute points to an id that does not exist, is not a <th>, or belongs to a different table.',
     fix: [
-      'Make sure every id in headers= matches a real <th id="..."> in the same table.',
+      'Ensure every id in headers= matches a real <th id="..."> in the same table.',
       'Keep ids unique across the page.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/td-headers-attr?application=axeAPI',
@@ -282,7 +285,7 @@ const RULES = [
     id: 'bypass',
     help: 'Page must have means to bypass repeated blocks',
     wcag: '2.4.1', level: 'A',
-    means: 'Keyboard users must tab through the entire nav/header on every page before reaching content — no skip link or landmark shortcut.',
+    means: 'Keyboard users must tab through the entire navigation and header on every page before reaching the content; no skip link or landmark shortcut is provided.',
     fix: [
       'Add a "Skip to main content" link as the first focusable element.',
       'Or ensure a <main> landmark exists and is reachable.',
@@ -293,10 +296,10 @@ const RULES = [
     id: 'document-title',
     help: 'Documents must have <title> element to aid in navigation',
     wcag: '2.4.2', level: 'A',
-    means: 'The page has no <title> (or an empty one), so browser tabs, bookmarks, and screen reader page lists show nothing useful.',
+    means: 'The page has no <title> element (or an empty one), so browser tabs, bookmarks, and screen reader page lists display nothing useful.',
     fix: [
       'Add a unique, descriptive <title> to every page.',
-      'Lead with the page topic, keep it under ~60 characters.',
+      'Lead with the page topic and keep it under approximately 60 characters.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/document-title?application=axeAPI',
   },
@@ -304,10 +307,10 @@ const RULES = [
     id: 'link-name',
     help: 'Links must have discernible text',
     wcag: '2.4.4 / 4.1.2', level: 'A',
-    means: 'A link has no accessible name — icon-only links, empty anchors, or links whose only content is an unlabeled image.',
+    means: 'A link has no accessible name: icon-only links, empty anchors, or links whose only content is an unlabelled image.',
     fix: [
       'Add visible text, aria-label, or aria-labelledby.',
-      'For icon links, give the SVG/icon an accessible name.',
+      'For icon links, give the SVG or icon an accessible name.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/link-name?application=axeAPI',
   },
@@ -315,10 +318,10 @@ const RULES = [
     id: 'button-name',
     help: 'Buttons must have discernible text',
     wcag: '4.1.2', level: 'A',
-    means: 'A <button> (or role="button") has no accessible name — screen readers announce just "button".',
+    means: 'A <button> (or role="button") element has no accessible name; screen readers announce only "button".',
     fix: [
       'Add text content, aria-label, or aria-labelledby.',
-      'Icon-only buttons need aria-label describing the action.',
+      'Icon-only buttons require an aria-label describing the action.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/button-name?application=axeAPI',
   },
@@ -326,10 +329,10 @@ const RULES = [
     id: 'input-button-name',
     help: 'Input buttons must have discernible text',
     wcag: '4.1.2', level: 'A',
-    means: 'An <input type="button|submit|reset"> has no value/text, so its purpose is unknown.',
+    means: 'An <input type="button|submit|reset"> has no value or text, so its purpose is unknown.',
     fix: [
-      'Set the value attribute (e.g. value="Search").',
-      'Or use a <button> element with text.',
+      'Set the value attribute (for example, value="Search").',
+      'Or use a <button> element containing text.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/input-button-name?application=axeAPI',
   },
@@ -337,10 +340,10 @@ const RULES = [
     id: 'summary-name',
     help: 'Summary elements must have discernible text',
     wcag: '4.1.2', level: 'A',
-    means: 'A <summary> (the clickable part of <details>) has no text, so users don\u2019t know what it expands.',
+    means: 'A <summary> element (the clickable part of <details>) has no text, so users cannot determine what it expands.',
     fix: [
-      'Put descriptive text inside <summary>.',
-      'If it\u2019s icon-only, add aria-label.',
+      'Place descriptive text inside <summary>.',
+      'If it is icon-only, add an aria-label.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/summary-name?application=axeAPI',
   },
@@ -348,10 +351,10 @@ const RULES = [
     id: 'aria-command-name',
     help: 'ARIA commands must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'An element with an ARIA role like link/button/menuitem has no accessible name.',
+    means: 'An element with an ARIA role such as link, button, or menuitem has no accessible name.',
     fix: [
-      'Add aria-label/aria-labelledby or text content.',
-      'Prefer native elements (<a>, <button>) over ARIA roles when possible.',
+      'Add aria-label, aria-labelledby, or text content.',
+      'Prefer native elements (<a>, <button>) over ARIA roles where possible.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-command-name?application=axeAPI',
   },
@@ -359,9 +362,9 @@ const RULES = [
     id: 'aria-dialog-name',
     help: 'ARIA dialog and alertdialog nodes should have an accessible name',
     wcag: 'best-practice',
-    means: 'A role="dialog"/"alertdialog" element has no accessible name, so users don\u2019t know what the dialog is for.',
+    means: 'A role="dialog" or role="alertdialog" element has no accessible name, so users cannot determine the purpose of the dialog.',
     fix: [
-      'Add aria-label or aria-labelledby pointing at the dialog\u2019s heading.',
+      'Add aria-label or aria-labelledby pointing to the dialog\u2019s heading.',
       'Prefer the native <dialog> element.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-dialog-name?application=axeAPI',
@@ -370,9 +373,9 @@ const RULES = [
     id: 'aria-treeitem-name',
     help: 'ARIA treeitem nodes should have an accessible name',
     wcag: 'best-practice',
-    means: 'A role="treeitem" has no accessible name.',
+    means: 'A role="treeitem" element has no accessible name.',
     fix: [
-      'Add aria-label/aria-labelledby or text content to the treeitem.',
+      'Add aria-label, aria-labelledby, or text content to the treeitem.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-treeitem-name?application=axeAPI',
   },
@@ -380,10 +383,10 @@ const RULES = [
     id: 'marquee',
     help: '<marquee> elements are deprecated and must not be used',
     wcag: '2.2.2', level: 'A',
-    means: 'Scrolling <marquee> text can\u2019t be paused and is a seizure/distraction risk — it\u2019s also ignored inconsistently by modern browsers.',
+    means: 'Scrolling <marquee> text cannot be paused and presents a distraction and seizure risk; modern browsers also handle it inconsistently.',
     fix: [
       'Remove it; use static text or a proper animation with a pause control.',
-      'CSS animation alone isn\u2019t enough — WCAG 2.2.2 still requires a stop mechanism.',
+      'CSS animation alone is insufficient; WCAG 2.2.2 still requires a stop mechanism.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/marquee?application=axeAPI',
   },
@@ -391,9 +394,9 @@ const RULES = [
     id: 'blink',
     help: '<blink> elements are deprecated and must not be used',
     wcag: '2.2.2', level: 'A',
-    means: 'Blinking <blink> text is a seizure hazard and isn\u2019t supported by modern browsers anyway.',
+    means: 'Blinking <blink> text is a seizure hazard and is not supported by modern browsers in any case.',
     fix: [
-      'Remove it entirely — never reimplement flashing text with CSS/JS.',
+      'Remove it entirely; never reimplement flashing text with CSS or JavaScript.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/blink?application=axeAPI',
   },
@@ -401,10 +404,10 @@ const RULES = [
     id: 'meta-refresh',
     help: 'Delayed refresh under 20 hours must not be used',
     wcag: '2.2.1', level: 'A',
-    means: 'A <meta http-equiv="refresh"> reloads the page automatically, yanking users (especially screen reader users mid-sentence) away.',
+    means: 'A <meta http-equiv="refresh"> tag reloads the page automatically, abruptly removing users (including screen reader users mid-sentence) from the content.',
     fix: [
-      'Remove the meta refresh; use a real link or JS with user control.',
-      'Session timeouts need a warning + extend option instead.',
+      'Remove the meta refresh; use a real link or JavaScript with user control.',
+      'Session timeouts require a warning and an option to extend the session instead.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/meta-refresh?application=axeAPI',
   },
@@ -412,7 +415,7 @@ const RULES = [
     id: 'meta-refresh-no-exceptions',
     help: 'Delayed refresh must not be used',
     wcag: '2.2.4 / 3.2.5', level: 'AAA',
-    means: 'AAA-level stricter version: no timed refresh at all, even with user control.',
+    means: 'The stricter AAA-level variant: no timed refresh is permitted at all, even with user control.',
     fix: [
       'Remove timed refreshes entirely.',
     ],
@@ -422,10 +425,10 @@ const RULES = [
     id: 'scrollable-region-focusable',
     help: 'Scrollable region must have keyboard access',
     wcag: '2.1.1 / 2.1.3', level: 'A',
-    means: 'A scrollable <div> (overflow:auto/scroll) can\u2019t be reached or scrolled with a keyboard alone.',
+    means: 'A scrollable <div> (overflow:auto or scroll) cannot be reached or scrolled using a keyboard alone.',
     fix: [
       'Add tabindex="0" to the scrollable region.',
-      'Or better: use a natively scrollable element with real content.',
+      'Or preferably, use a natively scrollable element with real content.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=axeAPI',
   },
@@ -433,9 +436,9 @@ const RULES = [
     id: 'target-size',
     help: 'All touch targets must be 24px large, or leave sufficient space',
     wcag: '2.5.8', level: 'AA',
-    means: 'Buttons/links are too small or too close together to tap reliably — WCAG 2.2 target size minimum is 24×24 CSS px (with spacing exceptions).',
+    means: 'Buttons and links are too small or too close together to be tapped reliably; the WCAG 2.2 minimum target size is 24\u00d724 CSS pixels, subject to spacing exceptions.',
     fix: [
-      'Increase padding/size to at least 24px in each dimension.',
+      'Increase padding or size to at least 24px in each dimension.',
       'Or ensure sufficient spacing between adjacent targets.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/target-size?application=axeAPI',
@@ -444,10 +447,10 @@ const RULES = [
     id: 'identical-links-same-purpose',
     help: 'Links with the same name must have a similar purpose',
     wcag: '2.4.9', level: 'AAA',
-    means: 'Two links share the same text (e.g. "read more") but go to different places — screen reader link lists become meaningless.',
+    means: 'Two links share the same text (for example, "read more") but lead to different destinations; screen reader link lists become meaningless.',
     fix: [
-      'Make link text unique and descriptive ("Read more about pricing").',
-      'Or add context via aria-describedby if the visible text must stay short.',
+      'Make link text unique and descriptive (for example, "Read more about pricing").',
+      'Or add context via aria-describedby if the visible text must remain short.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/identical-links-same-purpose?application=axeAPI',
   },
@@ -455,10 +458,10 @@ const RULES = [
     id: 'tabindex',
     help: 'Elements should not have tabindex greater than zero',
     wcag: 'best-practice',
-    means: 'tabindex="1+" hijacks the natural tab order — keyboard users get thrown into an unexpected sequence.',
+    means: 'tabindex="1+" overrides the natural tab order, forcing keyboard users into an unexpected sequence.',
     fix: [
-      'Use tabindex="0" (add to tab order) or tabindex="-1" (programmatic focus only).',
-      'Fix the DOM order instead of overriding it.',
+      'Use tabindex="0" to add an element to the tab order, or tabindex="-1" for programmatic focus only.',
+      'Correct the DOM order instead of overriding it.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/tabindex?application=axeAPI',
   },
@@ -466,10 +469,10 @@ const RULES = [
     id: 'focus-order-semantics',
     help: 'Elements in the focus order should have an appropriate role',
     wcag: 'best-practice',
-    means: 'A focusable element has no semantic role (e.g. a plain <div tabindex="0"> that acts like a button but isn\u2019t announced as one).',
+    means: 'A focusable element has no semantic role (for example, a plain <div tabindex="0"> that behaves like a button but is not announced as one).',
     fix: [
-      'Use the right native element (<button>, <a href>) or add a role.',
-      'If it\u2019s a custom widget, implement the full ARIA pattern.',
+      'Use the appropriate native element (<button>, <a href>) or add a role.',
+      'For custom widgets, implement the complete ARIA pattern.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/focus-order-semantics?application=axeAPI',
   },
@@ -477,10 +480,10 @@ const RULES = [
     id: 'skip-link',
     help: 'The skip-link target should exist and be focusable',
     wcag: 'best-practice',
-    means: 'A "skip to content" link points at an element that doesn\u2019t exist or can\u2019t receive focus.',
+    means: 'A "skip to content" link points to an element that does not exist or cannot receive focus.',
     fix: [
-      'Make sure the skip link\u2019s href targets a real element (usually <main id="main">).',
-      'The target needs tabindex="-1" so it can take programmatic focus.',
+      'Ensure the skip link\u2019s href targets a real element, usually <main id="main">.',
+      'The target requires tabindex="-1" so it can receive programmatic focus.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/skip-link?application=axeAPI',
   },
@@ -488,7 +491,7 @@ const RULES = [
     id: 'frame-focusable-content',
     help: 'Frames with focusable content must not have tabindex=-1',
     wcag: '2.1.1', level: 'A',
-    means: 'An <iframe> contains focusable content but has tabindex="-1", which can trap or break keyboard focus inside the frame.',
+    means: 'An <iframe> contains focusable content but has tabindex="-1", which can trap or break keyboard focus within the frame.',
     fix: [
       'Remove tabindex="-1" from frames that contain interactive content.',
       'Ensure keyboard focus can move into and out of the frame.',
@@ -499,10 +502,10 @@ const RULES = [
     id: 'label-content-name-mismatch',
     help: 'Elements must have their visible text as part of their accessible name',
     wcag: '2.5.3', level: 'A',
-    means: 'The visible text of a control isn\u2019t part of its accessible name (e.g. aria-label overrides the button text), so voice-control users saying the visible label won\u2019t activate it.',
+    means: 'The visible text of a control is not part of its accessible name (for example, aria-label overrides the button text), so voice-control users who speak the visible label cannot activate it.',
     fix: [
-      'Make the accessible name start with the visible text, or match it.',
-      'Don\u2019t let aria-label contradict what\u2019s on screen.',
+      'Make the accessible name begin with the visible text, or match it exactly.',
+      'Do not allow aria-label to contradict the text shown on screen.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/label-content-name-mismatch?application=axeAPI',
   },
@@ -510,7 +513,7 @@ const RULES = [
     id: 'server-side-image-map',
     help: 'Server-side image maps must not be used',
     wcag: '2.1.1', level: 'A',
-    means: 'An old-style server-side image map (<img ismap>) produces click coordinates, not focusable links — keyboard and screen reader users can\u2019t use it.',
+    means: 'An old-style server-side image map (<img ismap>) produces click coordinates rather than focusable links; keyboard and screen reader users cannot operate it.',
     fix: [
       'Replace it with a client-side image map of real <a> links, or a plain list of links.',
     ],
@@ -522,7 +525,7 @@ const RULES = [
     id: 'html-has-lang',
     help: '<html> element must have a lang attribute',
     wcag: '3.1.1', level: 'A',
-    means: 'The <html> tag has no lang attribute, so screen readers don\u2019t know what language/pronunciation to use.',
+    means: 'The <html> tag has no lang attribute, so screen readers cannot determine the language and correct pronunciation.',
     fix: [
       'Add lang="en" (or the correct BCP47 tag) to <html>.',
     ],
@@ -532,10 +535,10 @@ const RULES = [
     id: 'html-lang-valid',
     help: '<html> element must have a valid value for the lang attribute',
     wcag: '3.1.1', level: 'A',
-    means: 'The lang attribute exists but the value isn\u2019t a recognized language tag.',
+    means: 'The lang attribute is present but its value is not a recognised language tag.',
     fix: [
-      'Use a valid tag: "en", "en-US", "pt-BR", etc.',
-      'Check for typos like lang="eng" or lang="english".',
+      'Use a valid tag: "en", "en-US", "pt-BR", and so on.',
+      'Check for typos such as lang="eng" or lang="english".',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/html-lang-valid?application=axeAPI',
   },
@@ -543,9 +546,9 @@ const RULES = [
     id: 'html-xml-lang-mismatch',
     help: 'HTML elements with lang and xml:lang must have the same base language',
     wcag: '3.1.1', level: 'A',
-    means: 'lang and xml:lang attributes disagree on the same element (common in XHTML-era markup).',
+    means: 'The lang and xml:lang attributes disagree on the same element, which is common in XHTML-era markup.',
     fix: [
-      'Set both to the same language, or drop xml:lang (rarely needed in HTML5).',
+      'Set both attributes to the same language, or remove xml:lang (rarely needed in HTML5).',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/html-xml-lang-mismatch?application=axeAPI',
   },
@@ -553,10 +556,10 @@ const RULES = [
     id: 'label',
     help: 'Form elements must have labels',
     wcag: '4.1.2 / 3.3.2', level: 'A',
-    means: 'An input/select/textarea has no associated <label>, aria-label, or aria-labelledby — screen readers announce "edit text" with no idea what it\u2019s for.',
+    means: 'An input, select, or textarea has no associated <label>, aria-label, or aria-labelledby; screen readers announce "edit text" without indicating the field\u2019s purpose.',
     fix: [
-      'Wrap the input in <label> or use for="id" matching the input\u2019s id.',
-      'Or add aria-label="..." / aria-labelledby.',
+      'Wrap the input in a <label>, or use for="id" matching the input\u2019s id.',
+      'Or add aria-label="..." or aria-labelledby.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/label?application=axeAPI',
   },
@@ -564,9 +567,9 @@ const RULES = [
     id: 'label-title-only',
     help: 'Form elements should have a visible label',
     wcag: 'best-practice',
-    means: 'A form field is labeled only via the title attribute (or placeholder) — visible labels are far more usable, especially on mobile and for low-vision users.',
+    means: 'A form field is labelled only via the title attribute or placeholder; visible labels are significantly more usable, particularly on mobile and for low-vision users.',
     fix: [
-      'Add a real visible <label>; don\u2019t rely on placeholder text alone.',
+      'Add a real visible <label>; do not rely on placeholder text alone.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/label-title-only?application=axeAPI',
   },
@@ -574,9 +577,9 @@ const RULES = [
     id: 'select-name',
     help: 'Select element must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'A <select> dropdown has no label, so users don\u2019t know what they\u2019re choosing.',
+    means: 'A <select> dropdown has no label, so users cannot determine what they are choosing.',
     fix: [
-      'Associate a <label> or add aria-label/aria-labelledby.',
+      'Associate a <label>, or add aria-label / aria-labelledby.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/select-name?application=axeAPI',
   },
@@ -584,9 +587,9 @@ const RULES = [
     id: 'form-field-multiple-labels',
     help: 'Form field must not have multiple label elements',
     wcag: '3.3.2', level: 'A',
-    means: 'A field has more than one <label> associated, which can produce confusing or duplicated announcements.',
+    means: 'A field has more than one <label> associated with it, which can produce confusing or duplicated announcements.',
     fix: [
-      'Keep one label per field; merge extra text into aria-describedby if needed.',
+      'Keep one label per field; merge additional text into aria-describedby if required.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/form-field-multiple-labels?application=axeAPI',
   },
@@ -594,10 +597,10 @@ const RULES = [
     id: 'list',
     help: '<ul> and <ol> must only directly contain <li>, <script> or <template> elements',
     wcag: '1.3.1', level: 'A',
-    means: 'A list contains non-<li> children (divs, spans, other elements), breaking the list structure screen readers rely on.',
+    means: 'A list contains non-<li> children (divs, spans, or other elements), breaking the list structure that screen readers rely on.',
     fix: [
-      'Make every direct child an <li>. If you need wrappers, put them inside the <li>.',
-      'If it\u2019s not really a list, don\u2019t use <ul>/<ol>.',
+      'Make every direct child an <li>; if wrappers are needed, place them inside the <li>.',
+      'If the content is not genuinely a list, do not use <ul> or <ol>.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/list?application=axeAPI',
   },
@@ -605,9 +608,9 @@ const RULES = [
     id: 'listitem',
     help: '<li> elements must be contained in a <ul> or <ol>',
     wcag: '1.3.1', level: 'A',
-    means: 'An <li> sits outside any list, so it\u2019s announced as a stray list item.',
+    means: 'An <li> element sits outside any list, so it is announced as a stray list item.',
     fix: [
-      'Wrap it in <ul> or <ol>, or change it to a <div>/<p>.',
+      'Wrap it in <ul> or <ol>, or change it to a <div> or <p>.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/listitem?application=axeAPI',
   },
@@ -615,9 +618,9 @@ const RULES = [
     id: 'definition-list',
     help: '<dl> elements must only directly contain properly-ordered <dt> and <dd> groups',
     wcag: '1.3.1', level: 'A',
-    means: 'A definition list has broken structure — <dd> without <dt>, wrong order, or stray elements.',
+    means: 'A definition list has broken structure: <dd> without <dt>, incorrect ordering, or stray elements.',
     fix: [
-      'Each <dt> should be followed by its <dd>(s); only <div> wrappers are allowed between groups.',
+      'Each <dt> should be followed by its <dd> element(s); only <div> wrappers are permitted between groups.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/definition-list?application=axeAPI',
   },
@@ -625,9 +628,9 @@ const RULES = [
     id: 'dlitem',
     help: '<dt> and <dd> elements must be contained by a <dl>',
     wcag: '1.3.1', level: 'A',
-    means: 'A <dt> or <dd> is used outside a <dl> definition list.',
+    means: 'A <dt> or <dd> element is used outside a <dl> definition list.',
     fix: [
-      'Wrap them in <dl>, or use regular headings/paragraphs.',
+      'Wrap them in a <dl>, or use regular headings and paragraphs.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/dlitem?application=axeAPI',
   },
@@ -635,7 +638,7 @@ const RULES = [
     id: 'page-has-heading-one',
     help: 'Page should contain a level-one heading',
     wcag: 'best-practice',
-    means: 'The page has no <h1>, so there\u2019s no clear top-level topic for screen reader users navigating by headings.',
+    means: 'The page has no <h1>, so there is no clear top-level topic for screen reader users navigating by headings.',
     fix: [
       'Add exactly one <h1> describing the page\u2019s main topic.',
     ],
@@ -645,10 +648,10 @@ const RULES = [
     id: 'heading-order',
     help: 'Heading levels should only increase by one',
     wcag: 'best-practice',
-    means: 'Headings skip levels (e.g. h1 → h3), which confuses the document outline screen readers build.',
+    means: 'Headings skip levels (for example, h1 to h3), which confuses the document outline that screen readers construct.',
     fix: [
-      'Don\u2019t skip levels: h1 → h2 → h3 in order.',
-      'Style with CSS instead of choosing a heading level for looks.',
+      'Do not skip levels: use h1, then h2, then h3 in order.',
+      'Apply styling with CSS rather than choosing a heading level for appearance.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/heading-order?application=axeAPI',
   },
@@ -656,10 +659,10 @@ const RULES = [
     id: 'empty-heading',
     help: 'Headings should not be empty',
     wcag: 'best-practice',
-    means: 'A heading element has no text — screen reader users hear "heading level 2" with nothing after it.',
+    means: 'A heading element has no text; screen reader users hear "heading level 2" with nothing following it.',
     fix: [
       'Give it real text, or remove the heading element.',
-      'If populated by JS, ensure it\u2019s filled before axe runs.',
+      'If populated by JavaScript, ensure it is filled before axe runs.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/empty-heading?application=axeAPI',
   },
@@ -667,9 +670,9 @@ const RULES = [
     id: 'empty-table-header',
     help: 'Table header text should not be empty',
     wcag: 'best-practice',
-    means: 'A <th> has no text, so screen reader users hear a column/row header with no label.',
+    means: 'A <th> element has no text, so screen reader users hear a column or row header with no label.',
     fix: [
-      'Add text or aria-label to the header cell, or use aria-hidden if it\u2019s decorative.',
+      'Add text or an aria-label to the header cell, or use aria-hidden if it is decorative.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/empty-table-header?application=axeAPI',
   },
@@ -679,9 +682,9 @@ const RULES = [
     id: 'aria-valid-attr',
     help: 'ARIA attributes must conform to valid names',
     wcag: '4.1.2', level: 'A',
-    means: 'An aria-* attribute is misspelled or doesn\u2019t exist (e.g. aria-lable), so browsers ignore it.',
+    means: 'An aria-* attribute is misspelled or does not exist (for example, aria-lable), so browsers ignore it.',
     fix: [
-      'Fix the typo — valid names come from the ARIA spec (aria-label, aria-hidden, aria-describedby...).',
+      'Correct the typo; valid names are defined by the ARIA specification (aria-label, aria-hidden, aria-describedby, and so on).',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-valid-attr?application=axeAPI',
   },
@@ -689,9 +692,9 @@ const RULES = [
     id: 'aria-roles',
     help: 'ARIA roles used must conform to valid values',
     wcag: '4.1.2', level: 'A',
-    means: 'A role="..." value is misspelled or not a real ARIA role, so assistive tech can\u2019t interpret the element.',
+    means: 'A role="..." value is misspelled or is not a real ARIA role, so assistive technology cannot interpret the element.',
     fix: [
-      'Use a valid role from the ARIA spec, or remove the role and use native HTML.',
+      'Use a valid role from the ARIA specification, or remove the role and rely on native HTML.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-roles?application=axeAPI',
   },
@@ -699,10 +702,10 @@ const RULES = [
     id: 'aria-required-attr',
     help: 'Required ARIA attributes must be provided',
     wcag: '4.1.2', level: 'A',
-    means: 'An ARIA role needs companion attributes that are missing (e.g. role="checkbox" without aria-checked).',
+    means: 'An ARIA role requires companion attributes that are missing (for example, role="checkbox" without aria-checked).',
     fix: [
-      'Add the required attributes for that role — check the ARIA spec or MDN.',
-      'Or use the native HTML element which handles this for you.',
+      'Add the attributes required for that role; consult the ARIA specification or MDN.',
+      'Or use the native HTML element, which handles this automatically.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-required-attr?application=axeAPI',
   },
@@ -710,9 +713,9 @@ const RULES = [
     id: 'aria-required-children',
     help: 'Certain ARIA roles must contain particular children',
     wcag: '1.3.1', level: 'A',
-    means: 'A parent role like menu/listbox/tablist is missing the child roles it requires (menuitem, option, tab), so the widget structure is broken.',
+    means: 'A parent role such as menu, listbox, or tablist is missing the child roles it requires (menuitem, option, tab), so the widget structure is broken.',
     fix: [
-      'Add the required child roles, or use native <ul>/<table> etc. that imply structure.',
+      'Add the required child roles, or use native <ul> or <table> markup that implies the structure.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-required-children?application=axeAPI',
   },
@@ -720,9 +723,9 @@ const RULES = [
     id: 'aria-required-parent',
     help: 'Certain ARIA roles must be contained by particular parents',
     wcag: '1.3.1', level: 'A',
-    means: 'An element has a role that requires a specific parent (e.g. role="menuitem" outside role="menu"), breaking the announced structure.',
+    means: 'An element has a role that requires a specific parent (for example, role="menuitem" outside role="menu"), breaking the announced structure.',
     fix: [
-      'Wrap it in the required parent role, or use native list/table markup.',
+      'Wrap it in the required parent role, or use native list or table markup.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-required-parent?application=axeAPI',
   },
@@ -730,10 +733,10 @@ const RULES = [
     id: 'aria-hidden-body',
     help: 'aria-hidden="true" must not be present on the document body',
     wcag: '1.3.1 / 4.1.2', level: 'A',
-    means: 'aria-hidden="true" on <body> hides the entire page from screen readers — usually a leftover from a modal/dialog script.',
+    means: 'aria-hidden="true" on <body> hides the entire page from screen readers; this is usually a leftover from a modal or dialog script.',
     fix: [
       'Remove it, or scope aria-hidden to the specific overlay element only.',
-      'Ensure it\u2019s removed when the modal closes.',
+      'Ensure it is removed when the modal closes.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-hidden-body?application=axeAPI',
   },
@@ -741,10 +744,10 @@ const RULES = [
     id: 'aria-hidden-focus',
     help: 'ARIA hidden element must not be focusable or contain focusable elements',
     wcag: '4.1.2', level: 'A',
-    means: 'Something hidden with aria-hidden still contains keyboard-focusable elements — keyboard users tab into invisible content.',
+    means: 'Content hidden with aria-hidden still contains keyboard-focusable elements, so keyboard users tab into invisible content.',
     fix: [
-      'Remove tabindex from hidden elements, or don\u2019t aria-hide containers with focusable children.',
-      'For modals, move focus into the dialog and trap it properly.',
+      'Remove tabindex from hidden elements, or do not apply aria-hidden to containers with focusable children.',
+      'For modals, move focus into the dialog and trap it correctly.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-hidden-focus?application=axeAPI',
   },
@@ -752,9 +755,9 @@ const RULES = [
     id: 'aria-prohibited-attr',
     help: 'Elements must only use permitted ARIA attributes',
     wcag: '4.1.2', level: 'A',
-    means: 'An element uses an ARIA attribute its role forbids (e.g. aria-label on a generic <div> with no role).',
+    means: 'An element uses an ARIA attribute that its role forbids (for example, aria-label on a generic <div> with no role).',
     fix: [
-      'Remove the prohibited attribute, or give the element a role that allows it.',
+      'Remove the prohibited attribute, or assign the element a role that permits it.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI',
   },
@@ -762,9 +765,9 @@ const RULES = [
     id: 'aria-text',
     help: '"role=text" should have no focusable descendants',
     wcag: 'best-practice',
-    means: 'A role="text" element (non-standard, used to flatten accessibility trees) contains focusable elements that become unreachable.',
+    means: 'A role="text" element (a non-standard technique for flattening the accessibility tree) contains focusable elements that become unreachable.',
     fix: [
-      'Remove role="text" or move focusable elements outside it.',
+      'Remove role="text", or move the focusable elements outside it.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-text?application=axeAPI',
   },
@@ -772,10 +775,10 @@ const RULES = [
     id: 'duplicate-id-aria',
     help: 'IDs used in ARIA and labels must be unique',
     wcag: '4.1.2', level: 'A',
-    means: 'The same id appears twice and is referenced by aria-labelledby/aria-describedby/label for — browsers pick one, possibly the wrong one.',
+    means: 'The same id appears twice and is referenced by aria-labelledby, aria-describedby, or a label for attribute; browsers select one, possibly the wrong one.',
     fix: [
-      'Make every id unique; rename duplicates.',
-      'Check that aria references point at the intended element.',
+      'Make every id unique and rename duplicates.',
+      'Verify that aria references point to the intended element.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/duplicate-id-aria?application=axeAPI',
   },
@@ -783,9 +786,9 @@ const RULES = [
     id: 'presentation-role-conflict',
     help: 'Elements marked as presentational should be consistently ignored',
     wcag: 'best-practice',
-    means: 'An element has role="presentation"/"none" but also global ARIA or is focusable — conflicting signals confuse assistive tech.',
+    means: 'An element has role="presentation" or role="none" but also carries global ARIA attributes or is focusable; the conflicting signals confuse assistive technology.',
     fix: [
-      'Remove the conflicting attributes, or drop the presentational role.',
+      'Remove the conflicting attributes, or remove the presentational role.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/presentation-role-conflict?application=axeAPI',
   },
@@ -793,9 +796,9 @@ const RULES = [
     id: 'nested-interactive',
     help: 'Interactive controls must not be nested',
     wcag: '4.1.2', level: 'A',
-    means: 'A link/button/control sits inside another interactive element (e.g. <a> inside <button> or a card link wrapping buttons) — screen readers can\u2019t parse it.',
+    means: 'A link, button, or other control sits inside another interactive element (for example, an <a> inside a <button>, or a card link wrapping buttons); screen readers cannot parse this correctly.',
     fix: [
-      'Restructure so interactive elements are siblings, not nested.',
+      'Restructure so interactive elements are siblings rather than nested.',
       'For clickable cards, make the title the link and keep buttons separate.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/nested-interactive?application=axeAPI',
@@ -804,10 +807,10 @@ const RULES = [
     id: 'landmark-one-main',
     help: 'Document should have one main landmark',
     wcag: 'best-practice',
-    means: 'The page has no <main> (or role="main") landmark, or more than one — screen reader users can\u2019t jump straight to content.',
+    means: 'The page has no <main> (or role="main") landmark, or more than one; screen reader users cannot jump directly to the content.',
     fix: [
       'Wrap the primary content in a single <main> element.',
-      'If multiple mains exist (e.g. in frames), give them distinct labels.',
+      'If multiple mains exist (for example, in frames), give them distinct labels.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=axeAPI',
   },
@@ -815,9 +818,9 @@ const RULES = [
     id: 'landmark-unique',
     help: 'Landmarks should have a unique role or role/label/title combination',
     wcag: 'best-practice',
-    means: 'Two landmarks share the same role and no distinguishing label, so they\u2019re indistinguishable in landmark navigation.',
+    means: 'Two landmarks share the same role and have no distinguishing label, so they are indistinguishable during landmark navigation.',
     fix: [
-      'Add aria-label/aria-labelledby to differentiate (e.g. two <nav> elements → "Main" and "Footer").',
+      'Add aria-label or aria-labelledby to differentiate them (for example, two <nav> elements labelled "Main" and "Footer").',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=axeAPI',
   },
@@ -825,9 +828,9 @@ const RULES = [
     id: 'landmark-no-duplicate-banner',
     help: 'Document should not have more than one banner landmark',
     wcag: 'best-practice',
-    means: 'More than one banner landmark (<header> at top level) exists on the page.',
+    means: 'More than one banner landmark (a top-level <header>) exists on the page.',
     fix: [
-      'Keep one page header; nested <header> elements inside <article>/<section> are fine.',
+      'Keep a single page header; nested <header> elements inside <article> or <section> are acceptable.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/landmark-no-duplicate-banner?application=axeAPI',
   },
@@ -835,9 +838,9 @@ const RULES = [
     id: 'landmark-no-duplicate-contentinfo',
     help: 'Document should not have more than one contentinfo landmark',
     wcag: 'best-practice',
-    means: 'More than one footer landmark (<footer> at top level) exists.',
+    means: 'More than one footer landmark (a top-level <footer>) exists on the page.',
     fix: [
-      'Keep one page footer; section-level <footer> elements are fine.',
+      'Keep a single page footer; section-level <footer> elements are acceptable.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/landmark-no-duplicate-contentinfo?application=axeAPI',
   },
@@ -855,9 +858,9 @@ const RULES = [
     id: 'meta-viewport-large',
     help: 'Users should be able to zoom and scale the text up to 500%',
     wcag: 'best-practice',
-    means: 'Even without disabling zoom, the layout breaks before users can reach 500% text zoom.',
+    means: 'Even without disabled zoom, the layout breaks before users can reach 500% text zoom.',
     fix: [
-      'Test at 500% zoom / 320px width; fix horizontal scrolling and clipping.',
+      'Test at 500% zoom and at 320px width; correct horizontal scrolling and clipping.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/meta-viewport-large?application=axeAPI',
   },
@@ -865,7 +868,7 @@ const RULES = [
     id: 'frame-title',
     help: 'Frames must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'An <iframe> or <frame> has no title, so screen reader users hear "frame" with no idea what\u2019s inside.',
+    means: 'An <iframe> or <frame> has no title, so screen reader users hear "frame" without knowing what it contains.',
     fix: [
       'Add title="..." describing the frame\u2019s content.',
     ],
@@ -875,7 +878,7 @@ const RULES = [
     id: 'frame-title-unique',
     help: 'Frames must have a unique title attribute',
     wcag: '4.1.2', level: 'A',
-    means: 'Two or more frames share the same title, so screen reader users can\u2019t tell them apart in the frame list.',
+    means: 'Two or more frames share the same title, so screen reader users cannot distinguish them in the frame list.',
     fix: [
       'Give each frame a unique, descriptive title.',
     ],
@@ -885,10 +888,10 @@ const RULES = [
     id: 'aria-allowed-attr',
     help: 'Elements must only use supported ARIA attributes',
     wcag: '4.1.2', level: 'A',
-    means: 'An element uses an aria-* attribute its role doesn\u2019t support (e.g. aria-label on a plain <div> with no role) — browsers and assistive tech may ignore it.',
+    means: 'An element uses an aria-* attribute that its role does not support (for example, aria-label on a plain <div> with no role); browsers and assistive technology may ignore it.',
     fix: [
       'Remove the unsupported attribute, or add a role that permits it.',
-      'Check the ARIA spec for which attributes each role allows.',
+      'Consult the ARIA specification for which attributes each role allows.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-allowed-attr?application=axeAPI',
   },
@@ -896,9 +899,9 @@ const RULES = [
     id: 'aria-braille-equivalent',
     help: 'aria-braille attributes must have a non-braille equivalent',
     wcag: '4.1.2', level: 'A',
-    means: 'An aria-braillelabel/aria-brailleroledescription has no plain-text fallback (aria-label/aria-roledescription), so refreshable braille displays can\u2019t adapt it.',
+    means: 'An aria-braillelabel or aria-brailleroledescription has no plain-text equivalent (aria-label or aria-roledescription), so refreshable braille displays cannot adapt it.',
     fix: [
-      'Provide the matching aria-label / aria-roledescription alongside the braille attribute.',
+      'Provide the matching aria-label or aria-roledescription alongside the braille attribute.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-braille-equivalent?application=axeAPI',
   },
@@ -906,9 +909,9 @@ const RULES = [
     id: 'aria-conditional-attr',
     help: 'ARIA attributes must be used as specified for the element\u2019s role',
     wcag: '4.1.2', level: 'A',
-    means: 'An ARIA attribute is used in a way its conditions forbid — e.g. a value only valid on certain roles, or a required companion attribute missing.',
+    means: 'An ARIA attribute is used in a way its conditions forbid; for example, a value valid only on certain roles, or a required companion attribute that is missing.',
     fix: [
-      'Check the attribute\u2019s conditions in the ARIA spec; add required companions or remove it.',
+      'Check the attribute\u2019s conditions in the ARIA specification; add required companions or remove the attribute.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-conditional-attr?application=axeAPI',
   },
@@ -916,9 +919,9 @@ const RULES = [
     id: 'aria-deprecated-role',
     help: 'Deprecated ARIA roles must not be used',
     wcag: '4.1.2', level: 'A',
-    means: 'A role="..." uses a deprecated ARIA role (e.g. directory) that assistive tech may stop supporting.',
+    means: 'A role="..." value uses a deprecated ARIA role (for example, directory) that assistive technology may stop supporting.',
     fix: [
-      'Swap for the modern equivalent or native HTML (e.g. <ul>/<li> instead of role="directory").',
+      'Replace it with the modern equivalent or native HTML (for example, <ul>/<li> instead of role="directory").',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-deprecated-role?application=axeAPI',
   },
@@ -926,7 +929,7 @@ const RULES = [
     id: 'aria-input-field-name',
     help: 'ARIA input fields must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'An input-like ARIA widget (textbox, searchbox, spinbutton…) has no accessible name, so screen readers announce an unlabeled field.',
+    means: 'An input-like ARIA widget (textbox, searchbox, spinbutton, and so on) has no accessible name, so screen readers announce an unlabelled field.',
     fix: [
       'Add aria-label, aria-labelledby, or associate a visible <label>.',
     ],
@@ -936,9 +939,9 @@ const RULES = [
     id: 'aria-roledescription',
     help: 'aria-roledescription must be on elements with a semantic role',
     wcag: '4.1.2', level: 'A',
-    means: 'aria-roledescription is set on an element with no semantic role (or a prohibited one), so assistive tech may announce a made-up role users can\u2019t map.',
+    means: 'aria-roledescription is set on an element with no semantic role (or a prohibited one), so assistive technology may announce a made-up role that users cannot map.',
     fix: [
-      'Only use it on elements with a real role, or remove it.',
+      'Use it only on elements with a real role, or remove it.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-roledescription?application=axeAPI',
   },
@@ -946,9 +949,9 @@ const RULES = [
     id: 'aria-tab-name',
     help: 'ARIA tab nodes must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'An element with role="tab" has no accessible name, so the tab strip announces unlabeled tabs.',
+    means: 'An element with role="tab" has no accessible name, so the tab strip announces unlabelled tabs.',
     fix: [
-      'Add visible text or aria-label/aria-labelledby to each tab.',
+      'Add visible text or aria-label / aria-labelledby to each tab.',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-tab-name?application=axeAPI',
   },
@@ -956,7 +959,7 @@ const RULES = [
     id: 'aria-toggle-field-name',
     help: 'ARIA toggle fields must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'A toggle widget (checkbox, switch, menuitemcheckbox…) has no accessible name, so screen readers announce an unnamed control.',
+    means: 'A toggle widget (checkbox, switch, menuitemcheckbox, and so on) has no accessible name, so screen readers announce an unnamed control.',
     fix: [
       'Add aria-label, aria-labelledby, or a visible <label>.',
     ],
@@ -966,7 +969,7 @@ const RULES = [
     id: 'aria-tooltip-name',
     help: 'ARIA tooltip nodes must have an accessible name',
     wcag: '4.1.2', level: 'A',
-    means: 'A role="tooltip" element has no accessible name/content for assistive tech to announce.',
+    means: 'A role="tooltip" element has no accessible name or content for assistive technology to announce.',
     fix: [
       'Give the tooltip text content or an aria-label describing the hint.',
     ],
@@ -976,21 +979,18 @@ const RULES = [
     id: 'aria-valid-attr-value',
     help: 'ARIA attributes must conform to valid values',
     wcag: '4.1.2', level: 'A',
-    means: 'An aria-* attribute has an invalid value (e.g. aria-expanded="yes" instead of true/false), so assistive tech ignores it.',
+    means: 'An aria-* attribute has an invalid value (for example, aria-expanded="yes" instead of true or false), so assistive technology ignores it.',
     fix: [
-      'Use the allowed values from the ARIA spec (true/false, tokens, IDs…).',
+      'Use the permitted values defined by the ARIA specification (true/false, tokens, ids, and so on).',
     ],
     helpUrl: 'https://dequeuniversity.com/rules/axe/4.14/aria-valid-attr-value?application=axeAPI',
   },
 ];
 
-const PRINCIPLES = [
-  { key: 'p', num: '1', name: 'Perceivable', blurb: 'Information and UI must be presentable in ways users can perceive — not color-only, not silent, not tiny.' },
-  { key: 'o', num: '2', name: 'Operable', blurb: 'UI components and navigation must be operable — keyboard reachable, no traps, no seizure risks.' },
-  { key: 'u', num: '3', name: 'Understandable', blurb: 'Information and UI operation must be understandable — labels, language, consistent structure.' },
-  { key: 'r', num: '4', name: 'Robust', blurb: 'Content must be robust enough for assistive technologies to interpret correctly — valid ARIA, unique IDs.' },
-  { key: 'b', num: 'B', name: 'Best practices', blurb: 'axe flags these as good practice rather than WCAG failures — fixing them usually helps real users anyway.' },
-];
+// Principle order and copy live in copy.js (COPY.rulesPage.principles).
+const RP = window.COPY.rulesPage;
+const PRINCIPLE_KEYS = ['p', 'o', 'u', 'r', 'b'];
+const PRINCIPLES = PRINCIPLE_KEYS.map((key, i) => ({ key, ...RP.principles[i] }));
 
 const WCAG_PRINCIPLE_KEY = { '1': 'p', '2': 'o', '3': 'u', '4': 'r' };
 
@@ -1007,25 +1007,25 @@ function esc(s) {
 
 function entryHtml(r) {
   const wcagBadge = r.wcag === 'best-practice'
-    ? '<span class="wcag-tag">best practice</span>'
-    : `<span class="wcag-tag">WCAG ${esc(r.wcag)}</span><span class="wcag-tag">${esc(r.level || '')}</span>`;
+    ? `<span class="wcag-tag">${RP.tagBestPractice}</span>`
+    : `<span class="wcag-tag">${RP.tagWcag.replace('{wcag}', esc(r.wcag))}</span><span class="wcag-tag">${esc(r.level || '')}</span>`;
   const fix = r.fix.map((f) => `<li>${esc(f)}</li>`).join('');
   return `
     <article class="rule" id="${esc(r.id)}" data-search="${esc((r.id + ' ' + r.help + ' ' + r.means + ' ' + r.wcag).toLowerCase())}">
       <header class="rule-head">
         <h3 class="rule-id"><code>${esc(r.id)}</code></h3>
-        <a class="rule-permalink" href="#${esc(r.id)}" aria-label="Permalink to ${esc(r.id)}">#</a>
+        <a class="rule-permalink" href="#${esc(r.id)}" aria-label="${esc(RP.permalinkAria.replace('{id}', r.id))}">#</a>
       </header>
       <p class="rule-help">${esc(r.help)}</p>
       <p class="rule-means">${esc(r.means)}</p>
       <div class="rule-fix">
-        <h4>How to fix</h4>
+        <h4>${RP.howToFix}</h4>
         <ul>${fix}</ul>
       </div>
       <footer class="rule-meta">
         ${wcagBadge}
-        <a href="${esc(r.helpUrl)}" rel="noopener">Full reference (dequeuniversity.com) ↗</a>
-        <a href="/">← Back to scanner</a>
+        <a href="${esc(r.helpUrl)}" rel="noopener">${RP.fullReference} ↗</a>
+        <a href="/">${RP.backToScanner}</a>
       </footer>
     </article>`;
 }
@@ -1063,7 +1063,7 @@ function initFilter() {
       sec.hidden = !any;
     });
     document.body.classList.toggle('filter-empty', shown === 0);
-    if (count) count.textContent = q ? `${shown} of ${articles().length} rules shown` : '';
+    if (count) count.textContent = q ? RP.filterCount.replace('{shown}', shown).replace('{total}', articles().length) : '';
   };
   input.addEventListener('input', apply);
   // jump-to-anchor support: if the target was hidden by a filter, reveal it

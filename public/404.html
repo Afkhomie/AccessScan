@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page not found · AccessScan</title>
-<meta name="description" content="The page you asked for doesn't exist on this AccessScan server.">
+<meta name="description" content="The requested page does not exist on this AccessScan server.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#003399">
 <link rel="stylesheet" href="style.css">
@@ -12,11 +12,11 @@
 </head>
 <body>
 
-<a class="skip-link" href="#main">Skip to main content</a>
+<a class="skip-link" href="#main" data-copy="chrome.skipToContent">Skip to main content</a>
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/" aria-label="AccessScan home">
+    <a class="brand" href="/" aria-label="AccessScan home" data-copy-aria-label="chrome.brandLabel">
       <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" fill="currentColor"/><path d="M8 16l6 6 10-12" stroke="#fff" stroke-width="4" fill="none"/></svg>
       <span>AccessScan</span>
     </a>
@@ -25,17 +25,19 @@
 
 <main id="main">
   <section class="hero wrap">
-    <h1>404 · page not found</h1>
-    <p class="lede">That address doesn't exist here. AccessScan only has one page, the scanner.</p>
-    <p><a class="btn-ghost btn-link" href="/">Back to the scanner</a></p>
+    <p class="hero-kicker" data-copy="notFound.kicker">Error 404</p>
+    <h1 data-copy="notFound.h1">Page not found</h1>
+    <p class="lede" data-copy="notFound.lede">The requested address does not exist on this server.</p>
+    <p><a class="btn-ghost btn-link" href="/" data-copy="notFound.back">Return to the scanner</a></p>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine: no accounts, no payments, no database, no cloud. MIT licensed. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="/">Scanner</a></p>
+    <p><span data-copy="chrome.footer.line"></span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy"></a> · <a href="terms.html" data-copy="chrome.footer.linkTerms"></a> · <a href="/" data-copy="chrome.footer.linkScanner"></a></p>
   </div>
 </footer>
 
+<script src="copy.js"></script>
 </body>
 </html>

@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WCAG rule reference · AccessScan</title>
-<meta name="description" content="Plain-English explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
+<meta name="description" content="Plain-language explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
 <meta name="theme-color" content="#003399">
 <link rel="canonical" href="https://access-scan-tool.vercel.app/rules">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AccessScan">
 <meta property="og:title" content="WCAG rule reference · AccessScan">
-<meta property="og:description" content="Plain-English explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
+<meta property="og:description" content="Plain-language explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
 <meta property="og:url" content="https://access-scan-tool.vercel.app/rules">
 <meta property="og:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="WCAG rule reference · AccessScan">
-<meta name="twitter:description" content="Plain-English explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
+<meta name="twitter:description" content="Plain-language explanations of the WCAG rules AccessScan checks, grouped by WCAG principle, with fix guidance.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Afkhomie/AccessScan/master/public/og-image.png">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23003399'/%3E%3Cpath d='M8 16l6 6 10-12' stroke='white' stroke-width='4' fill='none'/%3E%3C/svg%3E">
@@ -127,7 +127,7 @@ body.filter-empty .principle { display: none; }
 </head>
 <body>
 
-<a class="skip-link" href="#main">Skip to rule list</a>
+<a class="skip-link" href="#main" data-copy="chrome.skipToRules">Skip to rule list</a>
 
 <header class="site-header">
   <div class="wrap header-inner">
@@ -136,41 +136,38 @@ body.filter-empty .principle { display: none; }
       <span>AccessScan</span>
     </a>
     <nav class="header-nav" aria-label="Main">
-      <a href="/">Scanner</a>
+      <a href="/" data-copy="chrome.navScanner">Scanner</a>
     </nav>
   </div>
 </header>
 
 <main id="main">
   <section class="wrap rules-hero">
-    <p class="hero-kicker">Rule reference · axe-core 4.14</p>
-    <h1>WCAG rule reference</h1>
-    <p class="lede">Plain-English explanations of the accessibility rules AccessScan checks, grouped by WCAG&nbsp;2.x principle. Each entry links to the full axe-core reference.</p>
-    <div class="disclaimer" role="note">
-      <strong>Not exhaustive.</strong> This page covers the most common rules AccessScan reports, not the full axe-core rule set. For the complete list and deeper guidance, see
-      <a href="https://dequeuniversity.com/rules/axe/4.14" rel="noopener">Deque University’s axe rule index</a>.
-      Rules tagged “best practice” are axe recommendations, not WCAG failures.
-    </div>
+    <p class="hero-kicker" data-copy="rulesPage.kicker">Rule reference · axe-core 4.14</p>
+    <h1 data-copy="rulesPage.h1">WCAG rule reference</h1>
+    <p class="lede" data-copy="rulesPage.lede">Plain-language explanations of the accessibility rules AccessScan checks.</p>
+    <div class="disclaimer" role="note" data-copy-html="rulesPage.disclaimerHtml"></div>
     <div class="rule-filter-row">
-      <label class="sr-only" for="rule-filter">Filter rules</label>
+      <label class="sr-only" for="rule-filter" data-copy="rulesPage.filterLabel">Filter rules</label>
       <input id="rule-filter" type="search" autocomplete="off" spellcheck="false"
-             placeholder="Filter rules. Try “contrast”, “label”, “aria”…">
+             placeholder="Filter rules" data-copy-placeholder="rulesPage.filterPlaceholder">
       <span id="filter-count" aria-live="polite"></span>
     </div>
   </section>
 
   <div class="wrap rules-body">
     <div id="rules-root"><!-- populated by rules-data.js --></div>
-    <p class="empty-filter" id="empty-filter">No rules match that filter. Try a different word, or <a href="https://dequeuniversity.com/rules/axe/4.14" rel="noopener">browse the full axe rule index</a>.</p>
+    <p class="empty-filter" id="empty-filter" data-copy-html="rulesPage.emptyFilterHtml"></p>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>AccessScan runs entirely on this machine: no accounts, no payments, no database, no cloud. MIT licensed. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="/">Scanner</a></p>
+    <p><span data-copy="chrome.footer.line"></span> · <a href="privacy.html" data-copy="chrome.footer.linkPrivacy"></a> · <a href="terms.html" data-copy="chrome.footer.linkTerms"></a> · <a href="/" data-copy="chrome.footer.linkScanner"></a></p>
   </div>
 </footer>
 
+<script src="copy.js"></script>
 <script src="rules-data.js"></script>
 </body>
 </html>
