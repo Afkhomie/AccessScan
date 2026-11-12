@@ -19,10 +19,10 @@ window.COPY = {
     navScanner: 'Scanner',
     navRuleReference: 'Rule reference',
     footer: {
-      line: 'AccessScan runs locally on the machine that hosts it: no accounts, no payments, no database, no cloud. MIT licensed.',
+      line: 'AccessScan: no accounts, no payments, no database, no cloud. MIT licensed.',
       linkRuleReference: 'WCAG rule reference',
-      linkPrivacy: 'Privacy',
-      linkTerms: 'Terms',
+      linkPrivacy: 'Privacy Policy',
+      linkTerms: 'Terms of Use',
       linkScanner: 'Scanner',
     },
   },
@@ -33,7 +33,7 @@ window.COPY = {
       kicker: 'WCAG 2.x · EAA · axe-core · local-first',
       h1: 'Check whether your website is accessible.',
       lede: 'Enter a URL to scan a public page for common WCAG 2.x failures relevant to the EU Accessibility Act. The scan runs locally, is free, and requires no account or tracking.',
-      heroNote: 'If you cannot run Node.js locally, send this page to your web developer.',
+      heroNote: '',
     },
     navLimitations: 'Limitations',
     form: {
