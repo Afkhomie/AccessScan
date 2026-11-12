@@ -31,9 +31,9 @@ window.COPY = {
   /* ---------- index.html ---------- */
   index: {
     meta: {
-      kicker: 'Free · local · no account',
+      kicker: 'WCAG 2.x · EAA · axe-core · local-first',
       h1: 'Is your website accessible?',
-      lede: 'Free scan for common accessibility issues on any public page, run locally with no account.',
+      lede: 'Free scan for common WCAG 2.x accessibility failures on any public page. Runs locally, no account needed.',
     },
     navFaq: 'FAQ',
     form: {
@@ -62,7 +62,7 @@ window.COPY = {
       failedLabel: 'failed',
     },
     disclaimer: {
-      html: '<strong>Automated scans catch roughly a third of issues.</strong> A clean result is not a compliance guarantee. For real assurance, get a manual audit.',
+      html: '<strong>Automated scans catch roughly 30–57% of WCAG issues</strong> (per Deque’s research). A clean result is not a compliance guarantee. EAA enforcement applies in the EU as of June 2025; for assurance, get a manual audit.',
     },
     results: {
       heading: 'Report',
@@ -75,7 +75,7 @@ window.COPY = {
       heading: 'How it works',
       items: [
         { title: 'Paste a URL', body: 'Any public page. Private and internal addresses are blocked.' },
-        { title: 'We load the page', body: 'Its rendered content is checked for accessibility issues.' },
+        { title: 'We load the page', body: 'Its rendered content is checked against WCAG 2.x rules with axe-core.' },
         { title: 'Review the report', body: 'Issues are grouped by severity, with the element, a code snippet, and how to fix it. Crawl mode can scan up to 10 pages.' },
       ],
     },
@@ -84,7 +84,7 @@ window.COPY = {
       items: [
         {
           q: 'Does a clean scan prove my site is accessible?',
-          a: 'No. Automated scans catch roughly a third of issues, so a clean report is not a compliance guarantee. Pair it with a manual audit for real assurance.',
+          a: 'No. Automated scans catch roughly 30–57% of WCAG issues, so a clean report is not a compliance guarantee. Pair it with a manual audit for real assurance.',
         },
         {
           q: 'Is it free? Do I need an account?',
@@ -96,7 +96,7 @@ window.COPY = {
         },
         {
           q: 'What does it check?',
-          a: 'Common WCAG 2.x failures at A/AA level. See the <a href="rules.html">rule reference</a> for the full list; some items need manual review.',
+          a: 'Common WCAG 2.x failures at A/AA level, checked with axe-core. See the <a href="rules.html">rule reference</a> for the full list; some items need manual review.',
         },
         {
           q: 'Can it scan a whole site?',
