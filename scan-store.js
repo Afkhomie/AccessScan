@@ -2,6 +2,8 @@
 // and rule-level compare. No Playwright dependency: fully unit-testable by
 // fabricating records via create() + mutating status/result directly.
 
+const crypto = require('crypto');
+
 const MAX_SCANS = 20;
 
 // Normalization = origin + pathname, lowercased; query string and hash are
@@ -55,7 +57,6 @@ function diffResults(prevRec, curRec) {
 
 function createScanStore({ maxScans = MAX_SCANS } = {}) {
   const scans = new Map(); // id -> { id, status, phase, result?, error?, createdAt, url, maxPages }
-  let seq = 0;
 
   function prune() {
     while (scans.size > maxScans) {
@@ -68,7 +69,8 @@ function createScanStore({ maxScans = MAX_SCANS } = {}) {
   return {
     // Creates a running record, prunes old scans, returns the record.
     create({ url, maxPages }) {
-      const id = `scan_${Date.now()}_${++seq}`;
+      // Unguessable IDs — /api/scans/:id/compare and export are unauthenticated.
+      const id = `scan_${crypto.randomBytes(12).toString('hex')}`;
       const rec = { id, status: 'running', phase: 'queued', createdAt: Date.now(), url, maxPages };
       scans.set(id, rec);
       prune();

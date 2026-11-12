@@ -52,6 +52,13 @@ if (PROXY_SECRET) {
     next();
   });
 }
+// Baseline response headers on everything the API/static server emits —
+// no framing (clickjacking) and no MIME sniffing.
+app.use((_req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
 app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -239,6 +246,57 @@ function toUserError(e) {
   return 'Something went wrong while scanning this page.';
 }
 
+// CDP resource types we never let near the network. 'Fetch'/'XHR'/'Script'/
+// 'Stylesheet'/'Document'/'TextTrack' stay — SPAs need them to render.
+// 'Preflight' stays (blocking it would break every CORS fetch/XHR).
+const CDP_BLOCKED_TYPES = new Set([
+  'Image', 'Media', 'Font', 'Ping', 'WebSocket', 'EventSource',
+  'Manifest', 'CSPViolationReport', 'SignedExchange', 'Prefetch',
+]);
+
+// Per-page CDP Fetch interceptor. context.route() does NOT see redirect
+// hops in Playwright 1.65 (verified: the request event fires but the route
+// handler is skipped for redirected requests) — that gap was the blind-SSRF
+// hole. Fetch.requestPaused fires for EVERY request including each redirect
+// hop BEFORE Chromium connects, so validating 'Document' URLs here closes it.
+// Returns { blockedUrl } so callers can report the guard rejection.
+// page -> guard state; dedupes arming (context 'page' event fires for pages
+// we create ourselves, and crawl batches arm explicitly).
+const scanGuardPages = new WeakMap();
+
+async function armScanGuards(page) {
+  const existing = scanGuardPages.get(page);
+  if (existing) return existing;
+  const state = { blockedUrl: null };
+  scanGuardPages.set(page, state); // mark before awaits so concurrent callers dedupe
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Fetch.enable', { patterns: [{ urlPattern: '*' }] });
+  cdp.on('Fetch.requestPaused', (ev) => {
+    const reply = (cmd, params) => cdp.send(cmd, params).catch(() => {});
+    const type = ev.resourceType || '';
+    const url = ev.request?.url || '';
+    if (CDP_BLOCKED_TYPES.has(type)) {
+      return reply('Fetch.failRequest', { requestId: ev.requestId, errorReason: 'BlockedByClient' });
+    }
+    if (type === 'Document' && /^https?:/i.test(url)) {
+      validateScanUrl(url).then((check) => {
+        if (check.error) {
+          state.blockedUrl = url;
+          console.warn(`scan blocked (pre-connect): ${url} -> ${check.error}`);
+          return reply('Fetch.failRequest', { requestId: ev.requestId, errorReason: 'BlockedByClient' });
+        }
+        return reply('Fetch.continueRequest', { requestId: ev.requestId });
+      }).catch(() =>
+        // Guard itself failed — fail closed on document navigations.
+        reply('Fetch.failRequest', { requestId: ev.requestId, errorReason: 'BlockedByClient' })
+      );
+      return;
+    }
+    return reply('Fetch.continueRequest', { requestId: ev.requestId });
+  });
+  return state;
+}
+
 async function scanOnePage(page, url) {
   const resp = await page.goto(url, {
     waitUntil: 'domcontentloaded',
@@ -305,22 +363,80 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
     const context = await b.newContext({
       viewport: { width: 1280, height: 900 },
       userAgent: 'AccessScan/0.1 (+local accessibility checker; https://github.com)',
+      // Service workers can issue requests that bypass context.route —
+      // and cache/poison scanned pages. axe doesn't need them.
+      serviceWorkers: 'block',
+    });
+    // page -> URL the route-level guard refused (first hops, incl. popups).
+    const blockedByPage = new Map();
+    // Popups (window.open) get the same CDP redirect-hop guard, best effort.
+    // Arming must NOT happen synchronously inside the 'page' event: Fetch.enable
+    // sent while the page is still initializing loses to Playwright's own
+    // routing Fetch setup and silently stops intercepting (verified). The
+    // defer lets init settle; pages we scan are armed explicitly after
+    // newPage() resolves, which is the ordering that works. Popup first
+    // requests remain covered context-wide by context.route regardless.
+    context.on('page', (p) => {
+      setTimeout(() => { armScanGuards(p).catch(() => {}); }, 50);
     });
     // axe-core analyzes the DOM, not pixels — abort heavy subresources to
     // keep memory/bandwidth low (Render free tier is 512MB; images, video,
-    // and fonts are the biggest offenders on media-heavy pages).
-    await context.route('**/*', (route) => {
-      const t = route.request().resourceType();
-      return (t === 'image' || t === 'media' || t === 'font')
-        ? route.abort()
-        : route.continue();
+    // and fonts are the biggest offenders on media-heavy pages). 'ping'/
+    // 'beacon'/'websocket'/'eventsource'/'other' are blocked too — they
+    // are analytics/telemetry channels that only leak scan traffic.
+    // 'fetch'/'xhr' MUST keep flowing or JS-heavy pages/CSRF tokens break.
+    // Document requests additionally run the SSRF guard on EVERY redirect
+    // hop BEFORE the browser connects to it (pentest: a 302 to
+    // 127.0.0.1:10000/api/health returned 200 — the post-navigation
+    // page.url() check came too late).
+    await context.route('**/*', async (route) => {
+      const req = route.request();
+      const t = req.resourceType();
+      if (
+        t === 'image' || t === 'media' || t === 'font' ||
+        t === 'ping' || t === 'beacon' || t === 'websocket' ||
+        t === 'eventsource' || t === 'other'
+      ) {
+        return route.abort();
+      }
+      if (t === 'document') {
+        // Walk redirectedFrom() to cover the whole chain — route fires per
+        // hop, and a hop's predecessors are already validated, but re-check
+        // is cheap insurance for any chain shape Playwright hands us.
+        for (let hop = req; hop; hop = hop.redirectedFrom()) {
+          const check = await validateScanUrl(hop.url());
+          if (check.error) {
+            console.warn(`scan blocked: ${hop.url()} -> ${check.error}`);
+            // Tag the page so the scan reports the guard rejection instead
+            // of a generic net::ERR from the aborted navigation.
+            try {
+              const pg = req.frame()?.page?.();
+              if (pg) blockedByPage.set(pg, hop.url());
+            } catch { /* frame lookup is best-effort */ }
+            return route.abort();
+          }
+        }
+      }
+      return route.continue();
     });
     const page = await context.newPage();
+    const firstGuard = await armScanGuards(page).catch(() => null);
     const pages = [];
 
     try {
     rec.phase = 'loading';
-    const first = await scanOnePage(page, startUrl.toString());
+    let first;
+    try {
+      first = await scanOnePage(page, startUrl.toString());
+    } catch (e) {
+      const blocked = firstGuard?.blockedUrl || blockedByPage.get(page);
+      if (blocked) {
+        const err = new Error(`Redirected to a disallowed address (${blocked}).`);
+        err.blocked = true;
+        throw err;
+      }
+      throw e;
+    }
     pages.push(first);
     // Progress counts COMPLETED pages (first page already done → 1).
     let completed = 1;
@@ -338,10 +454,17 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
       // navigations don't race on a shared tab.
       const scanLink = async (link) => {
         const p = await context.newPage();
+        const guard = await armScanGuards(p).catch(() => null);
         try {
           return await scanOnePage(p, link);
         } catch (e) {
-          return { url: link, error: toUserError(e) };
+          const blocked = guard?.blockedUrl || blockedByPage.get(p);
+          return {
+            url: link,
+            error: blocked
+              ? `Redirected to a disallowed address (${blocked}).`
+              : toUserError(e),
+          };
         } finally {
           await p.close().catch(() => {});
           bumpProgress();
@@ -387,7 +510,7 @@ async function runScan(scanId, startUrl, crawl, maxPages) {
   } catch (e) {
     rec.status = 'error';
     rec.phase = 'error';
-    rec.error = toUserError(e);
+    rec.error = e.blocked ? e.message : toUserError(e);
   }
   scanning = false;
 }
@@ -457,11 +580,6 @@ app.get('/api/scan/:id', (req, res) => {
   const rec = scanStore.get(req.params.id);
   if (!rec) return res.status(404).json({ error: 'Unknown scan id.' });
   res.json(scanStore.toStatus(rec));
-});
-
-// Recent scans (newest first) — in-memory only, vanish on restart.
-app.get('/api/scans', (_req, res) => {
-  res.json({ scans: scanStore.list() });
 });
 
 // Compare a finished scan against the most recent OTHER finished scan of the
