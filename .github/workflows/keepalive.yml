@@ -1,0 +1,14 @@
+name: keepalive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      # Ping via the Vercel domain: it proxies to Render with the shared
+      # secret header, so no secret is needed in this workflow.
+      - run: curl -fsS --max-time 30 https://access-scan-tool.vercel.app/api/health || true
